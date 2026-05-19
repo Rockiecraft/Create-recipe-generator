@@ -3,11 +3,11 @@
   "version": "0.0.1",
   "description": "Desktop Studio Workspace for Create Mod Datapacks",
   "main": "app-entry.js",
-   "scripts": {
+  "scripts": {
     "start": "electron .",
-    "build:win": "electron-builder --win portable",
-    "build:linux": "electron-builder --linux AppImage",
-    "dist": "electron-builder --win portable --linux AppImage"
+    "build:win": "npx electron-builder --win portable",
+    "build:linux": "npx electron-builder --linux AppImage",
+    "dist": "npx electron-builder --win portable --linux AppImage"
   },
   "build": {
     "appId": "com.create.recipe.generator",
