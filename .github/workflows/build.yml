@@ -30,9 +30,9 @@ jobs:
       - name: Compile Application Executable Package
         run: |
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            npm run build:win
+            npx electron-builder --win portable
           else
-            npm run build:linux
+            npx electron-builder --linux AppImage
           fi
         shell: bash
 
