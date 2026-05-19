@@ -10,8 +10,6 @@
     <header>
         <h1>⚙️ CREATE RECIPE GENERATOR</h1>
         <div class="meta">
-            <span>Workspace: <strong id="workspaceNameLabel">custom_datapack</strong></span>
-            <button class="btn-util" style="background:var(--success); border:none;" onclick="copyToClipboard()">💾 Copy Code</button>
         </div>
     </header>
 
@@ -27,10 +25,7 @@
             <div id="recipeSidebarContainer" style="display:flex; flex-direction:column; gap:8px; overflow-y:auto; flex:1;">
                 <!-- Sidebar dynamic layout file entries item nodes -->
             </div>
-            
-            <div style="margin-top:auto;" id="sidebarExportWrapper">
-                <button class="btn-util" style="width:100%; padding:8px; background:#4f545c;" onclick="exportDatapackZip()">📥 Export Datapack Zip</button>
-            </div>
+        
         </div>
 
         <!-- Center Workspace Column 2 -->
@@ -202,7 +197,7 @@
         </div>
     </div>
 
-    <script src="js/jszip.js"></script>
+
     <script src="js/templates.js"></script>
     <script src="js/compiler.js"></script>
     <script src="js/main.js"></script>

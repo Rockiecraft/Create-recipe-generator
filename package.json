@@ -1,11 +1,13 @@
 {
   "name": "create-recipe-generator",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Desktop Studio Workspace for Create Mod Datapacks",
   "main": "app-entry.js",
-  "scripts": {
+   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --linux AppImage"
+    "build:win": "electron-builder --win portable",
+    "build:linux": "electron-builder --linux AppImage",
+    "dist": "electron-builder --win portable --linux AppImage"
   },
   "build": {
     "appId": "com.create.recipe.generator",
@@ -16,6 +18,9 @@
       "js/**/*",
       "app-entry.js"
     ],
+    "win": {
+      "target": "portable"
+    },
     "linux": {
       "target": [
         "AppImage"

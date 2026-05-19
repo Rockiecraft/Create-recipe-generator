@@ -148,8 +148,11 @@ function renderSidebarList() {
                     <div style="font-size:11px; color:var(--text-muted); pointer-events:none;">${recipesDatabase[filename].engine}</div>
                 </div>
                 
-                <div class="recipe-item-actions-wrapper">
+                <div class="recipe-item-actions-wrapper" style="display: flex; align-items: center; gap: 6px;">
+                    <!-- 1. Context Options Menu Button (Three Dots) -->
                     <button class="btn-dots-context" onclick="toggleContextDropdownMenu(event, '${filename}')">···</button>
+                    
+                    <!-- 2. Cleaned Dropdown Overlay Menu (Red Delete Button Completely Removed) -->
                     <div class="context-dropdown-overlay ${isDropdownOpen ? '' : 'hidden'}">
                         <button class="dropdown-action-item" onclick="event.stopPropagation(); cloneRecipeLayoutProfile('${filename}')">
                             📋 Clone Recipe
@@ -157,10 +160,15 @@ function renderSidebarList() {
                         <button class="dropdown-action-item" onclick="event.stopPropagation(); downloadSingleJsonFileDirectly('${filename}')">
                             📥 Download JSON
                         </button>
-                        <button class="dropdown-action-item" style="color:var(--danger); border-top:1px solid #2d2e31; margin-top:4px;" onclick="event.stopPropagation(); deleteRecipeTarget('${filename}')">
-                            ✕ Delete File
-                        </button>
                     </div>
+
+                    <!-- 3. Direct Trash Can Button (Positioned on the Right Side of the dots) -->
+                    <button class="btn-trash-direct delete-layout-trash-btn" 
+                            onclick="event.stopPropagation(); deleteRecipeTarget('${filename}')"
+                            title="Delete Layout"
+                            style="background: transparent; border: none; cursor: pointer; color: #ff4d4d; font-size: 14px; padding: 4px; display: flex; align-items: center; justify-content: center; line-height: 1;">
+                        🗑️
+                    </button>
                 </div>
             `;
         }
@@ -301,7 +309,6 @@ function saveActiveRecipeState() {
         inputItem: document.getElementById('inputItem').value,
         platform: document.querySelector('input[name="platform"]:checked').value,
         useConditional: document.getElementById('useConditional').checked,
-        wrapperNamespace: document.getElementById('wrapperNamespace').value,
         ingredients: ingredientsList,
         outputs: outputsList,
         conditions: customConditions,
@@ -309,6 +316,8 @@ function saveActiveRecipeState() {
         loops: parseInt(document.getElementById('loopsCount').value) || 4,
         sequenceSteps: stepsList
     };
+
+        localStorage.setItem('create_studio_recipe_cache', JSON.stringify(recipesDatabase));
 }
 
 function loadRecipeFromState(filename) {
@@ -319,7 +328,6 @@ function loadRecipeFromState(filename) {
 
     document.getElementById('inputItem').value = data.inputItem;
     document.getElementById('useConditional').checked = data.useConditional;
-    document.getElementById('wrapperNamespace').value = data.wrapperNamespace;
     document.getElementById('transitionalItem').value = data.transitional;
     document.getElementById('loopsCount').value = data.loops;
 
@@ -429,29 +437,6 @@ function getConditionHTMLString(id, cType, cKey, cVal) {
             <div class="grid-cell-context-hint">➔ Parameter verification check property.</div>
         </div>
     `;
-}
-
-function exportDatapackZip() {
-    saveActiveRecipeState(); 
-    let filenames = Object.keys(recipesDatabase);
-    if (filenames.length === 0) {
-        alert("You must create at least one custom recipe file before exporting your pack data!");
-        return;
-    }
-    let zip = new JSZip();
-    zip.file("pack.mcmeta", JSON.stringify({ "pack": { "description": "Generated Create Mod Datapack Studio Export", "pack_format": 10 } }, null, 2));
-    let recipesFolder = zip.folder("data/custom_datapack/recipes");
-    filenames.forEach(name => {
-        loadRecipeFromState(name);
-        let rawJsonText = document.getElementById('jsonOutput').textContent;
-        recipesFolder.file(name, rawJsonText);
-    });
-    zip.generateAsync({ type: "blob" }).then(finalBlob => {
-        let linkElement = document.createElement("a");
-        linkElement.href = URL.createObjectURL(finalBlob);
-        linkElement.download = "create_recipes_datapack.zip";
-        linkElement.click();
-    });
 }
 
 function switchEngine(buttonEl) {
@@ -698,6 +683,54 @@ function toggleConditionalFields() {
     config.classList.toggle('hidden', !cb.checked); 
     compileRecipe(); 
 }
+// ========================================================
+// PERSISTENT CACHE RECOVERY LOAD LAYER (Milestone 2) [1]
+// ========================================================
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Maintain your exact internal database schema records untouched
+    // If you have other default recipes below mixing_recipe, they will remain safely here.
+    recipesDatabase["mixing_recipe.json"] = {
+        engine: "create:mixing",
+        inputItem: "minecraft:iron_ingot",
+        platform: "universal",
+        useConditional: false,
+        wrapperNamespace: "forge:conditional",
+        ingredients: [
+            { item: "minecraft:copper_ingot", isFluid: false, count: 1 }, 
+            { item: "minecraft:zinc_ingot", isFluid: false, count: 1 }
+        ],
+        outputs: [{ item: "create:brass_ingot", count: 1, chance: "", isFluid: false }],
+        conditions: [],
+        transitional: "create:incomplete_iron_sheet",
+        loops: 4,
+        sequenceSteps: []
+    };
+
+    // 2. Safely merge previous layouts from browser storage without overwriting defaults [1]
+    const savedCacheData = localStorage.getItem('create_recipe_studio_db');
+    if (savedCacheData) {
+        try {
+            const parsedDatabase = JSON.parse(savedCacheData);
+            // Dynamic merge: Loop and append saved layouts back into active runtime memory [1]
+            Object.keys(parsedDatabase).forEach(filename => {
+                recipesDatabase[filename] = parsedDatabase[filename];
+            });
+        } catch (error) {
+            console.warn("Corrupted recipe database cache encountered. Reverting to structural defaults.", error);
+        }
+    }
+
+    // 3. Define active display targets and redraw the workspace elements out of cache [1]
+    const availableLayoutKeys = Object.keys(recipesDatabase);
+    if (availableLayoutKeys.length > 0) {
+        // Fall back to first valid file element record if activeRecipeId is blank
+        activeRecipeId = availableLayoutKeys[0];
+        
+        // Native render loops inside your repository to refresh UI panels [1]
+        if (typeof renderSidebarList === 'function') renderSidebarList();
+        if (typeof loadRecipeFromState === 'function') loadRecipeFromState(activeRecipeId);
+    }
+});
 
 recipesDatabase["mixing_recipe.json"] = {
     engine: "create:mixing",

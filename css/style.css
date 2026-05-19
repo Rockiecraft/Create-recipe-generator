@@ -163,11 +163,10 @@ input[type="checkbox"], input[type="radio"] { width: auto; margin-right: 6px; }
 .btn-util:hover { background: var(--border-color); }
 pre { background: #0c0c0e; border: 1px solid var(--border-color); padding: 15px; border-radius: 6px; color: #a7f3d0; overflow: auto; max-height: 250px; font-size: 12px; margin: 0; }
 
-.sidebar-right { width: 260px; background-color: var(--bg-card); border-left: 2px solid var(--border-color); display: flex; flex-direction: column; padding: 15px; gap: 12px; }
-.search-box { width: 100%; padding: 6px; background: var(--bg-input); border: 1px solid var(--border-color); color: #fff; border-radius: 4px; font-size: 12px; }
-.asset-grid { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; overflow-y: auto; align-content: start; }
-.asset-node-box { aspect-ratio: 1; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--text-muted); cursor: pointer; text-align: center; padding: 2px; overflow: hidden; }
-
+.sidebar-right {display: none !important;}
+.search-box { display: none !important;}
+.asset-grid {display: none !important; }
+.asset-node-box { display: none !important; }
 .hidden { display: none !important; }
 
 /* CONTEXT DOTS MENU ACTION BUTTON STYLES */
