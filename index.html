@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CREATE RECIPE GENERATOR</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <h1>⚙️ CREATE RECIPE GENERATOR</h1>
+        <div class="meta">
+            <span>Workspace: <strong id="workspaceNameLabel">custom_datapack</strong></span>
+            <button class="btn-util" style="background:var(--success); border:none;" onclick="copyToClipboard()">💾 Copy Code</button>
+        </div>
+    </header>
+
+    <div class="workspace-wrapper">
+        <!-- Sidebar Column 1 -->
+        <div class="sidebar-left" id="mainSidebarLayout">
+            <div style="display:flex; justify-content:flex-start; margin-bottom: 5px;">
+                <button class="btn-collapse-toggle" id="sidebarCollapseBtn" onclick="toggleSidebarCollapseState()">❮</button>
+            </div>
+
+            <button class="btn-action" id="sidebarNewBtn" onclick="createNewRecipeLayout()">+ New Recipe Layout</button>
+            
+            <div id="recipeSidebarContainer" style="display:flex; flex-direction:column; gap:8px; overflow-y:auto; flex:1;">
+                <!-- Sidebar dynamic layout file entries item nodes -->
+            </div>
+            
+            <div style="margin-top:auto;" id="sidebarExportWrapper">
+                <button class="btn-util" style="width:100%; padding:8px; background:#4f545c;" onclick="exportDatapackZip()">📥 Export Datapack Zip</button>
+            </div>
+        </div>
+
+        <!-- Center Workspace Column 2 -->
+        <div class="main-content">
+            <div class="engine-tabs-bar" style="overflow-x: auto; white-space: nowrap;">
+                <button class="engine-tab" data-engine="create:pressing" onclick="switchEngine(this)">Pressing</button>
+                <button class="engine-tab active" data-engine="create:mixing" onclick="switchEngine(this)">Mixing</button>
+                <button class="engine-tab" data-engine="create:compacting" onclick="switchEngine(this)">Compacting</button>
+                <button class="engine-tab" data-engine="create:crushing" onclick="switchEngine(this)">Crushing Wheels</button>
+                <button class="engine-tab" data-engine="create:cutting" onclick="switchEngine(this)">Cutting</button>
+                <button class="engine-tab" data-engine="create:haunting" onclick="switchEngine(this)">Haunting</button>
+                <button class="engine-tab" data-engine="create:splashing" onclick="switchEngine(this)">Splashing</button>
+                <button class="engine-tab" data-engine="create:filling" onclick="switchEngine(this)">Filling</button>
+                <button class="engine-tab" data-engine="create:sequenced_assembly" onclick="switchEngine(this)">Sequenced Assembly</button>
+            </div>
+
+            <!-- Visual JEI Simulator Display Box -->
+            <div class="jei-canvas-card">
+                <div class="jei-title-banner" id="jeiLabel">Mechanical Basin Mixing View</div>
+                <div class="jei-row-io">
+                    <div class="mc-slot" id="jeiIn">Input</div>
+                    <div class="mc-basin-grid" id="jeiGrid">
+                        <div class="mc-slot" style="width:38px; height:38px; font-size:8px;"></div>
+                        <div class="mc-slot" style="width:38px; height:38px; font-size:8px;"></div>
+                        <div class="mc-slot" style="width:38px; height:38px; font-size:8px;"></div>
+                        <div class="mc-slot" style="width:38px; height:38px; font-size:8px;"></div>
+                        <div class="mc-slot" style="width:38px; height:38px; font-size:8px;"></div>
+                        <div class="mc-slot" style="width:38px; height:38px; font-size:8px;"></div>
+                        <div class="mc-slot" style="width:38px; height:38px; font-size:8px;"></div>
+                        <div class="mc-slot" style="width:38px; height:38px; font-size:8px;"></div>
+                        <div class="mc-slot" style="width:38px; height:38px; font-size:8px;"></div>
+                    </div>
+                    <div class="create-machine-graphic-viewport" id="jeiMachineSymbol"></div>
+                    <div class="mc-slot" id="jeiOut" style="border-color:var(--accent);">Output</div>
+                </div>
+            </div>
+
+            <!-- Ingredients Card Wrapper Setup -->
+            <div class="config-card">
+                <h3>Recipe Ingredients Configuration</h3>
+                <div id="standardInputs" class="hidden">
+                    <div class="left-aligned-layout-grid" style="margin-top:0;">
+                        <div class="grid-cell-stacked-box">
+                            <label style="margin-top:0;">Single Input Item ID</label>
+                            <input type="text" id="inputItem" value="minecraft:iron_ingot" oninput="compileRecipe()">
+                        </div>
+                        <div class="grid-cell-context-hint">➔ Resource item parameter passed into standard process lines.</div>
+                    </div>
+                </div>
+
+                <div id="multiInputsPanel">
+                    <label style="margin-top:0;">Ingredients Inventory Setup (Max 9 Items):</label>
+                    <div id="ingredientsContainer"></div>
+                    <button type="button" class="btn-secondary" id="addIngBtn" style="width:auto; margin-top:8px; display:block;" onclick="addIngredientBlock()">+ Add Basin Input Node</button>
+                </div>
+
+                <!-- Advanced Sequenced Assembly Step Panel Configuration (Hidden by Default) -->
+                <div id="assemblyPanel" class="hidden" style="border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 10px;">
+                    <div class="left-aligned-layout-grid" style="margin-top:0;">
+                        <div class="grid-cell-stacked-box">
+                            <label style="margin-top:0;">Transitional Incomplete Item ID</label>
+                            <input type="text" id="transitionalItem" value="create:incomplete_iron_sheet" oninput="compileRecipe()">
+                        </div>
+                        <div class="grid-cell-context-hint">➔ The item ID tracked in intermediate progression states.</div>
+                    </div>
+                    <div class="left-aligned-layout-grid">
+                        <div class="grid-cell-stacked-box">
+                            <label style="margin-top:0;">Loop Cycles Required</label>
+                            <input type="number" id="loopsCount" value="4" min="1" oninput="compileRecipe()">
+                        </div>
+                        <div class="grid-cell-context-hint">➔ Total loop sequence executions required for execution verification passes.</div>
+                    </div>
+
+                    <!-- DYNAMIC ASSEMBLY SEQUENCE STEPS RENDER LAYER -->
+                    <div style="margin-top:15px; border-top: 1px dashed var(--border-color); padding-top:15px;">
+                        <label style="color: var(--accent); margin-bottom: 8px;">Sequence Manufacturing Steps Pipeline:</label>
+                        
+                        <div id="assemblyStepsContainer" style="display:flex; flex-direction:column; gap:10px; width:100%; margin-bottom:12px;">
+                            <!-- Step modules are appended here dynamically -->
+                        </div>
+
+                        <div class="left-aligned-layout-grid" style="margin-top:0; align-items: flex-end;">
+                            <div class="grid-cell-stacked-box">
+                                <label for="stepTypeSelector">Next Processing Step Action:</label>
+                                <select id="stepTypeSelector" style="margin-top:4px;">
+                                    <option value="create:pressing">🔨 Mechanical Pressing Step</option>
+                                    <option value="create:cutting">🪚 Mechanical Saw Cutting Step</option>
+                                    <option value="create:filling">🧪 Spout Fluid Filling Step</option>
+                                    <option value="create:deploying">🔧 Mechanical Deploying Step</option>
+                                </select>
+                            </div>
+                            <div>
+                                <button type="button" class="btn-util" style="background:var(--accent); color:#121212; font-weight:bold; height:35px; width:180px;" onclick="addAssemblyStepBlock()">+ Append Sequence Step</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DYNAMIC REUSABLE OUTPUT SELECTION PANEL CONTAINER -->
+                <div id="outputsPanel" style="margin-top:15px; margin-bottom:10px; border-top:1px solid var(--border-color); padding-top:15px;">
+                    <label style="margin-top:0; margin-bottom:4px;">Recipe Output Products List:</label>
+                    <div id="outputsContainer"></div>
+                    <button type="button" class="btn-util" style="width:auto; margin-top:12px; background:var(--accent); color:#121212; font-weight:bold; height:32px;" onclick="addOutputBlock('minecraft:gold_nugget', 1, 1000)">+ Add Extra Output Product Node</button>
+                </div>
+            </div>
+
+            <!-- Conditional Framework Panel Rules Setup -->
+            <div class="config-card">
+                <h3>Framework Rules (Conditional Engines)</h3>
+                <div class="left-aligned-layout-grid" style="margin-top:0;">
+                    <div class="grid-cell-stacked-box">
+                        <label style="margin-top:0;">Environment Platform Restrictions</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="platform" value="universal" checked onchange="compileRecipe()"> Universal Setup</label>
+                            <label><input type="radio" name="platform" value="forge_only" onchange="compileRecipe()"> Forge Only Layer</label>
+                            <label><input type="radio" name="platform" value="fabric_only" onchange="compileRecipe()"> Fabric Only Layer</label>
+                        </div>
+                    </div>
+                    <div class="grid-cell-context-hint">➔ Applies automatic cross-compatibility mod checks depending on the system platform choice.</div>
+                </div>
+
+                <div style="margin-top:15px;">
+                    <label><input type="checkbox" id="useConditional" onchange="toggleConditionalFields()"> Wrap Data string inside Loader Conditions</label>
+                </div>
+
+                <div id="conditionalConfig" class="hidden" style="margin-top:10px; border-top:1px solid var(--border-color); padding-top:10px;">
+                    <!-- DROPDOWN BOX REMOVED SYSTEM CONTAINER CODES CLEANED FROM HERE -->
+
+                    <!-- Condition Selector Picker Block -->
+                    <div class="left-aligned-layout-grid" style="margin-top:0; margin-bottom:15px; align-items: flex-end;">
+                        <div class="grid-cell-stacked-box">
+                            <label for="conditionSelector" style="color: var(--accent);">Condition Logic Type Check Preset:</label>
+                            <select id="conditionSelector" style="margin-top:4px;">
+                                <option value="custom">✨ Custom Condition Block (Blank Canvas)</option>
+                                <option value="forge:mod_loaded">Forge: Mod Loaded check</option>
+                                <option value="forge:item_exists">Forge: Item Registered check</option>
+                                <option value="fabric:mod_loaded">Fabric: Mod Loaded check</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button type="button" class="btn-util" style="background:var(--accent); color:#121212; font-weight:bold; margin-top:0; height:35px; width:180px;" onclick="addConditionBlock()">+ Add Condition Block</button>
+                        </div>
+                    </div>
+
+                    <label style="color:#5dade2; margin-top:15px; display:block;">Assigned Custom Evaluation Steps:</label>
+                    <div id="conditionsContainer" style="display:flex; flex-direction:column; gap:10px; width:100%;"></div>
+                </div>
+            </div>
+
+            <!-- Final Code Preview Area Box -->
+            <div class="config-card">
+                <div class="output-header">
+                    <h3>Compiled JSON Code Block String</h3>
+                    <button class="btn-util" onclick="copyToClipboard()">Copy Text</button>
+                </div>
+                <pre id="jsonOutput">{}</pre>
+            </div>
+        </div>
+
+        <!-- Palette List Asset Drawer Column 3 -->
+        <div class="sidebar-right">
+            <input type="text" class="search-box" placeholder="Filter Palette...">
+            <div class="asset-grid">
+                <div class="asset-node-box" onclick="quickFillAsset('minecraft:iron_ingot')">iron_ingot</div>
+                <div class="asset-node-box" onclick="quickFillAsset('minecraft:copper_ingot')">copper_ingot</div>
+                <div class="asset-node-box" onclick="quickFillAsset('minecraft:zinc_ingot')">zinc_ingot</div>
+                <div class="asset-node-box" onclick="quickFillAsset('create:brass_ingot')">brass_ingot</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jszip.js"></script>
+    <script src="js/templates.js"></script>
+    <script src="js/compiler.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

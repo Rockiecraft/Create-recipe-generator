@@ -1,0 +1,28 @@
+{
+  "name": "create-recipe-generator",
+  "version": "1.0.0",
+  "description": "Desktop Studio Workspace for Create Mod Datapacks",
+  "main": "app-entry.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --linux AppImage"
+  },
+  "build": {
+    "appId": "com.create.recipe.generator",
+    "productName": "CreateRecipeGenerator",
+    "files": [
+      "index.html",
+      "css/**/*",
+      "js/**/*",
+      "app-entry.js"
+    ],
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Development"
+    }
+  },
+  "author": "Rockiecraft",
+  "license": "MIT"
+}

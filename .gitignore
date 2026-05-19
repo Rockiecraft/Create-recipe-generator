@@ -1,0 +1,36 @@
+# --- NODE DEPENDENCIES PACKAGES ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.eslintcache
+
+# --- LOCAL DEVELOPMENT SYSTEM CACHES ---
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# --- ELECTRON BUNDLER & DISTRIBUTION OUTPUTS ---
+dist/
+build/
+out/
+app/dist/
+*.AppImage
+*.deb
+*.rpm
+*.snap
+*.zip
+*.tar.gz
+*.asar
+
+# --- DISTROBOX & CONTAINER RUNTIME ARTIFACTS ---
+.distrobox/
+container-artifacts/
