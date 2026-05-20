@@ -13,21 +13,14 @@ const presets = {
     "forge:mod_loaded": { 
         id: "forge:mod_loaded", 
         key: "modid", 
-        val: "create", 
+        val: "the_mod_id", 
         hintA: "Forge check verifying if a dependency mod is loaded.", 
         hintB: "The exact mod id requirement string (e.g., 'jei')." 
-    },
-    "forge:item_exists": { 
-        id: "forge:item_exists", 
-        key: "item", 
-        val: "create:brass_ingot", 
-        hintA: "Forge check confirming if a specific item registry entry exists.", 
-        hintB: "The raw item resource path identifier entry key." 
     },
     "fabric:mod_loaded": { 
         id: "fabric:mod_loaded", 
         key: "modid", 
-        val: "create", 
+        val: "the_mod_id", 
         hintA: "Fabric API loader verification rule check.", 
         hintB: "The targeted Fabric mod namespace ID tag value." 
     }

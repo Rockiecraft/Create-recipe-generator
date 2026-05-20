@@ -13,10 +13,8 @@ function createStudioDesktopWindow() {
         }
     });
 
-    // Hide top browser menu bar for a clean desktop application feel
     desktopWin.setMenuBarVisibility(false);
 
-    // Load your skeletal index file from the local root folder path
     desktopWin.loadFile('index.html');
 }
 

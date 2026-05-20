@@ -1,0 +1,362 @@
+.recipe-form {
+    flex: 0 0 540px !important; 
+    width: 540px !important;
+    max-width: 540px !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+}
+
+.main-content { 
+    flex: 1; 
+    padding: 20px; 
+    overflow: visible !important;
+    height: auto !important;
+    display: flex; 
+    flex-direction: column; 
+    gap: 20px; 
+}
+
+
+.engine-tabs-bar {
+    display: flex; 
+    gap: 6px; 
+    background: var(--bg-card); 
+    padding: 6px; 
+    border-radius: 6px; 
+    border: 1px solid var(--border-color);
+    flex-wrap: wrap; 
+    min-height: min-content; 
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.engine-tab {
+    padding: 8px 14px; 
+    font-size: 13px; 
+    font-weight: 500; 
+    color: var(--text-muted);
+    cursor: pointer; 
+    border-radius: 4px; 
+    background: transparent; 
+    border: none; 
+    white-space: nowrap;
+}
+
+.engine-tab:hover { 
+    background: rgba(255,255,255,0.03); 
+    color: #fff; 
+}
+
+.engine-tab.active { 
+    background: var(--bg-input); 
+    color: #fff; 
+    font-weight: 600; 
+}
+
+
+.config-card,
+.ingredient-block,
+#ingredientsContainer > div { 
+    background-color: #1b1c24 !important; 
+    border: 1px solid #262836 !important; 
+    border-radius: 4px !important; 
+    padding: 6px 10px !important; 
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0px !important;
+    box-sizing: border-box !important;
+}
+
+.config-card h3 { 
+    margin: 0 0 12px 0; 
+    font-size: 13px; 
+    color: var(--accent); 
+    text-transform: uppercase; 
+    letter-spacing: 0.5px; 
+}
+
+
+.form-group {
+    display: grid !important;
+    grid-template-columns: 110px 1fr !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-top: 3px !important;
+    width: 100% !important;
+}
+
+label,
+.form-group label,
+.config-card label,
+.ingredient-block label,
+.out-count-label { 
+    font-size: 10px !important; 
+    font-weight: 500 !important; 
+    color: #7d8296 !important; 
+    text-transform: none !important; 
+    margin: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+
+input{
+    background-color: #14151c !important; 
+    border: 1px solid #232530 !important; 
+    color: #fff !important; 
+    border-radius: 4px !important; 
+    padding: 1px 6px !important;
+    height: 20px !important; 
+    font-size: 11px !important;
+    outline: none !important;
+    width: 60% !important;
+    box-sizing: border-box !important;
+}
+
+ select {
+    background-color: #14151c !important;
+    border: 1px solid #232530 !important; 
+    color: #fff !important; 
+    border-radius: 4px !important; 
+    padding: 1px 6px !important;
+    height: 20px !important;
+    font-size: 11px !important;
+    outline: none !important;
+    width: 70% !important;
+    box-sizing: border-box !important;
+}
+
+input:focus, select:focus {
+    border-color: var(--accent) !important;
+}
+
+input[type="checkbox"], input[type="radio"] { 
+    width: 11px !important; 
+    height: 11px !important; 
+    accent-color: var(--accent) !important;
+    cursor: pointer !important;
+    margin: 0 !important;
+}
+
+.radio-group { 
+    display: flex; 
+    gap: 15px; 
+    background: #1a1a1c; 
+    padding: 10px; 
+    border-radius: 4px; 
+    border: 1px solid var(--border-color); 
+    margin-top: 6px; 
+}
+
+.radio-group label { 
+    margin-top: 0; 
+    color: #fff; 
+    cursor: pointer; 
+}
+
+
+.left-aligned-layout-grid { display: grid; grid-template-columns: 380px 1fr; gap: 12px 24px; margin-top: 10px; }
+.grid-full-width-line { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; }
+.grid-cell-stacked-box { display: flex; flex-direction: column; }
+
+.grid-cell-context-hint { 
+    grid-column: 2 !important; 
+    display: flex; 
+    align-items: center; 
+    font-size: 10px !important; 
+    color: #53586d !important; 
+    line-height: 1.2 !important; 
+    padding-top: 0px !important; 
+    margin-top: 0px !important;
+}
+
+.cond-block {
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.cond-full-row, .cond-header-line { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.cond-input-group { display: flex; flex-direction: column; }
+.cond-context-clue { display: flex; align-items: center; font-size: 12px; color: var(--text-muted); line-height: 1.4; padding-top: 22px; }
+
+#ingredientsContainer { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; margin-bottom: 12px; }
+.output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+
+
+#outputsContainer { 
+    display: flex !important; 
+    flex-direction: column !important; 
+    gap: 12px !important; 
+    width: 100% !important; 
+}
+
+#outputsContainer > .form-group,
+#outputsContainer > div {
+    max-width: 100% !important; 
+    width: 35% !important;
+    background-color: #1b1c24 !important;
+    border: 1px solid #262836 !important;
+    border-radius: 4px;
+    padding: 6px 10px !important;
+    box-sizing: border-box !important;
+}
+
+#outputsContainer input[type="text"]{
+    width: 70% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+#outputsContainer input[type="number"] {
+    width: 25% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+#addOutputBtn,
+.workspace button[id*="Output"] {
+    width: 200px !important;
+    max-width: 240px !important;
+    display: block !important;
+    margin-top: 10px !important;
+}
+
+
+
+.workspace, .workspace-wrapper, .app-layout {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important; 
+    align-items: flex-start !important;
+    gap: 12px !important;             
+    padding: 12px !important;          
+    width: 100% !important;
+    height: auto !important;           
+    box-sizing: border-box !important;
+}
+
+.recipe-form, .main-content {
+    flex: 0 0 840px !important;         
+    width: 640px !important;
+    max-width: 840px !important;
+    min-width: 0 !important;
+    height: auto !important;
+    overflow-y: visible !important;    
+    box-sizing: border-box !important;
+}
+
+.btn-util { background: var(--bg-input); border: 1px solid var(--border-color); color: #fff; padding: 1px 1px; border-radius: 4px; font-size: 11.5px; cursor: pointer; }
+.btn-util:hover { background: var(--border-color); }
+
+
+
+
+
+
+
+
+
+#conditionsContainer > div,
+.config-card #conditionsContainer > div {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;              
+    width: 100% !important;
+    padding: 14px !important;
+    background-color: #1b1c24 !important;
+    border: 1px solid #262836 !important;
+    border-radius: 4px !important;
+    box-sizing: border-box !important;
+}
+
+
+#conditionsContainer > div > div[style*="display: flex"],
+#conditionsContainer > div > div[style*="display:flex"] {
+    display: flex !important;
+    flex-direction: row !important;      
+    justify-content: flex-start !important; 
+    align-items: center !important;    
+    width: 100% !important;
+    gap: 16px !important;                
+    box-sizing: border-box !important;
+}
+
+
+#conditionsContainer div[style*="flex-direction: column"],
+#conditionsContainer div[style*="flex-direction:column"],
+#conditionsContainer .form-group {
+    flex: 0 1 auto !important;          
+    width: auto !important;
+    max-width: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    box-sizing: border-box !important;
+}
+
+
+#conditionsContainer input.cond-type,
+#conditionsContainer input.cond-key,
+#conditionsContainer input.cond-val,
+#conditionsContainer select.cond-route-select {
+    width: auto !important;            
+    height: 22px !important;
+    background-color: #14151c !important; 
+    border: 1px solid #232530 !important;
+    color: #ffffff !important;
+    border-radius: 4px !important;
+    padding: 1px 6px !important;
+    font-size: 11px !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+}
+
+/* 5. LIQUID TEXT POSITIONING: Slides descriptive comment tracks seamlessly left and right */
+#conditionsContainer div[style*="line-height: 1.4"],
+#conditionsContainer .cond-context-clue,
+#conditionsContainer .grid-cell-context-hint {
+    flex: 1 1 auto !important;          
+    display: block !important;
+    width: auto !important;
+    max-width: none !important;
+    white-space: normal !important;      
+    word-break: break-word !important;   
+    
+    padding: 0 !important;               
+    margin: 0 !important;
+    
+    font-size: 11px !important;
+    color: #7d8296 !important;          
+    line-height: 1.4 !important;
+    text-align: left !important;
+}
+
+
+#conditionsContainer .left-aligned-layout-grid,
+#conditionsContainer .grid-cell-stacked-box {
+    display: contents !important;        
+}
+
+.advanced-options-disclosure summary::-webkit-details-marker {
+    display: none !important;
+}
+
+/* Rotates the custom indicator text symbol downwards when the menu opens */
+.advanced-options-disclosure[open] .disclosure-arrow-marker,
+details[open] .disclosure-arrow-marker,
+details[open] summary span:first-child {
+    transform: rotate(90deg) !important;
+    color: var(--accent) !important;
+    display: inline-block !important; /* Critical for rotation animations */
+}

@@ -1,7 +1,7 @@
 {
   "name": "create-recipe-generator",
-  "version": "0.0.1",
-  "description": "Desktop Studio Workspace for Create Mod Datapacks",
+  "version": "0.0.2",
+  "description": "Recipe Generator for the Create Mod",
   "main": "app-entry.js",
   "scripts": {
     "start": "electron .",
@@ -10,7 +10,7 @@
     "dist": "npx electron-builder --win portable --linux AppImage"
   },
   "build": {
-    "appId": "com.create.recipe.generator",
+    "appId": "com.create_recipe_generator",
     "productName": "CreateRecipeGenerator",
     "files": [
       "index.html",

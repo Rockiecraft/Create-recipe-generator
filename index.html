@@ -133,73 +133,121 @@
             </div>
 
             <!-- Conditional Framework Panel Rules Setup -->
-            <div class="config-card">
-                <h3>Framework Rules (Conditional Engines)</h3>
-                <div class="left-aligned-layout-grid" style="margin-top:0;">
-                    <div class="grid-cell-stacked-box">
-                        <label style="margin-top:0;">Environment Platform Restrictions</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="platform" value="universal" checked onchange="compileRecipe()"> Universal Setup</label>
-                            <label><input type="radio" name="platform" value="forge_only" onchange="compileRecipe()"> Forge Only Layer</label>
-                            <label><input type="radio" name="platform" value="fabric_only" onchange="compileRecipe()"> Fabric Only Layer</label>
+            <div class="expandable-toolbar-row" style="display: flex; flex-direction: row; flex-wrap: wrap; align-items: flex-start; gap: 10px; margin-top: 15px; margin-bottom: 15px; width: 100%;">
+
+                <!-- MENU BLOCK 1: CONDITIONAL & FRAMEWORK RULES -->
+                <div class="config-card" style="flex: 0 1 auto; width: max-content; margin: 0; padding: 6px 12px !important;">
+                    <details class="advanced-options-disclosure" style="cursor: pointer;">
+                        <!-- Static Text Fit Header -->
+                        <summary style="font-size: 11px; font-weight: bold; color: var(--accent, #e19524); text-transform: uppercase; letter-spacing: 0.5px; list-style: none; display: flex; align-items: center; gap: 6px; outline: none; user-select: none; white-space: nowrap;">
+                            <span class="disclosure-arrow-marker" style="transition: transform 0.15s ease; display: inline-block;">▶</span> Conditional & Framework Rules
+                        </summary>
+
+                        <!-- Content Drawer (Expands down as an absolute panel layer to protect width) -->
+                        <div class="expandable-drawer-content-box" style="margin-top: 12px; display: flex; flex-direction: column; gap: 15px; cursor: default; width: 516px; box-sizing: border-box;" onclick="event.stopPropagation();">
+                            <!-- PART 1: Environment Platform Restrictions Radio Row -->
+                            <div style="display: flex; flex-direction: column; gap: 4px; width: 100%;">
+                                <label style="color: #7d8296; font-size: 10px; font-weight: 600; text-transform: uppercase;">Environment Platform Restrictions</label>
+                                <div class="radio-group" style="display: flex; gap: 15px; background: #14151c; padding: 6px 10px; border-radius: 4px; border: 1px solid #232530; width: 100%; box-sizing: border-box; justify-content: flex-start; align-items: center; margin-top: 2px;">
+                                    <label style="color: #fff; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; text-transform: none;"><input type="radio" name="platform" value="universal" checked onchange="compileRecipe()" style="width: 11px; height: 11px; margin: 0; accent-color: var(--accent);"> Universal Setup</label>
+                                    <label style="color: #fff; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; text-transform: none;"><input type="radio" name="platform" value="forge_only" onchange="compileRecipe()" style="width: 11px; height: 11px; margin: 0; accent-color: var(--accent);"> Forge Only Layer</label>
+                                    <label style="color: #fff; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; text-transform: none;"><input type="radio" name="platform" value="fabric_only" onchange="compileRecipe()" style="width: 11px; height: 11px; margin: 0; accent-color: var(--accent);"> Fabric Only Layer</label>
+                                </div>
+                                <div class="grid-cell-context-hint" style="color: #53586d; font-size: 10px; margin-top: 2px; line-height: 1.3;">→ Applies automatic cross-compatibility mod checks depending on the system platform choice.</div>
+                            </div>
+
+                            <!-- PART 2: Wrap Data String Trigger Checkbox Line -->
+                            <div style="margin-top: 4px; border-top: 1px dashed #2d2e31; padding-top: 10px;">
+                                <label style="display: flex; align-items: center; gap: 6px; color: #fff; font-size: 12px; cursor: pointer;">
+                                    <input type="checkbox" id="useConditional" onchange="toggleConditionalFields()" style="width: 12px; height: 12px; accent-color: var(--accent); margin: 0;"> Wrap Data string inside Loader Conditions
+                            </label>
+                            </div>
+
+                            <!-- PART 3: Condition Selector Picker Block Inset Panel -->
+                            <div id="conditionalConfig" class="hidden" style="margin-top: 2px; border: 1px solid var(--border-color); background-color: #14151c; padding: 12px; border-radius: 4px; display: flex; flex-direction: column; gap: 10px;">
+                                <div class="form-group" style="display: flex; flex-direction: column; gap: 4px; width: 100%; margin: 0;">
+                                    <label for="conditionSelector" style="color: var(--accent); font-weight: 600; font-size: 11px;">Condition Logic Type Check Preset:</label>
+                                    <select id="conditionSelector" style="height: 22px; padding: 2px 6px; font-size: 11px; background-color: #1b1c24; border: 1px solid #232530; color: #fff; border-radius: 4px; width: 100%;">
+                                        <option value="custom">✨ Custom Condition Block (Blank Canvas)</option>
+                                        <option value="forge:mod_loaded">Forge: Mod Loaded check</option>
+                                        <option value="forge:item_exists">Forge: Item Registered check</option>
+                                        <option value="fabric:mod_loaded">Fabric: Mod Loaded check</option>
+                                    </select>
+                                </div>
+                                <div style="margin-top: 4px; display: flex; justify-content: flex-start; width: 100%;">
+                                    <button type="button" class="btn-util" onclick="addConditionBlock()" style="background: var(--accent); color: #121212; font-weight: bold; border: none; padding: 6px 14px; border-radius: 4px; font-size: 12px; cursor: pointer; height: 28px; display: flex; align-items: center; justify-content: center;">+ Add Condition Block</button>
+                                </div>
+                            </div>
+
+                            <!-- PART 4: Custom Evaluation Steps Container Track -->
+                            <div style="margin-top: 4px; border-top: 1px dashed #2d2e31; padding-top: 10px; display: flex; flex-direction: column; gap: 6px; width: 100%;">
+                                <label style="color: #8da6c2; font-size: 11px; font-weight: 500;">Assigned Custom Evaluation Steps:</label>
+                                <div id="conditionsContainer" style="display: flex; flex-direction: column; gap: 10px; width: 100%; min-height: 0;"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="grid-cell-context-hint">➔ Applies automatic cross-compatibility mod checks depending on the system platform choice.</div>
+                    </details>
                 </div>
 
-                <div style="margin-top:15px;">
-                    <label><input type="checkbox" id="useConditional" onchange="toggleConditionalFields()"> Wrap Data string inside Loader Conditions</label>
+                <!-- MENU BLOCK 2: ADVANCED PROCESSING RULES -->
+                <div class="config-card" style="flex: 0 1 auto; width: max-content; margin: 0; padding: 6px 12px !important;">
+                    <details class="advanced-options-disclosure" style="cursor: pointer;">
+                        <!-- Static Text Fit Header -->
+                        <summary style="font-size: 11px; font-weight: bold; color: var(--accent, #e19524); text-transform: uppercase; letter-spacing: 0.5px; list-style: none; display: flex; align-items: center; gap: 6px; outline: none; user-select: none; white-space: nowrap;">
+                            <span class="disclosure-arrow-marker" style="transition: transform 0.15s ease; display: inline-block;">▶</span> Advanced Processing Rules
+                        </summary>
+
+                        <div class="expandable-drawer-content-box" style="margin-top: 12px; display: flex; flex-direction: column; gap: 12px; cursor: default; width: 516px; box-sizing: border-box;" onclick="event.stopPropagation();">
+                            <!-- 1. HEAT REQUIREMENT CONTAINER -->
+                            <div id="heatRequirementGroup" class="form-group hidden" style="margin-top: 0;">
+                                <label style="font-weight: 500; color: #7d8296; font-size: 11px; text-transform: none;">🔥 Heat Requirement</label>
+                                <select id="heatRequirement" onchange="saveActiveRecipeState(); compileRecipe();">
+                                    <option value="none">None (Cold Processing)</option>
+                                    <option value="heated">Heated (Blaze Burner)</option>
+                                    <option value="superheated">Superheated (Blaze Burner + Blaze Cake)</option>
+                                </select>
+                                <div class="grid-cell-context-hint">Specifies the temperature constraint required by the mixing or compacting machine.</div>
+                            </div>
+
+                            <!-- 2. FLUID FORMAT CHECKBOX TOGGLE -->
+                            <div class="fluid-toggle-row" style="display: flex; align-items: flex-start; gap: 6px; margin-top: 4px;">
+                                <input type="checkbox" id="autoConvertFabricFluids" onchange="saveActiveRecipeState(); compileRecipe();" style="width: 11px; height: 11px; margin-top: 2px; accent-color: var(--accent);">
+                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                    <label for="autoConvertFabricFluids" style="color: #ffffff; font-weight: 500; text-transform: none; font-size: 11px; cursor: pointer;">
+                                        💧 Auto-Convert Fluid mB to Fabric Units (Droplets ×81)
+                                    </label>
+                                    <div class="grid-cell-context-hint">Applies automatic scaling multipliers to fluid amounts within the compiled output.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
                 </div>
 
-                <div id="conditionalConfig" class="hidden" style="margin-top:10px; border-top:1px solid var(--border-color); padding-top:10px;">
-                    <!-- DROPDOWN BOX REMOVED SYSTEM CONTAINER CODES CLEANED FROM HERE -->
-
-                    <!-- Condition Selector Picker Block -->
-                    <div class="left-aligned-layout-grid" style="margin-top:0; margin-bottom:15px; align-items: flex-end;">
-                        <div class="grid-cell-stacked-box">
-                            <label for="conditionSelector" style="color: var(--accent);">Condition Logic Type Check Preset:</label>
-                            <select id="conditionSelector" style="margin-top:4px;">
-                                <option value="custom">✨ Custom Condition Block (Blank Canvas)</option>
-                                <option value="forge:mod_loaded">Forge: Mod Loaded check</option>
-                                <option value="forge:item_exists">Forge: Item Registered check</option>
-                                <option value="fabric:mod_loaded">Fabric: Mod Loaded check</option>
-                            </select>
-                        </div>
-                        <div>
-                            <button type="button" class="btn-util" style="background:var(--accent); color:#121212; font-weight:bold; margin-top:0; height:35px; width:180px;" onclick="addConditionBlock()">+ Add Condition Block</button>
-                        </div>
-                    </div>
-
-                    <label style="color:#5dade2; margin-top:15px; display:block;">Assigned Custom Evaluation Steps:</label>
-                    <div id="conditionsContainer" style="display:flex; flex-direction:column; gap:10px; width:100%;"></div>
-                </div>
             </div>
 
-            <!-- Final Code Preview Area Box -->
-            <div class="config-card">
-                <div class="output-header">
-                    <h3>Compiled JSON Code Block String</h3>
-                    <button class="btn-util" onclick="copyToClipboard()">Copy Text</button>
-                </div>
-                <pre id="jsonOutput">{}</pre>
-            </div>
+    </div> <!-- End of recipe-form -->
+
+    
+    <div class="code-preview-sidebar-card">
+        <div class="code-card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+            <label style="font-weight: bold; color: var(--accent); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">COMPILED JSON CODE BLOCK STRING</label>
+            <button class="add-slot-btn" onclick="copyToClipboard()" type="button" style="padding: 4px 10px; font-size: 11px; cursor: pointer;">Copy Text</button>
         </div>
-
-        <!-- Palette List Asset Drawer Column 3 -->
-        <div class="sidebar-right">
-            <input type="text" class="search-box" placeholder="Filter Palette...">
-            <div class="asset-grid">
-                <div class="asset-node-box" onclick="quickFillAsset('minecraft:iron_ingot')">iron_ingot</div>
-                <div class="asset-node-box" onclick="quickFillAsset('minecraft:copper_ingot')">copper_ingot</div>
-                <div class="asset-node-box" onclick="quickFillAsset('minecraft:zinc_ingot')">zinc_ingot</div>
-                <div class="asset-node-box" onclick="quickFillAsset('create:brass_ingot')">brass_ingot</div>
-            </div>
-        </div>
+        <pre id="jsonOutput">{}</pre>
     </div>
+
+            </div> <!-- End of workspace -->
+        </div> <!-- End of mainContent -->
+    </div> <!-- End of app-layout -->
 
 
     <script src="js/templates.js"></script>
     <script src="js/compiler.js"></script>
     <script src="js/main.js"></script>
+
+<link rel="stylesheet" href="css/global.css">
+<link rel="stylesheet" href="css/sidebar-left.css">
+<link rel="stylesheet" href="css/recipe-form.css">
+<link rel="stylesheet" href="css/sidebar-right.css">
+
 </body>
 </html>

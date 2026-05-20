@@ -1,0 +1,91 @@
+
+
+:root {
+    --bg-main: #141416;
+    --bg-card: #1b1c1e;
+    --bg-input: #252629;
+    --border-color: #2d2e31;
+    --text-main: #dbdee1;
+    --text-muted: #949ba4;
+    --accent: #e19524;
+    --danger: #da373c;
+    --success: #248046;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    margin: 0; 
+    padding: 0;
+    display: flex; 
+    flex-direction: column;
+    height: 100vh; 
+    overflow: hidden;
+}
+
+header {
+    background-color: var(--bg-card);
+    border-bottom: 2px solid var(--border-color);
+    padding: 10px 20px; 
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    height: 35px;
+}
+
+header h1 { 
+    margin: 0; 
+    font-size: 16px; 
+    font-weight: 600; 
+    color: #fff; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+}
+
+header .meta { 
+    display: flex; 
+    gap: 15px; 
+    align-items: center; 
+    font-size: 12px; 
+    color: var(--text-muted); 
+}
+
+.workspace-wrapper {
+    display: flex !important;
+    width: 100vw !important;
+    height: calc(100vh - 57px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+}
+
+.workspace {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+    padding: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* KEYFRAME ANIMATIONS FOR THE MECHANICAL MACHINE VIEW NODES */
+@keyframes machineStampAnim {
+    0%, 100% { transform: translateY(0); }
+    40% { transform: translateY(8px); }
+    50% { transform: translateY(8px); }
+}
+@keyframes machineSpinAnim {
+    100% { transform: rotate(360deg); }
+}
+@keyframes machineSpinReverseAnim {
+    100% { transform: rotate(-360deg); }
+}
+
+.hidden, .jei-canvas-card {
+    display: none !important;
+}

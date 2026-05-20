@@ -1,20 +1,21 @@
-/**
- * CREATE RECIPE GENERATOR - Output Translation Engine
- * Compiles UI forms state matrices dynamically into valid Datapack JSON targets
- */
+
 function compileRecipe() {
     const platformSelection = document.querySelector('input[name="platform"]:checked').value;
     let coreRecipe = {};
-    
-    // Determine active machine parameters layout style rules
+
+   
     const isBasinStyle = (currentActiveEngine === 'create:mixing' || currentActiveEngine === 'create:compacting');
-    document.getElementById('jeiIn').classList.toggle('hidden', isBasinStyle);
+    document.getElementById('jeiIn').classList.toggle('hidden', !isBasinStyle);
     document.getElementById('jeiGrid').classList.toggle('hidden', !isBasinStyle);
 
-    // Automatically flag Fabric compilation requirements based on platform selections
-    const demandsFabricFormat = (platformSelection === "fabric_only");
+  
+    let demandsFabricFormat = (platformSelection === "fabric_only");
+    const manualFabricFluidsChecked = document.getElementById('autoConvertFabricFluids')?.checked || false;
+    if (manualFabricFluidsChecked) {
+        demandsFabricFormat = true;
+    }
 
-    // --- COMPILE DYNAMIC MULTIPLE OUTPUTS ELEMENT ARRAYS ---
+  
     let compiledResultsArray = [];
     const outputContainers = document.getElementById('outputsContainer').children;
     const allowsChance = (currentActiveEngine === 'create:crushing' || currentActiveEngine === 'create:sequenced_assembly');
@@ -28,19 +29,20 @@ function compileRecipe() {
         if (itemInput && itemInput.value) {
             let resultNode = {};
 
-            // DYNAMIC FLUID OUTPUT CONVERSION MATRIX
+            
             if (isFluidCheckbox && isFluidCheckbox.checked) {
                 let amountInMb = parseInt(countInput.value) || 1000;
+
                 
                 if (demandsFabricFormat) {
                     resultNode = {
                         "fluid": itemInput.value,
-                        "amount": amountInMb * 81 // [In-Game mB] × 81 = [JSON Amount] for Fabric Only
+                        "amount": amountInMb * 81
                     };
                 } else {
                     resultNode = {
                         "fluid": itemInput.value,
-                        "amount": amountInMb // Keeps native Millibuckets for Forge/Universal
+                        "amount": amountInMb 
                     };
                 }
             } else {
@@ -50,7 +52,6 @@ function compileRecipe() {
                 };
             }
 
-            // CHANCE ENFORCEMENT: Only embed a 'chance' entry if supported by the machine engine
             if (allowsChance && chanceInput && chanceInput.value !== "") {
                 let chanceValue = parseFloat(chanceInput.value);
                 if (!isNaN(chanceValue) && chanceValue < 1.0) {
@@ -61,15 +62,16 @@ function compileRecipe() {
         }
     }
 
+
     if (compiledResultsArray.length === 0) {
         compiledResultsArray.push({ "item": "create:brass_ingot", "count": 1 });
     }
 
-    // Safely pull the first item out of the array for the JEI screen preview text layout
+    
     let firstOutputNode = compiledResultsArray[0] || { "item": "create:brass_ingot" };
     let firstOutputItemName = firstOutputNode.fluid ? firstOutputNode.fluid : (firstOutputNode.item ? firstOutputNode.item : "create:brass_ingot");
 
-    // --- MACHINE PREVIEW CANVAS RENDERERS ---
+   
     if (isBasinStyle) {
         const ingElements = document.getElementById('ingredientsContainer').children;
         const compiledIngredients = [];
@@ -110,7 +112,25 @@ function compileRecipe() {
             "ingredients": compiledIngredients, 
             "results": compiledResultsArray 
         };
-        
+        const enablesHeatFormatting = (currentActiveEngine === 'create:mixing' || currentActiveEngine === 'create:compacting');
+        let selectedHeatValue = "none";
+        if (enablesHeatFormatting) {
+            selectedHeatValue = document.getElementById('heatRequirement')?.value || "none";
+        }
+
+       
+        coreRecipe = {
+            "type": currentActiveEngine
+        };
+
+       
+        if (enablesHeatFormatting && selectedHeatValue !== "none") {
+            coreRecipe["heatRequirement"] = selectedHeatValue;
+        }
+
+       
+        coreRecipe["ingredients"] = compiledIngredients;
+        coreRecipe["results"] = compiledResultsArray;
         let graphicContainer = document.getElementById('jeiMachineSymbol');
         if (graphicContainer) {
             if (currentActiveEngine === 'create:mixing') {
@@ -293,7 +313,7 @@ function compileRecipe() {
         };
 
     } else {
-        // UNIVERSAL PRESET CONDITION HYBRID MATRIX
+        
         if (isConditionalChecked && rawInputsList.length > 0) {
             let forgeArray = [];
             let fabricArray = [];
@@ -311,27 +331,24 @@ function compileRecipe() {
                 }
             });
 
-            if (forgeArray.length === 0 && fabricArray.length > 0) {
-                outputJson = {
-                    "type": "forge:conditional",
-                    "recipes": [{
-                        "conditions": [{ "type": "forge:mod_loaded", "modid": "fabric" }],
+                if (forgeArray.length === 0 && fabricArray.length > 0) {
+                    
+                    outputJson = {
                         "fabric:load_conditions": fabricArray,
                         "recipe": coreRecipe
-                    }]
-                };
-            } else if (fabricArray.length === 0 && forgeArray.length > 0) {
-                outputJson = { "type": "forge:conditional", "recipes": [{ "conditions": forgeArray, "recipe": coreRecipe }] };
-            } else {
-                outputJson = {
-                    "type": "forge:conditional",
-                    "recipes": [{
-                        "conditions": forgeArray,
-                        "fabric:load_conditions": fabricArray,
-                        "recipe": coreRecipe
-                    }]
-                };
-            }
+                    };
+                } else if (fabricArray.length === 0 && forgeArray.length > 0) {
+                    outputJson = { "type": "forge:conditional", "recipes": [{ "conditions": forgeArray, "recipe": coreRecipe }] };
+                } else {
+                    outputJson = {
+                        "type": "forge:conditional",
+                        "recipes": [{
+                            "conditions": forgeArray,
+                            "fabric:load_conditions": fabricArray,
+                            "recipe": coreRecipe
+                        }]
+                    };
+                }
         }
     }
 
