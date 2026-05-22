@@ -73,7 +73,7 @@ header .meta {
     box-sizing: border-box !important;
 }
 
-/* KEYFRAME ANIMATIONS FOR THE MECHANICAL MACHINE VIEW NODES */
+
 @keyframes machineStampAnim {
     0%, 100% { transform: translateY(0); }
     40% { transform: translateY(8px); }

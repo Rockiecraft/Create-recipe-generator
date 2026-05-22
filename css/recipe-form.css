@@ -263,7 +263,28 @@ input[type="checkbox"], input[type="radio"] {
 
 
 
+#outputsContainer .grid-cell-stacked-box > div[style*="display:flex"] {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box;
+}
 
+
+#outputsContainer .out-count,
+#outputsContainer .out-chance {
+    width: 100% !important;
+    min-width: 60px !important;
+    height: 20px !important; 
+    padding: 6px 10px !important;
+    box-sizing: border-box !important;
+    background-color: var(--bg-input) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--text-color) !important;
+    font-size: 12px !important;
+}
 
 
 
@@ -322,7 +343,7 @@ input[type="checkbox"], input[type="radio"] {
     box-sizing: border-box !important;
 }
 
-/* 5. LIQUID TEXT POSITIONING: Slides descriptive comment tracks seamlessly left and right */
+
 #conditionsContainer div[style*="line-height: 1.4"],
 #conditionsContainer .cond-context-clue,
 #conditionsContainer .grid-cell-context-hint {
@@ -352,11 +373,188 @@ input[type="checkbox"], input[type="radio"] {
     display: none !important;
 }
 
-/* Rotates the custom indicator text symbol downwards when the menu opens */
+
 .advanced-options-disclosure[open] .disclosure-arrow-marker,
 details[open] .disclosure-arrow-marker,
 details[open] summary span:first-child {
     transform: rotate(90deg) !important;
     color: var(--accent) !important;
-    display: inline-block !important; /* Critical for rotation animations */
+    display: inline-block !important; 
 }
+
+.hidden, 
+.fluid-output-toggle-row.hidden {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
+#assemblyStepsContainer select.step-type,
+#assemblyStepsContainer input.ing-id,
+#assemblyStepsContainer input.step-fluid-id {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+    box-sizing: border-box !important;
+}
+
+
+#assemblyStepsContainer input.step-fluid-amount {
+    width: 10px !important;
+    min-width: 0px !important;
+    max-width: 75px !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+}
+
+
+#assemblyStepsContainer select.step-type,
+#assemblyStepsContainer input.ing-id,
+#assemblyStepsContainer input.step-fluid-id {
+    width: auto !important;      
+    max-width: auto !important;  
+    flex: none !important;         
+}
+
+
+#assemblyStepsContainer div[style*="display:flex"] {
+    justify-content: flex-start !important;
+}
+
+#assemblyStepsContainer .grid-cell-stacked-box {
+    background-color: #14151c !important; 
+    border: 1px solid #3c3f54 !important; 
+    border-radius: var(--radius-lg) !important;
+    padding: 16px !important;
+    margin-bottom: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    box-sizing: border-box !important;
+    width: 53% !important;
+}
+
+
+#assemblyStepsContainer .grid-cell-stacked-box > div:first-child {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-bottom: 4px !important;
+}
+
+
+
+
+
+
+#ingredientsContainer .grid-cell-stacked-box,
+#outputsContainer .grid-cell-stacked-box {
+    background-color: #16171e !important;   
+    border: 1px solid #232530 !important;    
+    border-radius: 8px !important;           
+    padding: 16px !important;                 
+    margin-bottom: 12px !important;
+    box-shadow: none !important;              
+    display: flex !important;
+    flex-direction: column !important;        
+    gap: 10px !important;                    
+}
+
+
+#ingredientsContainer .grid-cell-stacked-box span,
+#outputsContainer .grid-cell-stacked-box span {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+}
+
+
+#ingredientsContainer .grid-cell-stacked-box span:not([style*="color:var(--danger)"]),
+#outputsContainer .grid-cell-stacked-box span:not([style*="color:var(--danger)"]) {
+    color: #a3a6b4 !important;            
+}
+
+
+#ingredientsContainer .grid-cell-stacked-box span[style*="color:var(--danger)"],
+#outputsContainer .grid-cell-stacked-box span[style*="color:var(--danger)"] {
+    color: #da584d !important;               
+    font-size: 13px !important;
+    cursor: pointer !important;
+    opacity: 0.85 !important;
+    transition: opacity 0.15s ease !important;
+}
+
+#ingredientsContainer .grid-cell-stacked-box span[style*="color:var(--danger)"]:hover,
+#outputsContainer .grid-cell-stacked-box span[style*="color:var(--danger)"]:hover {
+    opacity: 1 !important;
+}
+
+
+#ingredientsContainer .grid-cell-stacked-box label,
+#outputsContainer .grid-cell-stacked-box label,
+#outputsContainer .grid-cell-stacked-box .out-count-label {
+    color: #5d606f !important;                
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    margin: 0 !important;
+    white-space: nowrap !important;           
+}
+
+
+#ingredientsContainer .grid-cell-stacked-box input[type="text"],
+#ingredientsContainer .grid-cell-stacked-box input[type="number"],
+#outputsContainer .grid-cell-stacked-box input[type="text"],
+#outputsContainer .grid-cell-stacked-box input[type="number"] {
+    background-color: #0f1014 !important;   
+    border: 1px solid #232530 !important;     
+    border-radius: 4px !important;            
+    color: #e2e4ec !important;                
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+    box-sizing: border-box !important;        
+}
+
+
+#ingredientsContainer .grid-cell-stacked-box input[type="text"],
+#outputsContainer .grid-cell-stacked-box input[type="text"] {
+    width: 100% !important;
+    max-width: 100% !important;               
+    margin-bottom: 2px !important;
+}
+
+
+#ingredientsContainer .grid-cell-stacked-box input[type="number"],
+#outputsContainer .grid-cell-stacked-box input[type="number"] {
+    width: 120px !important;                  
+    min-width: 120px !important;
+    max-width: 120px !important;
+    display: inline-block !important;
+}
+
+
+#ingredientsContainer .grid-cell-stacked-box div[style*="display:flex; gap:10px; align-items:center;"],
+#ingredientsContainer .grid-cell-stacked-box div[style*="display: flex; gap: 10px; align-items: center;"] {
+    display: flex !important;
+    flex-direction: column !important;        
+    align-items: flex-start !important;       
+    gap: 8px !important;                      
+    width: 100% !important;
+    margin-top: 4px !important;
+}
+
+#ingredientsContainer .grid-cell-stacked-box div[style*="display:flex; gap:10px; align-items:center;"] > label,
+#ingredientsContainer .grid-cell-stacked-box div[style*="display: flex; gap: 10px; align-items: center;"] > label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;                      
+    width: 100% !important;
+}
+
+
+
