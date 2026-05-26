@@ -2,28 +2,28 @@ function renderSidebarList() {
     const listContainer = document.getElementById('recipeSidebarContainer');
     if (!listContainer) return;
     listContainer.innerHTML = '';
-    
+
     const keys = Object.keys(recipesDatabase);
     if (keys.length === 0) {
         listContainer.innerHTML = '<div style="color:var(--text-muted); font-size:11px; text-align:center; padding:10px 0;">No Recipes Found</div>';
         return;
     }
-    
+
     keys.forEach(filename => {
         const item = recipesDatabase[filename];
         const isActive = String(filename) === String(activeRecipeId);
-        
+
         let badgeColor = 'var(--accent)';
         if (item.engine === 'create:mixing') badgeColor = '#5db0e5';
         if (item.engine === 'create:compacting') badgeColor = '#e57d5d';
         if (item.engine === 'create:sequenced_assembly') badgeColor = '#b55de5';
         if (item.engine === 'create:mechanical_crafting') badgeColor = '#e19524';
-        
+
         const cleanType = "create:" + (item.engine || 'mixing').replace('create:', '');
         const itemDiv = document.createElement('div');
         itemDiv.className = `recipe-list-item ${isActive ? 'active' : ''}`;
-        
-       
+
+
         if (isActive) {
             itemDiv.style.borderLeftColor = 'var(--accent)';
             itemDiv.style.backgroundColor = 'var(--bg-input)';
@@ -31,19 +31,19 @@ function renderSidebarList() {
             itemDiv.style.borderLeftColor = '#444';
             itemDiv.style.backgroundColor = 'transparent';
         }
-        
+
         if (isSidebarCollapsed) {
-           
+
             let visualIconHtml = typeof getRecipeVisualIcon === 'function' ? getRecipeVisualIcon(item.engine) : "🔨";
             itemDiv.setAttribute('title', item.name || "Untitled Recipe");
-            
+
             itemDiv.innerHTML = `
                 <div onclick="selectActiveRecipeTarget('${filename}')" style="cursor: pointer; user-select: none; width: 100%; display: flex; align-items: center; justify-content: center; padding: 4px 0;">
                     ${visualIconHtml}
                 </div>
             `;
         } else {
-            
+
             itemDiv.setAttribute('onclick', `loadRecipeFromState('${filename}')`);
             itemDiv.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; width:100%; gap:8px; box-sizing:border-box; position:relative;">
@@ -73,20 +73,20 @@ function renderSidebarList() {
 function executeSidebarCollapseToggle() {
     const sidebar = document.getElementById('mainSidebarLayout') || document.querySelector('.sidebar-left');
     const toggleBtn = document.getElementById('sidebarCollapseBtn') || document.querySelector('.btn-collapse-toggle');
-    
+
     if (!sidebar) {
         console.error("Critical Error: Left sidebar element container not found in DOM.");
         return;
     }
-    
+
     isSidebarCollapsed = !isSidebarCollapsed;
 
     sidebar.classList.toggle('collapsed-slim', isSidebarCollapsed);
-    
+
     if (toggleBtn) {
         toggleBtn.textContent = isSidebarCollapsed ? '<' : '>';
     }
-    
+
 
     if (typeof renderSidebarList === 'function') {
         renderSidebarList();
@@ -94,7 +94,7 @@ function executeSidebarCollapseToggle() {
 }
 
 
-window.toggleSidebarCollapseState = function() {
+window.toggleSidebarCollapseState = function () {
     executeSidebarCollapseToggle();
 };
 
@@ -119,7 +119,7 @@ function createNewRecipeLayout() {
     activeRecipeId = id;
     const titleInput = document.getElementById('recipeTitle');
     if (titleInput) titleInput.value = `Untitled Template Module`;
-    
+
     const containerIng = document.getElementById('ingredientsContainer');
     const containerOut = document.getElementById('outputsContainer');
     const containerSteps = document.getElementById('assemblyStepsContainer');
@@ -128,10 +128,10 @@ function createNewRecipeLayout() {
     if (containerOut) containerOut.innerHTML = '';
     if (containerSteps) containerSteps.innerHTML = '';
     if (containerCond) containerCond.innerHTML = '';
-    
+
     if (typeof addIngredientBlock === 'function') addIngredientBlock();
     if (typeof addOutputBlock === 'function') addOutputBlock();
-    
+
     const tabElement = document.querySelector(`.engine-tab[data-engine="${cleanEngine}"]`);
     if (tabElement) {
         document.querySelectorAll('.engine-tab').forEach(b => b.classList.remove('active'));
@@ -241,12 +241,12 @@ function toggleContextDropdownMenu(event, filename) {
     if (event) event.stopPropagation();
     const dropdown = document.getElementById(`dropdown_${filename}`);
     if (!dropdown) return;
-    
+
     if (activeOpenDropdownId && activeOpenDropdownId !== `dropdown_${filename}`) {
         const openDropdown = document.getElementById(activeOpenDropdownId);
         if (openDropdown) openDropdown.classList.add('hidden');
     }
-    
+
     dropdown.classList.toggle('hidden');
     activeOpenDropdownId = dropdown.classList.contains('hidden') ? null : `dropdown_${filename}`;
 }

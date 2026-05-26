@@ -1,19 +1,18 @@
 function compileBasinRecipe(rawEngine, resultsArray, isFabric) {
-    let recipe = JSON.parse(JSON.stringify(RECIPE_TEMPLATES[rawEngine] || RECIPE_TEMPLATES["create:mixing"]));
     let ingredientsArray = [];
-    
+
     const inputContainers = document.getElementById('ingredientsContainer')?.children || [];
     for (let container of inputContainers) {
         const idInput = container.querySelector('.ing-id');
         const fluidCheck = container.querySelector('.ing-is-fluid');
         const countInput = container.querySelector('.ing-count');
-        
+
         if (!idInput || !idInput.value) continue;
-        
+
         if (fluidCheck && fluidCheck.checked) {
             let amount = parseInt(countInput.value) || 1000;
             if (isFabric) amount *= 81;
-            
+
             ingredientsArray.push({
                 "fluid": idInput.value.trim(),
                 "amount": amount
@@ -27,24 +26,32 @@ function compileBasinRecipe(rawEngine, resultsArray, isFabric) {
                 });
             } else {
                 ingredientsArray.push({
-                    "item": val
+                    "item": val,
                 });
             }
         }
     }
+
+  
+    const heatEl = document.getElementById('basinHeatRequirement') || document.getElementById('heatRequirement');
+    const targetHeatValue = (heatEl && heatEl.value !== "none") ? heatEl.value.toLowerCase() : null;
+
+  
+    let recipe = {};
+    
+    recipe.type = rawEngine;
+    
+    if (targetHeatValue) {
+        recipe.heatRequirement = targetHeatValue;
+    }
     
     recipe.ingredients = ingredientsArray;
     recipe.results = resultsArray;
-    
-    const heatEl = document.getElementById('heatRequirement');
-    if (heatEl && heatEl.value !== "none") {
-        recipe.heatRequirement = heatEl.value;
-    } else {
-        delete recipe.heatRequirement;
-    }
-    
+
     return recipe;
 }
+
+
 
 function compileStandardKineticRecipe(rawEngine, resultsArray) {
     let recipe = JSON.parse(JSON.stringify(RECIPE_TEMPLATES[rawEngine] || { "type": rawEngine, "ingredients": [], "results": [] }));
@@ -66,6 +73,98 @@ function compileStandardKineticRecipe(rawEngine, resultsArray) {
     
     return recipe;
 }
+
+function compileSpoutRecipe(resultsArray, demandsFabricFormat) {
+    let recipe = {
+        "type": "create:filling",
+        "ingredients": [],
+        "results": resultsArray
+    };
+
+    const baseItemInput = document.getElementById('inputItemFilling');
+    const fluidNameInput = document.getElementById('fluidInputName');
+    const fluidAmountInput = document.getElementById('fluidInputAmount');
+    const fluidNbtInput = document.getElementById('fluidInputNbt');
+
+  
+    if (baseItemInput && baseItemInput.value.trim()) {
+        const val = baseItemInput.value.trim();
+        recipe.ingredients.push(val.startsWith('#') ? { "tag": val.replace('#', '') } : { "item": val });
+    } else {
+        recipe.ingredients.push({ "item": "minecraft:glass_bottle" });
+    }
+
+   
+    let fluidAmount = fluidAmountInput && fluidAmountInput.value.trim() ? parseInt(fluidAmountInput.value.trim(), 10) : 1000;
+    if (isNaN(fluidAmount)) fluidAmount = 1000;
+    
+    if (demandsFabricFormat) {
+        fluidAmount *= 81; 
+    }
+
+    const fluidName = fluidNameInput && fluidNameInput.value.trim() ? fluidNameInput.value.trim() : "minecraft:water";
+
+    let fluidObject = {
+        "amount": fluidAmount,
+        "fluid": fluidName
+    };
+
+   
+    if (fluidNbtInput && fluidNbtInput.value.trim()) {
+        try {
+            fluidObject.nbt = JSON.parse(fluidNbtInput.value.trim());
+        } catch(e) {
+            fluidObject.nbt = {};
+        }
+    } else {
+        fluidObject.nbt = {};
+    }
+
+    recipe.ingredients.push(fluidObject);
+    return recipe;
+}
+
+function compileTimedKineticRecipe(rawEngine, resultsArray) {
+   
+    let ingredientsArray = [];
+    const singleInput = document.getElementById('inputItem');
+    
+    if (singleInput && singleInput.value.trim()) {
+        const val = singleInput.value.trim();
+        if (val.startsWith('#')) {
+            ingredientsArray.push({ "tag": val.replace('#', '') });
+        } else {
+            ingredientsArray.push({ "item": val });
+        }
+    } else {
+        ingredientsArray.push({ "item": "minecraft:air" });
+    }
+
+  
+    const timeInput = document.getElementById('processingTimeInput');
+   
+    const defaultTicks = 200;
+    let processingTicks = defaultTicks;
+
+    if (timeInput && timeInput.value.trim()) {
+        const parsedTime = parseInt(timeInput.value.trim(), 10);
+        if (!isNaN(parsedTime) && parsedTime > 0) {
+            processingTicks = parsedTime;
+        }
+    }
+
+   
+    let recipe = {};
+    
+    recipe.type = rawEngine;
+    recipe.ingredients = ingredientsArray;
+    recipe.processingTime = processingTicks; 
+    recipe.results = resultsArray;
+
+    return recipe;
+}
+
+
 
 
 function compileAssemblyRecipe(resultsArray, isFabric) {

@@ -46,7 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
             conditions: [],
             assemblySteps: [],
             assemblyLoops: 1,
-            transitionalItem: ""
+            transitionalItem: "",
+            heatRequirement: "none"
+
         };
         activeRecipeId = defaultId;
     }
@@ -67,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof loadRecipeFromState === 'function' && activeRecipeId) loadRecipeFromState(activeRecipeId);
 });
 
-(function() {
+(function () {
     const enforceUniversalDefault = () => {
 
         const universalRadio = document.querySelector('input[name="platform"][value="universal"]');

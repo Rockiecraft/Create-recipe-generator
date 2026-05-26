@@ -1,7 +1,7 @@
 .recipe-form {
     flex: 0 0 540px !important; 
     width: 540px !important;
-    max-width: 540px !important;
+    max-width: auto !important;
     min-width: 0 !important;
     margin: 0 !important;
     display: flex !important;
@@ -241,12 +241,13 @@ input[type="checkbox"], input[type="radio"] {
     align-items: flex-start !important;
     gap: 12px !important;             
     padding: 12px !important;          
-    width: 100% !important;
+    width: auto !important;
     height: auto !important;           
     box-sizing: border-box !important;
 }
 
 .recipe-form, .main-content {
+    display: flex !important;
     flex: 0 0 840px !important;         
     width: 640px !important;
     max-width: 840px !important;
@@ -524,16 +525,16 @@ details[open] summary span:first-child {
 #ingredientsContainer .grid-cell-stacked-box input[type="text"],
 #outputsContainer .grid-cell-stacked-box input[type="text"] {
     width: 100% !important;
-    max-width: 100% !important;               
+    max-width: 80% !important;               
     margin-bottom: 2px !important;
 }
 
 
 #ingredientsContainer .grid-cell-stacked-box input[type="number"],
 #outputsContainer .grid-cell-stacked-box input[type="number"] {
-    width: 120px !important;                  
-    min-width: 120px !important;
-    max-width: 120px !important;
+    width: 60% !important;                  
+    min-width: 10% !important;
+    max-width: 200% !important;
     display: inline-block !important;
 }
 
@@ -555,6 +556,4 @@ details[open] summary span:first-child {
     gap: 8px !important;                      
     width: 100% !important;
 }
-
-
 

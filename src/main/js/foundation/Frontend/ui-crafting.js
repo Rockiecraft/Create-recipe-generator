@@ -27,7 +27,7 @@ function updateCraftingKeysLegend() {
     const container = document.getElementById('craftingKeysLegendContainer');
     if (!container) return;
 
-  
+
     if (container.parentElement && container.parentElement.style.width !== '100%') {
         container.parentElement.style.setProperty('width', '100%', 'important');
         container.parentElement.style.setProperty('max-width', '100%', 'important');

@@ -2,16 +2,18 @@ const { app, BrowserWindow } = require('electron');
 const path = require('path');
 
 function createStudioDesktopWindow() {
-    const desktopWin = new BrowserWindow({
-        width: 1280,
-        height: 800,
-        backgroundColor: '#141416',
-        title: "Create Recipe Generator",
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true
-        }
-    });
+  const desktopWin = new BrowserWindow({
+    width: 1280,
+    height: 800,
+    minWidth: 950,
+    minHeight: 650,
+    backgroundColor: '#141416',
+    title: "Create Recipe Generator",
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true
+    }
+  });
 
     desktopWin.setMenuBarVisibility(false);
 
@@ -29,3 +31,4 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
+

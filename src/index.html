@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta charset="UTF-8">
+    <title>CREATE RECIPE GENERATOR</title>
+
+</head>
+
+<body>
+
+    <header>
+        <h1>⚙️ CREATE RECIPE GENERATOR</h1>
+        <div class="meta">
+        </div>
+    </header>
+
+    <div class="workspace-wrapper">
+        <!-- Sidebar Column 1 -->
+        <div class="sidebar-left" id="mainSidebarLayout">
+            <div style="display:flex; justify-content:flex-start; margin-bottom: 5px;">
+                <button class="btn-collapse-toggle" id="sidebarCollapseBtn"
+                    onclick="toggleSidebarCollapseState()">❮</button>
+            </div>
+
+            <button class="btn-action" id="sidebarNewBtn" onclick="createNewRecipeLayout()">+ New Recipe Layout</button>
+
+            <div id="recipeSidebarContainer"
+                style="display:flex; flex-direction:column; gap:8px; overflow-y:auto; flex:1;">
+                <!-- Sidebar dynamic layout file entries item nodes -->
+            </div>
+
+        </div>
+
+        <!-- Center Workspace Column 2 -->
+        <div class="main-content">
+            <div class="engine-tabs-bar" style="overflow-x: auto; white-space: nowrap;">
+                <button class="engine-tab" data-engine="create:pressing" onclick="switchEngine(this)">Pressing</button>
+                <button class="engine-tab active" data-engine="create:mixing"
+                    onclick="switchEngine(this)">Mixing</button>
+                <button class="engine-tab" data-engine="create:compacting"
+                    onclick="switchEngine(this)">Compacting</button>
+                <button class="engine-tab" data-engine="create:crushing" onclick="switchEngine(this)">Crushing
+                    Wheels</button>
+                <button class="engine-tab" data-engine="create:cutting" onclick="switchEngine(this)">Cutting</button>
+                <button class="engine-tab" data-engine="create:milling" onclick="switchEngine(this)">Milling</button>
+                <button class="engine-tab" data-engine="create:sandpaper_polishing"
+                    onclick="switchEngine(this)">Polishing</button>
+
+                <!-- 2. Encased Fan Airflow (Thermodynamics) -->
+                <button class="engine-tab" data-engine="create:splashing"
+                    onclick="switchEngine(this)">Splashing</button>
+                <button class="engine-tab" data-engine="create:smoking" onclick="switchEngine(this)">Smoking</button>
+                <button class="engine-tab" data-engine="create:blasting" onclick="switchEngine(this)">Blasting</button>
+                <button class="engine-tab" data-engine="create:haunting" onclick="switchEngine(this)">Haunting</button>
+
+
+                <button class="engine-tab" data-engine="create:filling" onclick="switchEngine(this)">Filling</button>
+
+                <!-- 4. Advanced Line Assembly & Large Crafting -->
+                <button class="engine-tab" data-engine="create:deploying"
+                    onclick="switchEngine(this)">Deploying</button>
+                <button class="engine-tab" data-engine="create:sequenced_assembly"
+                    onclick="switchEngine(this)">Sequenced Assembly</button>
+                <button class="engine-tab" data-engine="create:mechanical_crafting"
+                    onclick="switchEngine(this)">Mechanical Crafting</button>
+            </div>
+
+
+
+            <!-- Ingredients Card Wrapper Setup -->
+            <div class="config-card">
+                <h3>Recipe Ingredients Configuration</h3>
+                <div id="standardInputs" class="hidden">
+                    <div class="left-aligned-layout-grid" style="margin-top:0;">
+                        <div class="grid-cell-stacked-box">
+                            <label style="margin-top:0;">Single Input Item ID</label>
+                            <input type="text" id="inputItem" value="minecraft:iron_ingot" oninput="compileRecipe()">
+                        </div>
+                        <div class="grid-cell-context-hint">➔ Resource item parameter passed into standard process
+                            lines.</div>
+                    </div>
+                </div>
+                <!-- Locate standardInputs inside index.html and append this panel beneath its closing tag -->
+                <div id="fillingInputsPanel" class="hidden">
+                    <div class="left-aligned-layout-grid" style="margin-top:0;">
+                        <!-- Container Item Component Block -->
+                        <div class="grid-cell-stacked-box">
+                            <label style="margin-top:0;">Base Container Item ID</label>
+                            <input type="text" id="inputItemFilling" value="minecraft:glass_bottle"
+                                oninput="compileRecipe()">
+                        </div>
+                        <div class="grid-cell-context-hint">→ The empty container item passed into the Spout tracking
+                            lane.</div>
+
+                        <!-- Fluid Registry Component Block -->
+                        <div class="grid-cell-stacked-box" style="margin-top: 12px;">
+                            <label style="margin-top:0;">Fluid Registry ID</label>
+                            <input type="text" id="fluidInputName" value="minecraft:water" oninput="compileRecipe()">
+                        </div>
+
+                        <!-- Fluid Numeric Quantities and NBT Structure Grid -->
+                        <div style="display: flex; gap: 16px; margin-top: 12px; width: 100%;">
+                            <div class="grid-cell-stacked-box" style="flex: 1;">
+                                <label style="margin-top:0;">Amount (mB)</label>
+                                <input type="number" id="fluidInputAmount" style="width: 64px !important;" value="1000"
+                                    oninput="compileRecipe()">
+                            </div>
+                            <div class="grid-cell-stacked-box" style="flex: 3;">
+                                <label style="margin-top:0;">Fluid Optional NBT Compound String</label>
+                                <input type="text" id="fluidInputNbt" placeholder="{}" oninput="compileRecipe()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="multiInputsPanel">
+                    <label style="margin-top:0;">Ingredients Inventory Setup (Max 9 Items):</label>
+                    <div id="ingredientsContainer"></div>
+                    <button type="button" class="btn-secondary" id="addIngBtn"
+                        style="width:auto; margin-top:8px; display:block;" onclick="addIngredientBlock()">+ Add Basin
+                        Input Node</button>
+                </div>
+
+                <!-- Advanced Sequenced Assembly Step Panel Configuration (Hidden by Default) -->
+                <div id="assemblyPanel" class="hidden"
+                    style="border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 10px;">
+                    <div class="left-aligned-layout-grid" style="margin-top:0;">
+                        <div class="grid-cell-stacked-box">
+                            <label style="margin-top:0;">Transitional Incomplete Item ID</label>
+                            <input type="text" id="transitionalItem" value="create:incomplete_iron_sheet"
+                                oninput="compileRecipe()">
+                        </div>
+                        <div class="grid-cell-context-hint">➔ The item ID tracked in intermediate progression states.
+                        </div>
+                    </div>
+                    <div class="left-aligned-layout-grid">
+                        <div class="grid-cell-stacked-box">
+                            <label style="margin-top:0;">Loop Cycles Required</label>
+                            <input type="number" id="loopsCount" value="4" min="1" oninput="compileRecipe()">
+                        </div>
+                        <div class="grid-cell-context-hint">➔ Total loop sequence executions required for execution
+                            verification passes.</div>
+                    </div>
+
+                    <!-- DYNAMIC ASSEMBLY SEQUENCE STEPS RENDER LAYER -->
+                    <div style="margin-top:15px; border-top: 1px dashed var(--border-color); padding-top:15px;">
+                        <label style="color: var(--accent); margin-bottom: 8px;">Sequence Manufacturing Steps
+                            Pipeline:</label>
+
+                        <div id="assemblyStepsContainer"
+                            style="display:flex; flex-direction:column; gap:10px; width:100%; margin-bottom:12px;">
+                            <!-- Step modules are appended here dynamically -->
+                        </div>
+
+                        <div class="left-aligned-layout-grid"
+                            style="margin-top: 12px; display: flex; justify-content: flex-start; width: 100%;">
+                            <button type="button" class="btn-util"
+                                style="background: var(--accent); color: #121212; font-weight: bold; height: 35px; width: 180px; border: none; border-radius: var(--radius-md); cursor: pointer;"
+                                onclick="addAssemblyStepBlock()">+ Append Sequence Step</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DYNAMIC REUSABLE OUTPUT SELECTION PANEL CONTAINER -->
+                <div id="outputsPanel"
+                    style="margin-top:15px; margin-bottom:10px; border-top:1px solid var(--border-color); padding-top:15px;">
+                    <label style="margin-top:0; margin-bottom:4px;">Recipe Output Products List:</label>
+                    <div id="outputsContainer"></div>
+                    <button type="button" class="btn-util"
+                        style="width:auto; margin-top:12px; background:var(--accent); color:#121212; font-weight:bold; height:32px;"
+                        onclick="addOutputBlock('minecraft:gold_nugget', 1, 1000)">+ Add Extra Output Product
+                        Node</button>
+                </div>
+
+                <div id="mechanicalCraftingContainer" class="config-card hidden"
+                    style="flex: 0 1 auto; width: 100%; margin: 16px 0 0 0; padding: 12px !important; box-sizing: border-box;">
+                    <details class="advanced-options-disclosure" style="cursor: pointer; width: 100%;" open>
+                        <summary
+                            style="font-size: 11px; font-weight: bold; color: var(--accent, #e19524); text-transform: uppercase; letter-spacing: 0.5px; list-style: none; display: flex; align-items: center; gap: 6px; outline: none; user-select: none; white-space: nowrap;">
+                            <span class="disclosure-arrow-marker"
+                                style="transition: transform 0.15s ease; display: inline-block;">▼</span> Mechanical
+                            Crafting Setup
+                        </summary>
+
+                        <div class="expandable-drawer-content-box"
+                            style="margin-top: 12px; display: flex; flex-direction: column; gap: 14px; cursor: default; width: 100%; box-sizing: border-box;"
+                            onclick="event.stopPropagation();">
+
+                            <!-- Grid Dimension Form Controls Row -->
+                            <div
+                                style="display: flex; gap: 16px; background: #14151c; padding: 8px 12px; border-radius: 4px; border: 1px solid #232530; align-items: center; width: 100%; box-sizing: border-box;">
+
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span
+                                        style="color: #7d8296; font-size: 11px; white-space: nowrap; font-weight: 500; user-select: none;">Width
+                                        (Cols):</span>
+                                    <input type="number" id="craftingWidth" value="3" min="1" max="9"
+                                        onchange="generateCraftingGrid(); compileRecipe();"
+                                        style="width: 48px !important; min-width: 48px !important; max-width: 48px !important; height: 22px !important; text-align: center !important; background: #1b1c24 !important; border: 1px solid #262836 !important; border-radius: 4px !important; color: #fff !important; font-size: 11px !important; font-weight: bold !important; outline: none !important; padding: 0 !important; box-sizing: border-box !important;">
+                                </div>
+
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span
+                                        style="color: #7d8296; font-size: 11px; white-space: nowrap; font-weight: 500; user-select: none;">Height
+                                        (Rows):</span>
+                                    <input type="number" id="craftingHeight" value="3" min="1" max="9"
+                                        onchange="generateCraftingGrid(); compileRecipe();"
+                                        style="width: 48px !important; min-width: 48px !important; max-width: 48px !important; height: 22px !important; text-align: center !important; background: #1b1c24 !important; border: 1px solid #262836 !important; border-radius: 4px !important; color: #fff !important; font-size: 11px !important; font-weight: bold !important; outline: none !important; padding: 0 !important; box-sizing: border-box !important;">
+                                </div>
+
+                                <div style="display: flex; align-items: center; gap: 6px; flex: 1;">
+                                    <span
+                                        style="color: #7d8296; font-size: 11px; white-space: nowrap; font-weight: 500; user-select: none;">Mirroring:</span>
+                                    <select id="acceptMirrored" onchange="compileRecipe();"
+                                        style="height: 22px !important; width: max-content !important; min-width: 175px !important; background: #1b1c24 !important; border: 1px solid #262836 !important; border-radius: 4px !important; color: #fff !important; font-size: 11px !important; outline: none !important; padding: 0 24px 0 6px !important; cursor: pointer !important; box-sizing: border-box !important;">
+                                        <option value="false">false (Exact Pattern Only)</option>
+                                        <option value="true">true (Allow Mirroring)</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div id="craftingGridMatrix"
+                                style="display: flex !important; flex-direction: column !important; gap: 4px !important; background: #14151c; padding: 12px; border-radius: 4px; border: 1px solid #232530; align-items: center !important; justify-content: center !important; min-height: 40px; width: fit-content !important; margin: 0 auto !important; box-sizing: border-box !important;">
+                            </div>
+
+
+                            <div
+                                style="font-size: 10px; color: #5c6370; line-height: 1.3; border-top: 1px dashed #2d2e31; padding-top: 8px;">
+                                Type single letters inside the box array below to structure your crafting configuration.
+                                Leave squares blank (spaces) for empty slots.
+                            </div>
+
+                            <!-- Item Key Legend Definition List Map Container -->
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <span
+                                    style="font-size: 10px; font-weight: bold; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px;">Item
+                                    Key Legend Definitions</span>
+                                <div id="craftingKeysLegendContainer"
+                                    style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; max-height: 150px; overflow-y: auto; background: #14151c; padding: 8px; border-radius: 4px; border: 1px solid #232530; box-sizing: border-box; width: 100%;">
+                                    <div
+                                        style="font-size: 11px; color: #53586d; grid-column: span 2; text-align: center;">
+                                        Type letters into the grid matrix below to assign custom items.</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Place this right below the mechanicalCraftingContainer closing </div> -->
+                <div id="advancedProcessingDrawer" style="margin-top: 15px; width: 100%;">
+
+                    <!-- Row 1: Heat Requirement Configuration (Only for Mixing & Compacting) -->
+                    <div id="advancedHeatRow" class="form-control-wrapper hidden"
+                        style="background: #14151c; border: 1px solid #232530; border-radius: 6px; padding: 12px; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label
+                                style="margin: 0; color: #7d8296; font-size: 11px; font-weight: 500; min-width: 120px;">🔥
+                                Heat Requirement</label>
+                            <select id="basinHeatRequirement" onchange="compileRecipe()"
+                                style="height: 22px !important; flex: 1; background: #1b1c24 !important; border: 1px solid #262836 !important; border-radius: 4px; color: #fff; font-size: 11px; outline: none; padding: 0 6px; cursor: pointer;">
+                                <option value="none">None (Cold Processing)</option>
+                                <option value="heated">Heated</option>
+                                <option value="superheated">Superheated</option>
+                            </select>
+                        </div>
+                        <span
+                            style="display: block; font-size: 10px; color: #5c6370; margin-top: 4px; margin-left: 128px;">Specifies
+                            the temperature constraint required by the mixing or compacting machine.</span>
+                    </div>
+
+                    <!-- Row 2: Fluid mB to Droplet Multiplier Checkbox (Only for Mixing, Compacting & Filling) -->
+                    <div id="advancedFluidRow" class="form-control-wrapper hidden"
+                        style="background: #14151c; border: 1px solid #232530; border-radius: 6px; padding: 12px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="autoConvertFabricFluids" onchange="compileRecipe()"
+                                style="margin: 0; cursor: pointer;">
+                            <label for="autoConvertFabricFluids"
+                                style="margin: 0; color: #7d8296; font-size: 11px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                                💧 Auto-Convert Fluid mB to Fabric Units (Droplets ×81)
+                            </label>
+                        </div>
+                        <span style="display: block; font-size: 10px; color: #5c6370; margin-left: 22px;">Applies
+                            automatic scaling multipliers to fluid amounts within the compiled output.</span>
+                    </div>
+                    <!-- Row 3: Kinetic Processing Time (Only for Milling & Crushing) -->
+                    <div id="processDurationRow" class="form-control-wrapper hidden"
+                        style="background: #14151c; border: 1px solid #232530; border-radius: 6px; padding: 12px; display: flex; align-items: center; gap: 12px;">
+                        <label for="processingTimeInput"
+                            style="margin: 0; color: #7d8296; font-size: 11px; font-weight: 500;">Kinetic Processing
+                            Time:</label>
+                        <input type="number" id="processingTimeInput" value="50" min="1" oninput="compileRecipe()"
+                            style="width: 48px !important; min-width: 48px !important; height: 22px !important; text-align: center; background: #1b1c24 !important; border: 1px solid #262836 !important; border-radius: 4px; color: #fff; font-size: 11px; font-weight: bold; outline: none; padding: 0;">
+                        <span style="font-size: 10px; color: #5c6370;">(Ticks - Only applies to Milling, Cutting &
+                            Crushing recipe types)</span>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <!-- Conditional Framework Panel Rules Setup -->
+            <div class="expandable-toolbar-row"
+                style="display: flex; flex-direction: row; flex-wrap: wrap; align-items: flex-start; gap: 10px; margin-top: 15px; margin-bottom: 15px; width: 100%;">
+
+                <!-- MENU BLOCK 1: CONDITIONAL & FRAMEWORK RULES -->
+                <div class="config-card"
+                    style="flex: 0 1 auto; width: max-content; margin: 0; padding: 6px 12px !important;">
+                    <details class="advanced-options-disclosure" style="cursor: pointer;">
+                        <!-- Static Text Fit Header -->
+                        <summary
+                            style="font-size: 11px; font-weight: bold; color: var(--accent, #e19524); text-transform: uppercase; letter-spacing: 0.5px; list-style: none; display: flex; align-items: center; gap: 6px; outline: none; user-select: none; white-space: nowrap;">
+                            <span class="disclosure-arrow-marker"
+                                style="transition: transform 0.15s ease; display: inline-block;">▶</span> Conditional &
+                            Framework Rules
+                        </summary>
+
+                        <!-- Content Drawer (Expands down as an absolute panel layer to protect width) -->
+                        <div class="expandable-drawer-content-box"
+                            style="margin-top: 12px; display: flex; flex-direction: column; gap: 15px; cursor: default; width: 516px; box-sizing: border-box;"
+                            onclick="event.stopPropagation();">
+
+                            <div style="display: flex; flex-direction: column; gap: 4px; width: 100%;">
+                                <label
+                                    style="color: #7d8296; font-size: 10px; font-weight: 600; text-transform: uppercase;">Environment
+                                    Platform Restrictions</label>
+                                <div class="radio-group"
+                                    style="display: flex; gap: 15px; background: #14151c; padding: 6px 10px; border-radius: 4px; border: 1px solid #232530; width: 100%; box-sizing: border-box; justify-content: flex-start; align-items: center; margin-top: 2px;">
+                                    <label
+                                        style="color: #fff; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; text-transform: none;"><input
+                                            type="radio" name="platform" value="universal" checked
+                                            onchange="compileRecipe()"
+                                            style="width: 11px; height: 11px; margin: 0; accent-color: var(--accent);">
+                                        Universal Setup</label>
+                                    <label
+                                        style="color: #fff; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; text-transform: none;"><input
+                                            type="radio" name="platform" value="forge_only" onchange="compileRecipe()"
+                                            style="width: 11px; height: 11px; margin: 0; accent-color: var(--accent);">
+                                        Forge Only Layer</label>
+                                    <label
+                                        style="color: #fff; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; text-transform: none;"><input
+                                            type="radio" name="platform" value="fabric_only" onchange="compileRecipe()"
+                                            style="width: 11px; height: 11px; margin: 0; accent-color: var(--accent);">
+                                        Fabric Only Layer</label>
+                                </div>
+                                <div class="grid-cell-context-hint"
+                                    style="color: #53586d; font-size: 10px; margin-top: 2px; line-height: 1.3;">→
+                                    Applies automatic cross-compatibility mod checks depending on the system platform
+                                    choice.</div>
+                            </div>
+
+
+                            <div style="margin-top: 4px; border-top: 1px dashed #2d2e31; padding-top: 10px;">
+                                <label
+                                    style="display: flex; align-items: center; gap: 6px; color: #fff; font-size: 12px; cursor: pointer;">
+                                    <input type="checkbox" id="useConditional" onchange="toggleConditionalFields()"
+                                        style="width: 12px; height: 12px; accent-color: var(--accent); margin: 0;"> Wrap
+                                    Data string inside Loader Conditions
+                                </label>
+                            </div>
+
+
+                            <div id="conditionalConfig" class="hidden"
+                                style="margin-top: 2px; border: 1px solid var(--border-color); background-color: #14151c; padding: 12px; border-radius: 4px; display: flex; flex-direction: column; gap: 10px;">
+                                <div class="form-group"
+                                    style="display: flex; flex-direction: column; gap: 4px; width: 100%; margin: 0;">
+                                    <label for="conditionSelector"
+                                        style="color: var(--accent); font-weight: 600; font-size: 11px;">Condition Logic
+                                        Type Check Preset:</label>
+                                    <select id="conditionSelector"
+                                        style="height: 22px; padding: 2px 6px; font-size: 11px; background-color: #1b1c24; border: 1px solid #232530; color: #fff; border-radius: 4px; width: 100%;">
+                                        <option value="custom">✨ Custom Condition Block (Blank Canvas)</option>
+                                        <option value="forge:mod_loaded">Forge: Mod Loaded check</option>
+                                        <option value="fabric:mod_loaded">Fabric: Mod Loaded check</option>
+                                    </select>
+                                </div>
+                                <div style="margin-top: 4px; display: flex; justify-content: flex-start; width: 100%;">
+                                    <button type="button" class="btn-util" onclick="addConditionBlock()"
+                                        style="background: var(--accent); color: #121212; font-weight: bold; border: none; padding: 6px 14px; border-radius: 4px; font-size: 12px; cursor: pointer; height: 28px; display: flex; align-items: center; justify-content: center;">+
+                                        Add Condition Block</button>
+                                </div>
+                            </div>
+
+                            <!-- PART 4: Custom Evaluation Steps Container Track -->
+                            <div
+                                style="margin-top: 4px; border-top: 1px dashed #2d2e31; padding-top: 10px; display: flex; flex-direction: column; gap: 6px; width: 100%;">
+                                <label style="color: #8da6c2; font-size: 11px; font-weight: 500;">Assigned Custom
+                                    Evaluation Steps:</label>
+                                <div id="conditionsContainer"
+                                    style="display: flex; flex-direction: column; gap: 10px; width: 100%; min-height: 0;">
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+        </div> <!-- End of recipe-form -->
+
+
+        <div class="code-preview-sidebar-card">
+            <div class="code-card-header"
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                <label
+                    style="font-weight: bold; color: var(--accent); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">COMPILED
+                    JSON CODE BLOCK STRING</label>
+                <button class="add-slot-btn" onclick="copyToClipboard()" type="button"
+                    style="padding: 4px 10px; font-size: 11px; cursor: pointer;">Copy Text</button>
+            </div>
+            <pre id="jsonOutput">{}</pre>
+        </div>
+
+    </div> <!-- End of workspace -->
+    </div> <!-- End of mainContent -->
+    </div> <!-- End of app-layout -->
+
+
+
+
+
+
+    <!-- Core Layout Stylesheets -->
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/sidebar-left.css">
+    <link rel="stylesheet" href="css/recipe-form.css">
+    <link rel="stylesheet" href="css/sidebar-right.css">
+
+
+    <!-- 1. Raw Engine Baselines & Templates Memory Matrices -->
+    <script src="main/js/foundation/recipe-compilers/recipe-templates.js"></script>
+    <script src="main/js/templates.js"></script>
+
+    <!-- 2. Core Serialization Compilation Engines -->
+    <script src="main/js/foundation/recipe-compilers/recipe-compiler.js"></script>
+    <script src="main/js/foundation/compilers/compiler-engines.js"></script>
+    <script src="main/js/foundation/compilers/compiler-core.js"></script>
+    <script src="main/js/compiler.js"></script>
+
+    <!-- 3. Frontend Interactivity & UI Factory Layer Components -->
+    <script src="main/js/foundation/Frontend/ui-components.js"></script>
+    <script src="main/js/foundation/Frontend/ui-crafting.js"></script>
+    <script src="main/js/foundation/Frontend/ui-preview.js"></script>
+    <script src="main/js/foundation/Frontend/ui-sidebar.js"></script>
+
+    <!-- 4. Main Event Listeners & Router Entry Handlers -->
+    <script src="main/js/foundation/Frontend/ui-router.js"></script>
+    <script src="main/js/main.js"></script>
+
+
+
+
+</body>
+
+</html>

@@ -107,7 +107,7 @@ function copyToClipboard() {
             copyBtn.textContent = 'Copied! ✅';
             copyBtn.style.background = '#4caf50';
             copyBtn.style.color = '#fff';
-            
+
             setTimeout(() => {
                 copyBtn.textContent = originalText;
                 copyBtn.style.background = '';
@@ -126,7 +126,7 @@ function downloadRecipeJson() {
     try {
         const parsed = JSON.parse(jsonText);
         const engineType = (parsed.type || parsed.engine || 'recipe').split(':').pop();
-        
+
         let filename = 'recipe.json';
         const titleInput = document.getElementById('recipeTitle');
         if (titleInput && titleInput.value.trim()) {
@@ -142,12 +142,12 @@ function downloadRecipeJson() {
         a.download = filename;
         document.body.appendChild(a);
         a.click();
-        
+
         setTimeout(() => {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }, 0);
-    } catch(e) {
+    } catch (e) {
         console.error('Failed to generate filename from invalid JSON:', e);
     }
 }

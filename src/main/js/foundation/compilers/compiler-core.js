@@ -8,10 +8,10 @@ function compileRecipe() {
     let demandsFabricFormat = (platformSelection === "fabric_only") || document.getElementById('autoConvertFabricFluids')?.checked;
     let compiledResultsArray = [];
     const outputContainers = document.getElementById('outputsContainer').children;
-    const allowsChance = ['crushing', 'sequenced_assembly', 'milling', 'splashing'].includes(targetEngine);
+    const allowsChance = ['crushing', 'sequenced_assembly', 'milling', 'splashing', 'cutting' ].includes(targetEngine);
 
     const ALLOWED_FLUID_ENGINES = ['mixing', 'compacting', 'filling'];
-    const ENGINES_WITH_CHANCE = ['crushing', 'sequenced_assembly', 'splashing'];
+    const ENGINES_WITH_CHANCE = ['crushing', 'sequenced_assembly', 'splashing', 'cutting'];
     const SEQUENCED_ASSEMBLY_STEP_TYPES = ['pressing', 'deploying', 'filling'];
 
 
@@ -37,24 +37,44 @@ function compileRecipe() {
                 "count": parseInt(countInput.value) || 1
             };
             if (allowsChance && chanceInput) {
-                const chanceVal = parseFloat(chanceInput.value);
-                if (!isNaN(chanceVal) && chanceVal < 1.0) {
-                    itemObject.chance = chanceVal;
+                const rawChanceString = chanceInput.value ? chanceInput.value.trim() : "";
+                let inputPercent = parseFloat(rawChanceString);
+
+            
+                if (rawChanceString === "") {
+                    inputPercent = 100;
+                }
+
+                if (!isNaN(inputPercent)) {
+             
+                    inputPercent = Math.max(0, Math.min(100, inputPercent));
+                    let chanceVal = inputPercent / 100;
+ 
+                    chanceVal = parseFloat(chanceVal.toFixed(2));
+
+
+                    if (chanceVal < 1.0) {
+                        itemObject.chance = chanceVal;
+                    }
                 }
             }
             compiledResultsArray.push(itemObject);
         }
     }
 
-    if (['mixing', 'compacting'].includes(targetEngine)) {
-        coreRecipe = compileBasinRecipe(rawEngine, compiledResultsArray, demandsFabricFormat);
-    } else if (targetEngine === 'sequenced_assembly') {
-        coreRecipe = compileAssemblyRecipe(compiledResultsArray, demandsFabricFormat);
-    } else if (targetEngine === 'mechanical_crafting') {
-        coreRecipe = compileMechanicalCraftingRecipe();
-    } else {
-        coreRecipe = compileStandardKineticRecipe(rawEngine, compiledResultsArray);
-    }
+if (targetEngine === 'filling') {
+    coreRecipe = compileSpoutRecipe(compiledResultsArray, demandsFabricFormat);
+} else if (['mixing', 'compacting'].includes(targetEngine)) {
+    coreRecipe = compileBasinRecipe(rawEngine, compiledResultsArray, demandsFabricFormat);
+} else if (targetEngine === 'sequenced_assembly') {
+    coreRecipe = compileAssemblyRecipe(compiledResultsArray, demandsFabricFormat);
+} else if (targetEngine === 'mechanical_crafting') {
+    coreRecipe = compileMechanicalCraftingRecipe();
+} else if (['milling', 'crushing', 'cutting'].includes(targetEngine)) {
+    coreRecipe = compileTimedKineticRecipe(rawEngine, compiledResultsArray);
+} else {
+    coreRecipe = compileStandardKineticRecipe(rawEngine, compiledResultsArray);
+}
     let outputJson = coreRecipe; 
     
     let isConditionalChecked = document.getElementById('useConditional')?.checked || false;
