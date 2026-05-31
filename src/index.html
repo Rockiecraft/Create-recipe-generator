@@ -175,7 +175,19 @@
                         onclick="addOutputBlock('minecraft:gold_nugget', 1, 1000)">+ Add Extra Output Product
                         Node</button>
                 </div>
+                <div id="singleOutputInputsPanel" class="recipe-group-card hidden" style="margin-top: 12px;">
+                    <div class="left-aligned-layout-grid">
 
+                        <!-- Registry Target Text Box Input Field -->
+                        <div class="grid-cell-stacked-box">
+                            <label style="margin-top:0;">Single Output Product Result</label>
+                            <input type="text" id="singleOutputProductId" placeholder="create:brass_ingot"
+                                value="create:brass_ingot" oninput="compileRecipe()">
+                        </div>
+                        <div class="grid-cell-context-hint">Determines the solid item resulting profile generated.</div>
+
+                    </div>
+                </div>
                 <div id="mechanicalCraftingContainer" class="config-card hidden"
                     style="flex: 0 1 auto; width: 100%; margin: 16px 0 0 0; padding: 12px !important; box-sizing: border-box;">
                     <details class="advanced-options-disclosure" style="cursor: pointer; width: 100%;" open>

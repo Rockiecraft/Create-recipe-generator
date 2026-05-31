@@ -13,10 +13,10 @@
     "appId": "com.rockiecraft.create-recipe-generator",
     "productName": "CreateRecipeGenerator",
     "files": [
-      "index.html",
-      "css/**/*",
-      "js/**/*",
-      "app-entry.js"
+    "src/index.html",
+    "src/css/**/*",
+    "src/main/**/*",
+    "app-entry.js"
     ],
     "win": {
       "target": "portable"

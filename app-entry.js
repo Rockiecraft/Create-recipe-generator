@@ -17,7 +17,7 @@ function createStudioDesktopWindow() {
 
     desktopWin.setMenuBarVisibility(false);
 
-    desktopWin.loadFile('index.html');
+    desktopWin.loadFile(path.join(__dirname, 'src', 'index.html'));
 }
 
 app.whenReady().then(() => {

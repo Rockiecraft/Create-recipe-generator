@@ -65,7 +65,14 @@ function toggleEngineFields() {
             timeInput.value = "200";
         }
     }
-
+    const singleOutputPanel = document.getElementById('singleOutputInputsPanel');
+    if (singleOutputPanel) {
+        if (['pressing', 'filling', 'smoking', 'blasting', 'haunting', 'sequenced_assembly', 'deploying', 'mechanical_crafting'].includes(targetEngine)) {
+            singleOutputPanel.classList.remove('hidden');
+        } else {
+            singleOutputPanel.classList.add('hidden');
+        }
+    }
 
     document.querySelectorAll('.chance-container').forEach(el =>
         el.classList.toggle('hidden', !['crushing', 'sequenced_assembly', 'milling', 'splashing', 'cutting'].includes(targetEngine)));
@@ -91,7 +98,23 @@ function toggleEngineFields() {
             }
         });
     }
+    const hidesMultiOutputs = ['pressing', 'filling', 'blasting', 'smoking', 'haunting', 'sequenced_assembly', 'deploying', 'mechanical_crafting'].includes(targetEngine);
 
+  
+    const outputsCardWrapper = document.getElementById('outputsContainer')?.closest('.recipe-group-card') || 
+                               document.getElementById('outputsContainer')?.parentElement;
+    const addOutputNodeBtn = document.querySelector('button[onclick*="addOutputBlock"]');
+
+    
+    if (hidesMultiOutputs) {
+       
+        outputsCardWrapper?.classList.add('hidden');
+        addOutputNodeBtn?.classList.add('hidden');
+    } else {
+    
+        outputsCardWrapper?.classList.remove('hidden');
+        addOutputNodeBtn?.classList.remove('hidden');
+    }
     if (typeof compileRecipe === 'function') compileRecipe();
 }
 

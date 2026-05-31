@@ -1,32 +1,35 @@
 function compileBasinRecipe(rawEngine, resultsArray, isFabric) {
     let ingredientsArray = [];
-
     const inputContainers = document.getElementById('ingredientsContainer')?.children || [];
+
     for (let container of inputContainers) {
-        const idInput = container.querySelector('.ing-id');
-        const fluidCheck = container.querySelector('.ing-is-fluid');
-        const countInput = container.querySelector('.ing-count');
+        // Multi-selector fallbacks to guarantee the elements are always found
+        const idInput = container.querySelector('.ing-id') || container.querySelector('input[type="text"]');
+        const fluidCheck = container.querySelector('.ing-is-fluid') || container.querySelector('input[type="checkbox"]');
+        const countInput = container.querySelector('.ing-count') || container.querySelector('input[type="number"]');
 
-        if (!idInput || !idInput.value) continue;
+        if (!idInput || !idInput.value || !idInput.value.trim()) continue;
 
+        const val = idInput.value.trim();
+
+        // Safe evaluation path for the active checkbox state
         if (fluidCheck && fluidCheck.checked) {
-            let amount = parseInt(countInput.value) || 1000;
+            let amount = countInput ? (parseInt(countInput.value, 10) || 1000) : 1000;
             if (isFabric) amount *= 81;
 
             ingredientsArray.push({
-                "fluid": idInput.value.trim(),
+                "fluid": val,
                 "amount": amount
             });
         } else {
-            const count = parseInt(countInput.value) || 1;
-            const val = idInput.value.trim();
+            // Standard block item format completely stripped of "count" properties
             if (val.startsWith('#')) {
                 ingredientsArray.push({
                     "tag": val.replace('#', '')
                 });
             } else {
                 ingredientsArray.push({
-                    "item": val,
+                    "item": val
                 });
             }
         }

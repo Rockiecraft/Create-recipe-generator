@@ -91,8 +91,10 @@ function addOutputBlock(defaultValue = 'create:brass_ingot') {
         <div style="display:flex; gap:10px; margin-top:6px;">
             <div style="flex:1;">
                 <label class="out-count-label" style="margin-top:0;">Amount</label>
-                <input type="number" class="out-count" value="1" min="0" max="10000" step="1" style="padding:4px; font-size:11px;" oninput="if(typeof compileRecipe==='function')compileRecipe();" onchange="let block = this.closest('.grid-cell-stacked-box'); let isFluid = block ? block.querySelector('.out-is-fluid')?.checked : false; if (isFluid) { let parsed = parseInt(this.value) || 0; if (parsed < 1) parsed = 100; if (parsed > 1000) parsed = 1000; this.value = parsed; } else { let parsed = parseInt(this.value) || 0; if (parsed < 1 || parsed > 64) parsed = 1; this.value = parsed; } if(typeof compileRecipe==='function')compileRecipe();" />
-            </div>
+                    <input type="number" class="out-count" value="${defaultValue}" min="0" max="1000" style="padding:4px; font-size:11px;"
+                        oninput="let block = this.closest('.grid-cell-stacked-box'); let isFluid = block ? block.querySelector('.out-is-fluid')?.checked : false; let parsed = parseInt(this.value); if (isFluid && parsed > 1000) this.value = 1000; compileRecipe();"
+                        onchange="let block = this.closest('.grid-cell-stacked-box'); let isFluid = block ? block.querySelector('.out-is-fluid')?.checked : false; let parsed = parseInt(this.value); if (isNaN(parsed)) parsed = 1; if (isFluid) { if (parsed < 0) parsed = 0; if (parsed > 1000) parsed = 1000; } else { if (parsed < 1) parsed = 1; } this.value = parsed; compileRecipe();">
+                </div>
             <div class="chance-container" style="flex:1;">
                 <label style="margin-top:0;">Chance (%)</label>
                 <input type="number" class="out-chance" placeholder="100" value="100" min="0" max="100" step="5" oninput="compileRecipe()" />
