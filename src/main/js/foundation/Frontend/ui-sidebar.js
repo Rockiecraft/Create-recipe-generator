@@ -1,4 +1,4 @@
-function renderSidebarList() {
+function renderSidebarList(forcedActiveId = null) {
     const listContainer = document.getElementById('recipeSidebarContainer');
     if (!listContainer) return;
     listContainer.innerHTML = '';
@@ -9,9 +9,10 @@ function renderSidebarList() {
         return;
     }
 
-    keys.forEach(filename => {
+    keys.forEach((filename) => {
         const item = recipesDatabase[filename];
-        const isActive = String(filename) === String(activeRecipeId);
+        const currentCheckId = forcedActiveId || activeRecipeId;
+        const isActive = String(filename) === String(currentCheckId);
 
         let badgeColor = 'var(--accent)';
         if (item.engine === 'create:mixing') badgeColor = '#5db0e5';
@@ -19,10 +20,9 @@ function renderSidebarList() {
         if (item.engine === 'create:sequenced_assembly') badgeColor = '#b55de5';
         if (item.engine === 'create:mechanical_crafting') badgeColor = '#e19524';
 
-        const cleanType = "create:" + (item.engine || 'mixing').replace('create:', '');
+        const cleanType = 'create:' + (item.engine || 'mixing').replace('create:', '');
         const itemDiv = document.createElement('div');
         itemDiv.className = `recipe-list-item ${isActive ? 'active' : ''}`;
-
 
         if (isActive) {
             itemDiv.style.borderLeftColor = 'var(--accent)';
@@ -33,9 +33,8 @@ function renderSidebarList() {
         }
 
         if (isSidebarCollapsed) {
-
-            let visualIconHtml = typeof getRecipeVisualIcon === 'function' ? getRecipeVisualIcon(item.engine) : "🔨";
-            itemDiv.setAttribute('title', item.name || "Untitled Recipe");
+            let visualIconHtml = typeof getRecipeVisualIcon === 'function' ? getRecipeVisualIcon(item.engine) : '🔨';
+            itemDiv.setAttribute('title', item.name || 'Untitled Recipe');
 
             itemDiv.innerHTML = `
                 <div onclick="selectActiveRecipeTarget('${filename}')" style="cursor: pointer; user-select: none; width: 100%; display: flex; align-items: center; justify-content: center; padding: 4px 0;">
@@ -43,7 +42,6 @@ function renderSidebarList() {
                 </div>
             `;
         } else {
-
             itemDiv.setAttribute('onclick', `loadRecipeFromState('${filename}')`);
             itemDiv.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; width:100%; gap:8px; box-sizing:border-box; position:relative;">
@@ -75,7 +73,7 @@ function executeSidebarCollapseToggle() {
     const toggleBtn = document.getElementById('sidebarCollapseBtn') || document.querySelector('.btn-collapse-toggle');
 
     if (!sidebar) {
-        console.error("Critical Error: Left sidebar element container not found in DOM.");
+        console.error('Critical Error: Left sidebar element container not found in DOM.');
         return;
     }
 
@@ -87,18 +85,14 @@ function executeSidebarCollapseToggle() {
         toggleBtn.textContent = isSidebarCollapsed ? '<' : '>';
     }
 
-
     if (typeof renderSidebarList === 'function') {
         renderSidebarList();
     }
 }
 
-
 window.toggleSidebarCollapseState = function () {
     executeSidebarCollapseToggle();
 };
-
-
 
 function createNewRecipeLayout() {
     const rawEngine = currentActiveEngine || 'create:mixing';
@@ -114,7 +108,7 @@ function createNewRecipeLayout() {
         conditions: [],
         assemblySteps: [],
         assemblyLoops: 1,
-        transitionalItem: ''
+        transitionalItem: '',
     };
     activeRecipeId = id;
     const titleInput = document.getElementById('recipeTitle');
@@ -134,7 +128,7 @@ function createNewRecipeLayout() {
 
     const tabElement = document.querySelector(`.engine-tab[data-engine="${cleanEngine}"]`);
     if (tabElement) {
-        document.querySelectorAll('.engine-tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.engine-tab').forEach((b) => b.classList.remove('active'));
         tabElement.classList.add('active');
     }
     if (typeof toggleEngineFields === 'function') toggleEngineFields();
@@ -202,7 +196,7 @@ function deleteRecipeTarget(id) {
             if (containerCond) containerCond.innerHTML = '';
             const tabElement = document.querySelector('.engine-tab[data-engine="create:mixing"]');
             if (tabElement) {
-                document.querySelectorAll('.engine-tab').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.engine-tab').forEach((b) => b.classList.remove('active'));
                 tabElement.classList.add('active');
             }
             if (typeof toggleEngineFields === 'function') toggleEngineFields();
@@ -218,22 +212,22 @@ function duplicateRecipeTarget(id) {
 }
 
 function getRecipeVisualIcon(recipeEngine) {
-    let icon = "🔨";
+    let icon = '🔨';
     const engine = (recipeEngine || '').replace('create:', '');
-    if (engine === 'mixing') icon = "🌀";
-    if (engine === 'compacting') icon = "📦";
-    if (engine === 'pressing') icon = "🖨️";
-    if (engine === 'cutting') icon = "🪚";
-    if (engine === 'milling') icon = "⚙️";
-    if (engine === 'crushing') icon = "🛞";
-    if (engine === 'filling') icon = "🧪";
-    if (engine === 'splashing') icon = "💦";
-    if (engine === 'smoking') icon = "💨";
-    if (engine === 'blasting') icon = "🔥";
-    if (engine === 'haunting') icon = "👻";
-    if (engine === 'deploying') icon = "🤖";
-    if (engine === 'sequenced_assembly') icon = "⛓️";
-    if (engine === 'mechanical_crafting') icon = "🧩";
+    if (engine === 'mixing') icon = '🌀';
+    if (engine === 'compacting') icon = '📦';
+    if (engine === 'pressing') icon = '🖨️';
+    if (engine === 'cutting') icon = '🪚';
+    if (engine === 'milling') icon = '⚙️';
+    if (engine === 'crushing') icon = '🛞';
+    if (engine === 'filling') icon = '🧪';
+    if (engine === 'splashing') icon = '💦';
+    if (engine === 'smoking') icon = '💨';
+    if (engine === 'blasting') icon = '🔥';
+    if (engine === 'haunting') icon = '👻';
+    if (engine === 'deploying') icon = '🤖';
+    if (engine === 'sequenced_assembly') icon = '⛓️';
+    if (engine === 'mechanical_crafting') icon = '🧩';
     return icon;
 }
 

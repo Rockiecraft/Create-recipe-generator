@@ -1,6 +1,153 @@
 function compileRecipe() {
+    if (window.isSwitchingLayouts || window.isWorkspaceSwappingLayout) return;
 
-    
+    let dataStore = null;
+
+    if (typeof activeRecipeId !== 'undefined' && activeRecipeId && typeof recipesDatabase !== 'undefined' && recipesDatabase[activeRecipeId]) {
+        const recipe = recipesDatabase[activeRecipeId];
+        const activeTabEl = document.querySelector('.engine-tab.active, .tab-button.active, .recipe-tab.active');
+        const rawEngine = activeTabEl ? activeTabEl.getAttribute('data-engine') || activeTabEl.dataset.engine || activeTabEl.id : 'create:mixing';
+
+        const currentEngine = rawEngine.includes('create:') ? rawEngine : `create:${rawEngine}`;
+        const targetEngine = currentEngine.replace('create:', '');
+
+        if (!recipe.enginesData) recipe.enginesData = {};
+        if (!recipe.enginesData[currentEngine]) {
+            recipe.enginesData[currentEngine] = {
+                inputItem: '',
+                outputItem: '',
+                processingTime: 200,
+                ingredients: [],
+                outputs: [],
+                conditions: [],
+                assemblySteps: [],
+                assemblyLoops: 1,
+                transitionalItem: '',
+            };
+        }
+
+        dataStore = recipe.enginesData[currentEngine];
+
+        const titleInput = document.getElementById('recipeTitle');
+        if (titleInput) recipe.name = titleInput.value.trim();
+
+        const platformRad = document.querySelector('input[name="platform"]:checked');
+        if (platformRad) recipe.platform = platformRad.value || 'universal';
+
+        dataStore.ingredients = [];
+        const containerIng = document.getElementById('ingredientsContainer');
+        if (containerIng) {
+            for (let row of containerIng.children) {
+                const idInput = row.querySelector('.ing-id');
+                const fluidCheck = row.querySelector('.ing-is-fluid');
+                const countInput = row.querySelector('.ing-count');
+
+                if (idInput && idInput.value.trim() !== '') {
+                    dataStore.ingredients.push({
+                        id: idInput.value.trim(),
+                        isFluid: fluidCheck ? fluidCheck.checked : false,
+                        amount: countInput ? countInput.value : '1',
+                    });
+                }
+            }
+        }
+
+        dataStore.outputs = [];
+        const containerOut = document.getElementById('outputsContainer');
+        if (containerOut) {
+            for (let row of containerOut.children) {
+                const idInput = row.querySelector('.out-id') || row.querySelector('input[type="text"]');
+                const countInput = row.querySelector('.out-count');
+                const fluidCheck = row.querySelector('.out-is-fluid');
+                const chanceInput = row.querySelector('.out-chance');
+
+                if (idInput && idInput.value.trim() !== '') {
+                    dataStore.outputs.push({
+                        id: idInput.value.trim(),
+                        count: countInput ? countInput.value : '1',
+                        isFluid: fluidCheck ? fluidCheck.checked : false,
+                        chance: chanceInput ? chanceInput.value : '1.0',
+                    });
+                }
+            }
+        }
+        if (targetEngine === 'sequenced_assembly') {
+            const loopsBox = document.getElementById('assemblyLoops');
+            if (loopsBox) dataStore.assemblyLoops = parseInt(loopsBox.value, 10) || 1;
+
+            const transitionalBox = document.getElementById('transitionalItem');
+            if (transitionalBox) dataStore.transitionalItem = transitionalBox.value.trim();
+
+            const singleInputBox = document.getElementById('inputItem') || document.getElementById('recipeInputItem');
+            if (singleInputBox) dataStore.inputItem = singleInputBox.value.trim();
+
+            dataStore.assemblySteps = [];
+            const assemblyContainer = document.getElementById('assemblyStepsContainer');
+            if (assemblyContainer) {
+                for (let stepRow of assemblyContainer.children) {
+                    const typeSelect = stepRow.querySelector('.step-type') || stepRow.querySelector('select');
+                    if (typeSelect && typeSelect.value) {
+                        dataStore.assemblySteps.push({
+                            id: stepRow.id,
+                            type: typeSelect.value,
+                        });
+                    }
+                }
+            }
+        }
+        if (targetEngine === 'mechanical_crafting') {
+            if (!dataStore.gridMatrix) dataStore.gridMatrix = {};
+
+            const widthBox = document.getElementById('craftingWidth');
+            if (widthBox) dataStore.width = parseInt(widthBox.value, 10) || 3;
+
+            const heightBox = document.getElementById('craftingHeight');
+            if (heightBox) dataStore.height = parseInt(heightBox.value, 10) || 3;
+
+            const mirroringSelect = document.getElementById('acceptMirrored');
+            if (mirroringSelect) dataStore.mirroring = mirroringSelect.value || 'false';
+
+            const width = dataStore.width || 3;
+            const height = dataStore.height || 3;
+
+            for (let r = 0; r < height; r++) {
+                for (let c = 0; c < width; c++) {
+                    const cell = document.querySelector(`.craft-cell[data-row="${r}"][data-col="${c}"]`);
+                    const coordinateKey = `${r},${c}`;
+                    if (cell) {
+                        dataStore.gridMatrix[coordinateKey] = cell.value.trim().toUpperCase();
+                    }
+                }
+            }
+
+            dataStore.ingredients = [];
+            const containerIng = document.getElementById('ingredientsContainer');
+            if (containerIng) {
+                for (let row of containerIng.children) {
+                    const idInput = row.querySelector('.ing-id');
+                    const countInput = row.querySelector('.ing-count');
+
+                    if (idInput && idInput.value.trim() !== '') {
+                        dataStore.ingredients.push({
+                            id: idInput.value.trim(),
+                            isFluid: false,
+                            amount: countInput ? parseInt(countInput.value, 10) || 1 : 1,
+                        });
+                    }
+                }
+            }
+
+            dataStore.outputs = [...recipe.outputs];
+            const singleOutputBox = document.getElementById('singleOutputProductId') || document.getElementById('outputItem');
+            if (singleOutputBox) dataStore.outputItem = singleOutputBox.value.trim();
+        }
+
+        recipe.engine = currentEngine;
+
+        if (typeof saveActiveRecipeState === 'function') {
+            saveActiveRecipeState();
+        }
+    }
     const activeRadio = document.querySelector('input[name="platform"]:checked');
     const platformSelection = activeRadio ? activeRadio.value : 'universal';
     let coreRecipe = {};
@@ -100,11 +247,14 @@ function compileRecipe() {
             const condValEl = condEl.querySelector('.cond-val');
 
             if (condTypeEl && condTypeEl.value) {
+                const condKeyEl = condEl.querySelector('.cond-key') || condEl.querySelector('input[placeholder*="Key"]') || condEl.querySelectorAll('input')[1];
+
                 rawInputsList.push({
-                    type: condTypeEl.value,
-                    key: condKeyEl ? condKeyEl.value : '',
-                    val: condValEl ? condValEl.value : '',
                     route: condRouteEl ? condRouteEl.value : 'both',
+                    type: condTypeEl.value.trim(),
+
+                    key: condKeyEl ? condKeyEl.value.trim() : '',
+                    value: condValEl ? condValEl.value.trim() : '',
                 });
             }
         }
@@ -115,32 +265,82 @@ function compileRecipe() {
         if (isConditionalChecked && rawInputsList.length > 0) {
             for (let input of rawInputsList) {
                 if (input.route === 'forge' || input.route === 'both') {
-                    compiledConditionsArray.push({ type: input.type, modid: input.key });
+                    let finalValue = input.value || '';
+
+                    let dynamicKey = input.key && input.key !== '' ? input.key : 'config';
+
+                    compiledConditionsArray.push({
+                        type: input.type,
+                        [dynamicKey]: finalValue,
+                    });
                 }
             }
         }
-        if (compiledConditionsArray.length === 0) {
-            compiledConditionsArray.push({ type: 'forge:mod_loaded', modid: 'create' });
+
+        let recipeInnerBlock = {
+            'fabric:load_conditions': [
+                {
+                    condition: 'fabric:all_mods_loaded',
+                    values: ['forge'],
+                },
+            ],
+            ...coreRecipe,
+        };
+
+        if (compiledConditionsArray.length > 0) {
+            recipeInnerBlock = {
+                conditions: compiledConditionsArray,
+                ...recipeInnerBlock,
+            };
         }
+
         outputJson = {
             type: 'forge:conditional',
-            recipes: [{ conditions: compiledConditionsArray, recipe: coreRecipe }],
+            recipes: [recipeInnerBlock],
         };
     } else if (platformSelection === 'fabric_only') {
         let compiledConditionsArray = [];
         if (isConditionalChecked && rawInputsList.length > 0) {
             for (let input of rawInputsList) {
                 if (input.route === 'fabric' || input.route === 'both') {
-                    compiledConditionsArray.push({ condition: input.type, values: [input.key] });
+                    let finalValue = input.value || '';
+
+                    let dynamicKey = input.key && input.key !== '' ? input.key : 'config';
+
+                    compiledConditionsArray.push({
+                        type: input.type,
+                        [dynamicKey]: finalValue,
+                    });
                 }
             }
         }
-        if (compiledConditionsArray.length === 0) {
-            compiledConditionsArray.push({ condition: 'fabric:all_mods_loaded', values: ['create'] });
-        }
-        outputJson = {
-            'fabric:load_conditions': compiledConditionsArray,
+
+        let recipeInnerBlock = {
+            conditions: [
+                {
+                    type: 'forge:mod_loaded',
+                    modid: 'fabricloader',
+                },
+            ],
             ...coreRecipe,
+        };
+
+        if (compiledConditionsArray.length > 0) {
+            recipeInnerBlock = {
+                conditions: [
+                    {
+                        type: 'forge:mod_loaded',
+                        modid: 'fabricloader',
+                    },
+                ],
+                'fabric:load_conditions': compiledConditionsArray,
+                ...coreRecipe,
+            };
+        }
+
+        outputJson = {
+            type: 'forge:conditional',
+            recipes: [recipeInnerBlock],
         };
     } else {
         if (isConditionalChecked && rawInputsList.length > 0) {
@@ -148,23 +348,50 @@ function compileRecipe() {
             let fabricConditions = [];
 
             for (let input of rawInputsList) {
-                if (input.route === 'forge' || input.route === 'both') {
-                    forgeConditions.push({ type: input.type, modid: input.key });
-                }
-                if (input.route === 'fabric' || input.route === 'both') {
-                    fabricConditions.push({ condition: input.type, values: [input.key] });
-                }
-            }
+                let finalValue = input.value || '';
 
-            let finalDualRecipe = { ...coreRecipe };
-            if (fabricConditions.length > 0) {
-                finalDualRecipe = { 'fabric:load_conditions': fabricConditions, ...coreRecipe };
+                let dynamicKey = input.key && input.key !== '' ? input.key : 'config';
+
+                if (input.route === 'forge' || input.route === 'both') {
+                    forgeConditions.push({
+                        type: input.type,
+                        [dynamicKey]: finalValue,
+                    });
+                }
+
+                if (input.route === 'fabric' || input.route === 'both') {
+                    fabricConditions.push({
+                        type: input.type,
+                        [dynamicKey]: finalValue,
+                    });
+                }
             }
 
             if (forgeConditions.length > 0) {
-                outputJson = { type: 'forge:conditional', recipes: [{ conditions: forgeConditions, recipe: finalDualRecipe }] };
+                let recipesBlock = {
+                    conditions: forgeConditions,
+                    recipe: coreRecipe,
+                };
+
+                if (fabricConditions.length > 0) {
+                    recipesBlock = {
+                        conditions: forgeConditions,
+                        'fabric:load_conditions': fabricConditions,
+                        recipe: coreRecipe,
+                    };
+                }
+
+                outputJson = {
+                    type: 'forge:conditional',
+                    recipes: [recipesBlock],
+                };
+            } else if (fabricConditions.length > 0) {
+                outputJson = {
+                    'fabric:load_conditions': fabricConditions,
+                    ...coreRecipe,
+                };
             } else {
-                outputJson = finalDualRecipe;
+                outputJson = coreRecipe;
             }
         } else {
             outputJson = coreRecipe;
