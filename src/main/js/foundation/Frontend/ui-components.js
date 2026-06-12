@@ -23,7 +23,7 @@ function addIngredientBlock(defaultValue = 'minecraft:stone') {
         
         <div class="fluid-toggle-row ${fluidVisibility}" style="display:flex; gap:10px; align-items:center; margin-top:6px;">
             <label style="margin-top:0; font-size:10px; display:inline-flex; align-items:center; cursor:pointer;">
-                <input type="checkbox" class=".ing-is-fluid" onchange="if(typeof toggleFluidLabelContext==='function')toggleFluidLabelContext(this, '${ingDiv.id}')"> 💧 Is Fluid?
+                <input type="checkbox" class="ing-is-fluid" onchange="if(typeof toggleFluidLabelContext==='function')toggleFluidLabelContext(this, '${ingDiv.id}'); if(typeof compileRecipe==='function')compileRecipe();"> 💧 Is Fluid?
             </label>
             <div class="ing-volume-container hidden" style="flex:1; display:flex; align-items:center; gap:6px;">
                 <span style="font-size:10px; font-weight:bold; color:var(--accent);">mB:</span>
@@ -83,7 +83,7 @@ function addOutputBlock(defaultValue = 'create:brass_ingot') {
 
         <div class="fluid-toggle-row${fluidOutputVisibilityClass}" style="display:flex; gap:10px; align-items:center; margin-top:6px;">
             <label style="margin-top:0; font-size:10px; display:inline-flex; align-items:center; cursor:pointer;">
-                <input type="checkbox" class=".out-is-fluid" onchange="if(typeof toggleFluidOutputLabelContext==='function')toggleFluidOutputLabelContext(this, '${outDiv.id}')" />
+                <input type="checkbox" class="out-is-fluid" onchange="if(typeof toggleFluidOutputLabelContext==='function')toggleFluidOutputLabelContext(this, '${outDiv.id}'); if(typeof compileRecipe==='function')compileRecipe();" />
                 💧 Is Fluid Output Result?
             </label>
         </div>
@@ -91,7 +91,15 @@ function addOutputBlock(defaultValue = 'create:brass_ingot') {
         <div style="display:flex; gap:10px; margin-top:6px;">
             <div style="flex:1;">
                 <label class="out-count-label" style="margin-top:0;">Amount</label>
-                <input type="number" class="out-count" value="1" min="0" max="1000" style="padding:4px; font-size:11px;" oninput="let block = this.closest('.grid-cell-stacked-box'); let isFluid = block ? block.querySelector('.out-is-fluid')?.checked : false; let parsed = parseInt(this.value); if (isFluid && parsed > 1000) this.value = 1000; compileRecipe();" onchange="let block = this.closest('.grid-cell-stacked-box'); let isFluid = block ? block.querySelector('.out-is-fluid')?.checked : false; let parsed = parseInt(this.value); if (isNaN(parsed)) parsed = 1; if (isFluid) { if (parsed < 0) parsed = 0; if (parsed > 1000) parsed = 1000; } else { if (parsed < 1) parsed = 1; } this.value = parsed; compileRecipe();" />
+                <input
+                    type="number"
+                    class="out-count"
+                    value="1"
+                    min="0"
+                    max="1000"
+                    style="padding:4px; font-size:11px;"
+                    oninput="let block = this.closest('.grid-cell-stacked-box') || this.parentElement.parentElement.parentElement; let inputs = block ? block.getElementsByTagName('input') : []; let fluidBox = Array.from(inputs).find(i => i.type === 'checkbox'); let isFluid = fluidBox ? fluidBox.checked : false; let parsed = parseInt(this.value); if (isFluid) { if (parsed > 1000) this.value = 1000; } else { if (parsed > 64) this.value = 64; } compileRecipe();"
+                    onchange="let block = this.closest('.grid-cell-stacked-box') || this.parentElement.parentElement.parentElement; let inputs = block ? block.getElementsByTagName('input') : []; let fluidBox = Array.from(inputs).find(i => i.type === 'checkbox'); let isFluid = fluidBox ? fluidBox.checked : false; let parsed = parseInt(this.value); if (isNaN(parsed)) parsed = 1; if (isFluid) { if (parsed < 0) parsed = 0; if (parsed > 1000) parsed = 1000; } else { if (parsed < 1) parsed = 1; if (parsed > 64) parsed = 64; } this.value = parsed; compileRecipe();" />
             </div>
             <div class="chance-container" style="flex:1;">
                 <label style="margin-top:0;">Chance (%)</label>

@@ -20,7 +20,7 @@ body {
     display: flex; 
     flex-direction: column;
     height: 100vh; 
-    overflow: hidden;
+    overflow-x: auto !important;
 }
 
 header {
@@ -52,8 +52,7 @@ header .meta {
 }
 
 .workspace-wrapper {
-    display: auto !important;
-    width: 100vw !important;
+    display: flex !important;
     height: calc(100vh - 57px) !important;
     overflow-y: auto !important;
     overflow-x: auto !important;
@@ -108,4 +107,312 @@ main, .app, #app, .app-container {
     width: 100vw !important;
     height: 100vh !important;
     overflow: hidden !important;
+}
+
+header, .title-bar-selector, [id*="header"] {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end !important; 
+    width: 100% !important;
+    height: 56px !important; 
+    background: #111217 !important; 
+    border-bottom: 1px solid #1c1d24 !important;
+    box-sizing: border-box !important;
+    padding: 0 30px 0 20px !important;
+    position: relative !important; 
+}
+
+header h1, .header-title-text {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important; 
+    margin: 0 !important;
+    text-align: center !important;
+    white-space: nowrap !important; 
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.75px !important;
+    color: #ffffff !important;
+    width: auto !important; 
+}
+
+.header-version-selector, [class*="version-selector"] {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    width: auto !important;        
+    max-width: none !important;    
+    min-width: max-content !important; 
+    white-space: nowrap !important;
+}
+
+
+.header-version-selector select, 
+#minecraftVersion {
+    background: #1b1c24 !important;
+    border: 1px solid #4a4d63 !important; 
+    border-radius: 4px !important;
+    color: #ffffff !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    
+    padding: 6px 32px 6px 12px !important; 
+    height: auto !important;
+    min-height: 28px !important;
+    line-height: 1.2 !important; 
+    
+    width: auto !important;
+    min-width: max-content !important; 
+    outline: none !important;
+    cursor: pointer !important;
+    display: inline-block !important;
+    box-sizing: border-box !important;
+}
+
+
+.header-version-selector select, 
+#minecraftVersion {
+    background: #1b1c24 !important;
+    border: 1px solid #4a4d63 !important; 
+    border-radius: 4px !important;
+    color: #ffffff !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    padding: 5px 12px !important;
+    width: auto !important;
+    min-width: max-content !important; 
+    outline: none !important;
+    cursor: pointer !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+html, body, .app-container, #app {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important; 
+    overflow-x: auto !important;       
+    overflow-y: auto !important;       
+    box-sizing: border-box !important;
+    background: #111217 !important;
+}
+
+header, .title-bar-selector, [id*="header"] {
+    position: relative !important;    
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end !important; 
+    width: 100% !important;
+    min-width: 1320px !important;      
+    height: 56px !important; 
+    
+    background: #1a1c24 !important; 
+    border-bottom: 2px solid #282b3a !important; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25) !important;
+    
+    box-sizing: border-box !important;
+    padding: 0 30px !important;
+    z-index: 10 !important;
+}
+
+header h1, .header-title-text {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important; 
+    margin: 0 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.75px !important;
+    color: #ffffff !important;
+    width: auto !important;
+}
+
+.header-version-selector, [class*="version-selector"] {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: max-content !important;
+    white-space: nowrap !important;
+    z-index: 20 !important;
+}
+
+.header-version-selector label, 
+.header-version-selector label[for="minecraftVersion"] {
+    color: #f1f2f6 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.75px !important;
+    width: auto !important;
+    max-width: none !important;       
+    display: inline-block !important;
+}
+
+.header-version-selector select, 
+#minecraftVersion {
+    background: #111217 !important;   
+    border: 1px solid #43475c !important; 
+    border-radius: 4px !important;
+    color: #ffffff !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    padding: 6px 32px 6px 12px !important; 
+    height: auto !important;
+    min-height: 28px !important;
+    line-height: 1.2 !important;      
+    width: auto !important;
+    min-width: max-content !important; 
+    outline: none !important;
+    cursor: pointer !important;
+    display: inline-block !important;
+    box-sizing: border-box !important;
+}
+
+
+.header-version-selector select option {
+    background: #1e1f29 !important;
+    color: #ffffff !important;
+}
+
+
+.workspace-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important; 
+    width: 100% !important;
+    min-width: 1320px !important;       
+    margin-top: 0 !important;           
+    margin-bottom: 0 !important;
+    padding: 20px 0 40px 0 !important;  
+    flex: 1 0 auto !important;         
+    overflow: visible !important;
+    box-sizing: border-box !important;
+}
+
+.sidebar-left, .main-content, .code-preview-sidebar-card {
+    flex-shrink: 0 !important;
+    height: auto !important; 
+    overflow: visible !important;
+}
+.sidebar-left { min-width: 280px !important; width: 280px !important; }
+.main-content { min-width: 650px !important; }
+.code-preview-sidebar-card { min-width: 380px !important; }
+
+.app-footer-container {
+    width: 100% !important;
+    min-width: 1320px !important;
+    margin-top: auto !important; 
+    padding: 20px 40px 30px 40px !important; 
+    box-sizing: border-box !important;
+    display: flex !important;
+    justify-content: center !important;
+    z-index: 10 !important;
+}
+
+.footer-boxed-card {
+    width: 100% !important;
+    max-width: 400px !important; 
+    
+    background: #1a1c24 !important; 
+    border: 2px solid #282b3a !important; 
+    border-radius: 8px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25) !important;
+    
+    padding: 16px 20px !important; 
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.footer-links-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 14px !important;            
+    color: #8c8f9f !important;
+    font-size: 13px !important;       
+    font-weight: 600 !important;
+    letter-spacing: 0.5px !important;
+}
+
+.footer-link-highlight {
+    display: inline-flex !important;  
+    align-items: center !important;  
+    color: #20c997 !important;
+    font-size: 13px !important;
+    text-decoration: none !important;
+    font-weight: 700 !important;
+    border-bottom: 1px dashed rgba(32, 201, 151, 0.5) !important;
+    padding-bottom: 1px !important;  
+    line-height: 1 !important;        
+    transition: color 0.2s ease, border-color 0.2s ease, text-shadow 0.2s ease !important;
+}
+.footer-link-highlight:hover {
+    color: #39ffd0 !important;
+    border-bottom: 1px solid #39ffd0 !important;
+    text-shadow: 0 0 8px rgba(57, 255, 208, 0.6) !important;
+}
+
+.footer-link {
+    display: inline-flex !important; 
+    align-items: center !important;  
+    color: #e09e3a !important;
+    font-size: 13px !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    border-bottom: 1px dashed rgba(224, 158, 58, 0.5) !important;
+    padding-bottom: 1px !important;   
+    line-height: 1 !important;        
+    transition: color 0.2s ease, border-color 0.2s ease, text-shadow 0.2s ease !important;
+}
+.footer-link:hover {
+    color: #ffc46b !important;
+    border-bottom: 1px solid #ffc46b !important;
+    text-shadow: 0 0 8px rgba(255, 196, 107, 0.6) !important;
+}
+
+
+
+body, #app, .app-container {
+    zoom: 0.90 !important; 
+    
+    
+    width: auto !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+}
+
+header, .app-footer {
+    width: 100% !important;
+    box-sizing: border-box !important;
 }

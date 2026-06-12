@@ -12,9 +12,16 @@
 <body>
 
     <header>
-        <h1>⚙️ CREATE RECIPE GENERATOR</h1>
+        <h1> CREATE RECIPE GENERATOR</h1>
         <div class="meta">
         </div>
+        <div class="header-version-selector" style="display: flex; align-items: center; gap: 8px; margin-left: auto; padding-right: 15px;">
+    <label for="minecraftVersion" style="color: #a4a6b5; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Target Version:</label>
+    <select id="minecraftVersion" onchange="if(typeof compileRecipe === 'function') compileRecipe();" style="background: #1b1c24; border: 1px solid #262836; border-radius: 4px; color: #fff; font-size: 11px; font-weight: bold; padding: 4px 8px; outline: none; cursor: pointer;">
+        <option value="1.20.1" selected>Minecraft 1.20.1 ("item")</option>
+        <option value="1.21.1">Minecraft 1.21.1 ("id")</option>
+    </select>
+</div>
     </header>
 
     <div class="workspace-wrapper">
@@ -476,7 +483,15 @@
 
 
 
-
+    <footer class="app-footer-container">
+        <div class="footer-boxed-card">
+            <div class="footer-links-row">
+                <span>App by <a href="https://github.com/Rockiecraft" target="_blank" class="footer-link-highlight">Rockiecraft</a></span>
+                <span class="footer-separator">•</span>
+                <a href="https://github.com/Rockiecraft/Create-recipe-generator/" target="_blank" class="footer-link">GitHub Repository</a>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

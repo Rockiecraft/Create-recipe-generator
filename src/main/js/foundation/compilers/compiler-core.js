@@ -39,7 +39,7 @@ function compileRecipe() {
         if (containerIng) {
             for (let row of containerIng.children) {
                 const idInput = row.querySelector('.ing-id');
-                const fluidCheck = row.querySelector('.ing-is-fluid');
+                const fluidCheck = row.querySelector('input[type="checkbox"]');
                 const countInput = row.querySelector('.ing-count');
 
                 if (idInput && idInput.value.trim() !== '') {
@@ -58,7 +58,7 @@ function compileRecipe() {
             for (let row of containerOut.children) {
                 const idInput = row.querySelector('.out-id') || row.querySelector('input[type="text"]');
                 const countInput = row.querySelector('.out-count');
-                const fluidCheck = row.querySelector('.out-is-fluid');
+                const fluidCheck = row.querySelector('input[type="checkbox"]');
                 const chanceInput = row.querySelector('.out-chance');
 
                 if (idInput && idInput.value.trim() !== '') {
@@ -71,6 +71,7 @@ function compileRecipe() {
                 }
             }
         }
+
         if (targetEngine === 'sequenced_assembly') {
             const loopsBox = document.getElementById('assemblyLoops');
             if (loopsBox) dataStore.assemblyLoops = parseInt(loopsBox.value, 10) || 1;
@@ -151,6 +152,9 @@ function compileRecipe() {
     const activeRadio = document.querySelector('input[name="platform"]:checked');
     const platformSelection = activeRadio ? activeRadio.value : 'universal';
     let coreRecipe = {};
+
+
+
     const rawEngine = currentActiveEngine || 'mixing';
     const targetEngine = rawEngine.replace('create:', '');
 
@@ -162,6 +166,11 @@ function compileRecipe() {
     const ALLOWED_FLUID_ENGINES = ['mixing', 'compacting', 'filling'];
     const ENGINES_WITH_CHANCE = ['crushing', 'sequenced_assembly', 'splashing', 'cutting'];
     const SEQUENCED_ASSEMBLY_STEP_TYPES = ['pressing', 'deploying', 'filling'];
+
+    const versionDropdown = document.getElementById('minecraftVersion');
+    const selectedVersion = versionDropdown ? versionDropdown.value : '1.20.1';
+    const itemKeyType = selectedVersion === '1.21.1' ? 'id' : 'item';
+    const fluidKeyType = (selectedVersion === '1.21.1' && ['mixing', 'compacting'].includes(targetEngine)) ? 'id' : 'fluid';
 
     for (let container of outputContainers) {
         const idInput = container.querySelector('.out-id') || container.querySelector('input[type="text"]');
@@ -179,7 +188,7 @@ function compileRecipe() {
             if (demandsFabricFormat) amountVal *= 81;
 
             compiledResultsArray.push({
-                fluid: cleanId,
+                [fluidKeyType]: cleanId,
                 amount: amountVal,
             });
         } else {
@@ -187,7 +196,7 @@ function compileRecipe() {
             if (isNaN(countVal)) countVal = 1;
 
             let itemObject = {
-                item: cleanId,
+                [itemKeyType]: cleanId,
                 count: countVal,
             };
 
@@ -214,7 +223,7 @@ function compileRecipe() {
         const singleOutInput = document.getElementById('singleOutputProductId') || document.getElementById('outputItem');
         if (singleOutInput && singleOutInput.value.trim()) {
             compiledResultsArray.push({
-                item: singleOutInput.value.trim(),
+                [itemKeyType]: singleOutInput.value.trim(),
             });
         }
     }

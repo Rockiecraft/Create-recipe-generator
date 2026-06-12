@@ -65,14 +65,36 @@ function saveActiveRecipeState() {
         recipe.transitionalItem = trans ? trans.value : '';
     }
 
+    if (typeof recipesDatabase === 'undefined' || !recipesDatabase || !activeRecipeId || !recipesDatabase[activeRecipeId]) return;
+    try {
+        const recipe = recipesDatabase[activeRecipeId];
+        if (typeof currentActiveEngine !== 'undefined' && currentActiveEngine) {
+            recipe.engine = currentActiveEngine.includes('create:') ? currentActiveEngine : `create:${currentActiveEngine}`;
+        }
+        const completePayloadString = JSON.stringify(recipesDatabase);
+        localStorage.setItem('create_recipes_db', completePayloadString);
+        if (window.electronAPI && typeof window.electronAPI.writeRecipeFile === 'function') {
+            window.electronAPI.writeRecipeFile(completePayloadString);
+        }
+    } catch (saveFault) {
+        console.warn('Workspace persistence pipeline temporarily interrupted: ', saveFault);
+    }
     localStorage.setItem('create_recipe_generator_cache', JSON.stringify(recipesDatabase));
 }
 
 function loadRecipeFromState(filename) {
     if (!recipesDatabase[filename]) return;
+
+    // 1. LOCK STATE: Prevent background updates
     window.isSwitchingLayouts = true;
+    window.isWorkspaceSwappingLayout = true;
+
     activeRecipeId = filename;
     const recipe = recipesDatabase[filename];
+    const activeEngineStr = recipe.engine || 'create:mixing';
+    window.currentActiveEngine = activeEngineStr;
+    const targetEngine = activeEngineStr.replace('create:', '');
+    const dataStore = recipe.enginesData ? recipe.enginesData[window.currentActiveEngine] : null;
 
     const titleInput = document.getElementById('recipeTitle');
     if (titleInput) titleInput.value = recipe.name || 'Untitled Recipe Template';
@@ -111,7 +133,6 @@ function loadRecipeFromState(filename) {
     if (recipe.outputs && Array.isArray(recipe.outputs)) {
         recipe.outputs.forEach((out) => {
             if (typeof addOutputBlock === 'function') {
-                addOutputBlock();
                 const lastChild = containerOut.lastChild;
                 if (lastChild) {
                     const idInput = lastChild.querySelector('.out-id') || lastChild.querySelector('input[type="text"]');
@@ -127,12 +148,15 @@ function loadRecipeFromState(filename) {
             }
         });
     }
-    currentActiveEngine = recipe.engine || 'create:mixing';
-    currentEngineType = currentActiveEngine;
+    if ((!recipe.outputs || recipe.outputs.length === 0) && (!dataStore || !dataStore.outputs || dataStore.outputs.length === 0)) {
+        if (typeof addOutputBlock === 'function' && ['mixing', 'compacting'].includes(targetEngine)) {
+            addOutputBlock();
+        }
+    }
 
-    const activeEngineStr = currentActiveEngine;
-    const targetEngine = activeEngineStr.replace('create:', '');
-    const dataStore = recipe.enginesData ? recipe.enginesData[currentActiveEngine] : null;
+    currentActiveEngine = recipe.engine || 'create:mixing';
+
+    document.querySelectorAll('#ingredientsContainer, #outputsContainer, #assemblyStepsContainer, #conditionsContainer').forEach((el) => (el.innerHTML = ''));
 
     if (targetEngine === 'sequenced_assembly' && dataStore) {
         if (Array.isArray(dataStore.assemblySteps)) {
@@ -151,7 +175,6 @@ function loadRecipeFromState(filename) {
             });
         }
     }
-    if (containerIng) containerIng.innerHTML = '';
 
     if (targetEngine === 'mechanical_crafting' && dataStore && Array.isArray(dataStore.ingredients)) {
         if (dataStore.ingredients.length > 0) {
@@ -197,21 +220,59 @@ function loadRecipeFromState(filename) {
         }
     }
 
-    if (containerOut) containerOut.innerHTML = '';
-    const tabElement = document.querySelector(`.engine-tab[data-engine="${currentActiveEngine}"]`);
-    if (tabElement) {
-        document.querySelectorAll('.engine-tab').forEach((b) => b.classList.remove('active'));
-        tabElement.classList.add('active');
+    if (['mixing', 'compacting'].includes(targetEngine) && dataStore && Array.isArray(dataStore.outputs)) {
+        if (dataStore.outputs.length > 0) {
+            dataStore.outputs.forEach((out) => {
+                if (typeof addOutputBlock === 'function') {
+                    addOutputBlock(out.id);
+                    const lastChild = containerOut.lastElementChild;
+                    if (lastChild) {
+                        const countInput = lastChild.querySelector('.out-count');
+                        const fluidCheck = lastChild.querySelector('.out-is-fluid');
+                        const chanceInput = lastChild.querySelector('.out-chance');
+
+                        if (countInput) countInput.value = out.count || 1;
+                        if (fluidCheck) {
+                            fluidCheck.checked = !!out.isFluid;
+                            if (typeof toggleFluidOutputLabelContext === 'function') {
+                                toggleFluidOutputLabelContext(fluidCheck, lastChild.id);
+                            }
+                        }
+                        if (chanceInput) chanceInput.value = out.chance !== undefined ? out.chance : '1.0';
+                    }
+                }
+            });
+        } else {
+            if (typeof addOutputBlock === 'function') addOutputBlock();
+        }
+    } else if (targetEngine !== 'mechanical_crafting') {
+        const singleOutputInput = document.getElementById('singleOutputProductId') || document.getElementById('outputItem');
+        if (singleOutputInput) {
+            singleOutputInput.value = dataStore ? dataStore.outputItem || '' : '';
+        }
     }
 
-    window.isSwitchingLayouts = false;
+    if (!['mixing', 'compacting'].includes(targetEngine)) {
+        if (containerOut) containerOut.innerHTML = '';
+    }
+
+    const tabElement = document.querySelector(`.engine-tab[data-engine="${window.currentActiveEngine}"]`) || document.querySelector(`.tab-button[data-engine="${window.currentActiveEngine}"]`);
+
+    if (tabElement) {
+        document.querySelectorAll('.engine-tab, .tab-button').forEach((b) => b.classList.remove('active'));
+        tabElement.classList.add('active');
+    }
+    const singleOutputBox = document.getElementById('singleOutputProductId') || document.getElementById('outputItem');
+    if (singleOutputBox && dataStore) dataStore.outputItem = singleOutputBox.value.trim();
 
     if (typeof toggleEngineFields === 'function') toggleEngineFields();
-    if (typeof compileRecipe === 'function') compileRecipe();
     if (typeof renderSidebarList === 'function') renderSidebarList(filename);
+
+    window.isSwitchingLayouts = false;
+    window.isWorkspaceSwappingLayout = false;
+    if (typeof compileRecipe === 'function') compileRecipe();
 }
 
 function selectActiveRecipeTarget(filename) {
-    saveActiveRecipeState();
     loadRecipeFromState(filename);
 }

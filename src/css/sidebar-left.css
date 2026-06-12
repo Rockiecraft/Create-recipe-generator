@@ -20,7 +20,8 @@
     border: 1px solid var(--border-color);
     padding: 15px;
     width: 280px;
-    display: auto;
+    flex-shrink: 0 !important;
+    display: flex;
     flex-direction: column;
     gap: 15px;
     box-sizing: border-box;
@@ -79,7 +80,7 @@
 }
 
 .recipe-sidebar-list {
-    display: auto;
+    display: flex;
     flex-direction: column;
     gap: 8px;
     overflow-y: auto;
