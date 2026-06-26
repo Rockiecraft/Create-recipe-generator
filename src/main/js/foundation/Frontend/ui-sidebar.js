@@ -95,46 +95,36 @@ window.toggleSidebarCollapseState = function () {
 };
 
 function createNewRecipeLayout() {
-    const rawEngine = currentActiveEngine || 'create:mixing';
-    const cleanEngine = rawEngine.includes('create:') ? rawEngine : `create:${rawEngine}`;
+    // Save the outgoing recipe's live DOM state before tearing anything down.
+    if (activeRecipeId && recipesDatabase[activeRecipeId]) {
+        if (typeof saveActiveRecipeState === 'function') saveActiveRecipeState();
+    }
+ 
     const id = `recipe_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+ 
     recipesDatabase[id] = {
         id: id,
-        name: `Untitled Template Module`,
-        engine: cleanEngine,
+        name: 'Untitled Template Module',
+        engine: 'create:pressing',
         platform: 'universal',
-        ingredients: [],
-        outputs: [],
+        enginesData: {},
         conditions: [],
-        assemblySteps: [],
-        assemblyLoops: 1,
-        transitionalItem: '',
+        pasteState: {},
     };
-    activeRecipeId = id;
-    const titleInput = document.getElementById('recipeTitle');
-    if (titleInput) titleInput.value = `Untitled Template Module`;
-
-    const containerIng = document.getElementById('ingredientsContainer');
-    const containerOut = document.getElementById('outputsContainer');
-    const containerSteps = document.getElementById('assemblyStepsContainer');
-    const containerCond = document.getElementById('conditionsContainer');
-    if (containerIng) containerIng.innerHTML = '';
-    if (containerOut) containerOut.innerHTML = '';
-    if (containerSteps) containerSteps.innerHTML = '';
-    if (containerCond) containerCond.innerHTML = '';
-
-    if (typeof addIngredientBlock === 'function') addIngredientBlock();
-    if (typeof addOutputBlock === 'function') addOutputBlock();
-
-    const tabElement = document.querySelector(`.engine-tab[data-engine="${cleanEngine}"]`);
-    if (tabElement) {
-        document.querySelectorAll('.engine-tab').forEach((b) => b.classList.remove('active'));
-        tabElement.classList.add('active');
+ 
+    
+    window.currentActiveEngine = 'create:pressing';
+    currentActiveEngine = 'create:pressing';
+ 
+    
+    if (window.workspaceIsolatorState) {
+        window.workspaceIsolatorState.activePastedRawText = {};
+        window.workspaceIsolatorState.cachedConditionTemplates = {};
+        window.workspaceIsolatorState.isParsingLock = false;
     }
-    if (typeof toggleEngineFields === 'function') toggleEngineFields();
-    if (typeof saveActiveRecipeState === 'function') saveActiveRecipeState();
-    renderSidebarList();
-    if (typeof compileRecipe === 'function') compileRecipe();
+ 
+
+    if (typeof loadRecipeFromState === 'function') loadRecipeFromState(id);
 }
 
 function updateRecipeFilenameInline(oldFilename, inputElement) {

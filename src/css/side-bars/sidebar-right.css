@@ -1,0 +1,182 @@
+/* ─── Preview Pane Card ──────────────────────────────────────── */
+.code-preview-sidebar-card {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 8px !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+    z-index: 999 !important;
+    overflow: hidden !important;
+}
+
+/* ─── Tab Bar ────────────────────────────────────────────────── */
+.code-pane-tabs-header-row {
+    display: flex !important;
+    background: #0c0c0e !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    gap: 0 !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+}
+
+.pane-toggle-tab {
+    flex: 1 !important;
+    padding: 10px 16px !important;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 3px solid transparent !important;
+    margin-bottom: -1px !important;
+    color: #3d4060 !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    cursor: pointer !important;
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+}
+
+.pane-toggle-tab:hover {
+    color: #7a7f9a !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.pane-toggle-tab.active {
+    color: #a7f3d0 !important;
+    border-bottom: 3px solid #a7f3d0 !important;
+    background: rgba(167, 243, 208, 0.05) !important;
+}
+
+/* ─── Header Row ─────────────────────────────────────────────── */
+.code-card-header {
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 8px 14px !important;
+    margin-bottom: 0 !important;
+    flex-shrink: 0 !important;
+}
+
+/* ─── Content Area ───────────────────────────────────────────── */
+.code-preview-sidebar-card > *:not(.code-pane-tabs-header-row):not(.code-card-header) {
+    padding: 12px 14px !important;
+}
+
+/* ─── Buttons ────────────────────────────────────────────────── */
+.code-preview-sidebar-card button:not(.pane-toggle-tab) {
+    background-color: #252834 !important;
+    color: var(--text-bright) !important;
+    border: 1px solid var(--border-color) !important;
+    padding: 4px 8px !important;
+    font-size: 11px !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+}
+
+.code-preview-sidebar-card button:not(.pane-toggle-tab):hover {
+    background: #2e3244 !important;
+}
+
+/* ─── JSON Output ────────────────────────────────────────────── */
+#jsonOutput {
+    flex-grow: 1 !important;
+    height: 600px !important;
+    max-height: none !important;
+    min-height: fit-content !important;
+    background-color: #0c0c0e !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 4px !important;
+    padding: 12px !important;
+    margin: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: auto !important;
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
+    font-family: 'Consolas', 'Courier New', monospace !important;
+    font-size: 12px !important;
+    color: #a7f3d0 !important;
+    line-height: 1.5 !important;
+    box-sizing: border-box !important;
+}
+
+/* ─── Paste Textarea ─────────────────────────────────────────── */
+
+#recipeCodeEditorWrapper {
+    width: 100% !important;
+    border: 1px solid #232530 !important;
+    border-radius: 6px !important;
+    background: #0c0c0e !important;
+    overflow: visible !important; /* let textarea grow naturally */
+}
+
+#recipeCodeEditorWrapper[style*="display: none"] {
+    display: none !important;
+}
+
+#recipeCodeTextarea {
+    flex: 1 !important;
+    width: 0 !important;
+    
+    background: transparent !important;
+    border: none !important;
+    color: #e09e3a !important;
+    font-family: 'Consolas', 'Courier New', monospace !important;
+    font-size: 12px !important;
+    line-height: 18px !important;
+    padding: 12px 8px !important;
+    resize: none !important;
+    overflow-y: hidden !important;
+    overflow-x: auto !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    field-sizing: content !important;
+    height: 300px !important;
+    max-height: none !important;
+}
+#recipeCodeTextarea:focus {
+    border-color: #a7e3d0 !important;
+}
+
+/* ─── pre blocks ─────────────────────────────────────────────── */
+pre {
+    background: #0c0c0e;
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 6px;
+    color: #a7f3d0;
+    overflow: auto;
+    max-height: 250px;
+    font-size: 12px;
+    margin: 0;
+}
+
+/* ─── Error Box ──────────────────────────────────────────────── */
+#recipeParserErrorLogBox {
+    margin-top: 12px !important;
+    background: rgba(224, 74, 58, 0.1) !important;
+    border: 1px solid #eb5344 !important;
+    border-radius: 6px !important;
+    padding: 12px !important;
+    box-sizing: border-box !important;
+}
+
+#recipeParserErrorLogBox h4 {
+    margin: 0 0 6px 0 !important;
+    font-size: 11px !important;
+    color: #ff5e5b !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+#recipeParserErrorMessage {
+    margin: 0 !important;
+    font-size: 11px !important;
+    color: #f1f2f6 !important;
+    line-height: 1.4 !important;
+    font-family: monospace !important;
+}

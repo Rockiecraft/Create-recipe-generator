@@ -1,0 +1,267 @@
+:root {
+    --bg-dark: #5865F2;
+    --bg-card: #1b1c24;
+    --bg-input: #111217;
+    --border-color: #262836;
+    --text-color: #ffffff;
+    --text-muted: #7d8296;
+    --accent: #5865F2;
+    --accent-hover: #5865F2;
+    --danger: #e55d5d;
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+}
+
+.sidebar-left {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    width: 300px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-sizing: border-box;
+    height: 100%;
+    transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1), padding 0.2s ease;
+}
+
+@media (max-width: 1700px) {
+    .sidebar-left {
+        width: 220px;
+    }
+}
+
+@media (max-width: 900px) {
+    .sidebar-left {
+        width: 40%;
+    }
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-title {
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.btn-collapse-toggle,
+#sidebarCollapseBtn {
+    background-color: #111217;
+    border: 1px solid #3c3f54;
+    border-radius: var(--radius-md);
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.btn-collapse-toggle:hover,
+#sidebarCollapseBtn:hover {
+    background-color: #232531;
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.btn-action {
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s;
+}
+
+.recipe-sidebar-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.recipe-list-item {
+    background-color: var(--bg-dark);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    padding: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+.recipe-list-item:hover {
+    border-color: #3f4257;
+    background-color: #1e202b;
+}
+.recipe-list-item.active {
+    border-color: var(--accent);
+    background-color: var(--bg-input);
+}
+
+/* ─── Collapsed (slim) sidebar state ─────────────────────────── */
+
+.sidebar-left.collapsed-slim,
+#mainSidebarLayout.collapsed-slim {
+    background-color: #14151c;
+    border-right: 1px solid #262836;
+    width: 60px;
+    min-width: 60px;
+    max-width: 60px;
+    padding: 15px 0;
+    margin: 0;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 100%;
+    justify-items: center;
+    align-content: start;
+    gap: 12px;
+    height: 100%;
+}
+
+.sidebar-left.collapsed-slim .recipe-sidebar-list,
+#mainSidebarLayout.collapsed-slim .recipe-sidebar-list {
+    display: grid;
+    grid-template-columns: 100%;
+    justify-items: center;
+    gap: 8px;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.sidebar-left.collapsed-slim #sidebarCollapseBtn,
+#mainSidebarLayout.collapsed-slim #sidebarCollapseBtn {
+    background-color: #1b1c24;
+    border: 1px solid #3c3f54;
+    border-radius: 6px;
+    color: #a0a5b5;
+    font-size: 14px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    position: static;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+.sidebar-left.collapsed-slim #sidebarCollapseBtn:hover,
+#mainSidebarLayout.collapsed-slim #sidebarCollapseBtn:hover {
+    background-color: #262836;
+    color: #ffffff;
+}
+
+.sidebar-left.collapsed-slim #sidebarNewBtn,
+#mainSidebarLayout.collapsed-slim #sidebarNewBtn,
+.sidebar-left.collapsed-slim .btn-action,
+#mainSidebarLayout.collapsed-slim .btn-action {
+    font-size: 0;
+    line-height: 0;
+    color: transparent;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    max-width: 36px;
+    padding: 0;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #3a3c4d;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.sidebar-left.collapsed-slim #sidebarNewBtn:hover,
+#mainSidebarLayout.collapsed-slim #sidebarNewBtn:hover,
+.sidebar-left.collapsed-slim .btn-action:hover,
+#mainSidebarLayout.collapsed-slim .btn-action:hover {
+    border-color: #e19524;
+    background-color: rgba(225, 149, 36, 0.05);
+}
+.sidebar-left.collapsed-slim #sidebarNewBtn::before,
+#mainSidebarLayout.collapsed-slim #sidebarNewBtn::before,
+.sidebar-left.collapsed-slim .btn-action::before,
+#mainSidebarLayout.collapsed-slim .btn-action::before {
+    content: "+";
+    font-size: 16px;
+    font-weight: bold;
+    color: #53586d;
+    display: block;
+    line-height: 1;
+    transition: color 0.15s ease;
+}
+.sidebar-left.collapsed-slim #sidebarNewBtn:hover::before,
+#mainSidebarLayout.collapsed-slim #sidebarNewBtn:hover::before,
+.sidebar-left.collapsed-slim .btn-action:hover::before,
+#mainSidebarLayout.collapsed-slim .btn-action:hover::before {
+    color: #e19524;
+}
+
+.sidebar-left.collapsed-slim .recipe-list-item,
+#mainSidebarLayout.collapsed-slim .recipe-list-item {
+    background-color: #1b1c24;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    max-width: 44px;
+    margin: 0 auto;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 6px;
+    box-sizing: border-box;
+    position: static;
+    border: 1px solid #262836;
+    justify-content: center;
+    align-items: center;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+.sidebar-left.collapsed-slim .recipe-list-item:hover,
+#mainSidebarLayout.collapsed-slim .recipe-list-item:hover {
+    border-color: #43475e;
+    background-color: #20222c;
+}
+.sidebar-left.collapsed-slim .recipe-list-item.active,
+#mainSidebarLayout.collapsed-slim .recipe-list-item.active {
+    background-color: #1b1c24;
+    border-color: #e57d5d;
+    box-shadow: 0 0 10px rgba(229, 125, 93, 0.25), inset 0 0 4px rgba(229, 125, 93, 0.15);
+}
+
+.sidebar-left.collapsed-slim .recipe-list-item > div,
+#mainSidebarLayout.collapsed-slim .recipe-list-item > div,
+.sidebar-left.collapsed-slim .recipe-list-item [onclick] {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+}
+
+.sidebar-left.collapsed-slim .recipe-list-item img,
+#mainSidebarLayout.collapsed-slim .recipe-list-item img {
+    width: 24px;
+    height: 24px;
+    margin: 0 auto;
+    display: block;
+}

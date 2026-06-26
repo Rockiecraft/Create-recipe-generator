@@ -1,0 +1,104 @@
+.engine-tabs-bar {
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--bg-card);
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  box-sizing: border-box;
+  flex-shrink: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+.engine-tabs-bar::-webkit-scrollbar {
+  height: 6px;
+}
+
+.engine-tabs-bar::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.engine-tabs-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: max-content; 
+}
+
+.engine-tabs-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 6px;
+}
+
+.engine-tab {
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 4px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  box-sizing: border-box;
+  line-height: 1;
+}
+
+.engine-tab:hover {
+  background: #2a2c31;
+  border-color: #44464d;
+  color: #fff;
+}
+
+.engine-tab:active {
+  transform: scale(0.97);
+}
+
+.engine-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #14151c;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(225, 149, 36, 0.35);
+}
+
+.engine-tab.active:hover {
+  background: var(--accent);
+  color: #14151c;
+}
+
+.engine-mod-tab {
+    padding: 6px 18px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #7d8296;
+    cursor: pointer;
+    border-radius: 4px 4px 0 0;
+    background: #13141b;
+    border: 1px solid #232530;
+    border-bottom: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    position: relative;
+    bottom: -1px;
+    transition: color 0.15s, background 0.15s;
+}
+
+.engine-mod-tab:hover {
+    color: #ccc;
+    background: #1a1b24;
+}
+
+.engine-mod-tab.active {
+    color: var(--accent);
+    background: #1e1f2c;
+    border-color: var(--accent);
+    border-bottom: 2px solid #1e1f2c;
+}

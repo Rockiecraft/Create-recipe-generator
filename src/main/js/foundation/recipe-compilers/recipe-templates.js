@@ -70,13 +70,20 @@ const RECIPE_TEMPLATES = {
         "ingredients": [],
         "results": []
     },
+
+    "create:item_application": {
+    "type": "create:item_application",
+    "ingredients": [],
+    "results": []
+    },
+    
     "create:sequenced_assembly": {
         "type": "create:sequenced_assembly",
         "ingredient": {},
-        "transitionalItem": {},
-        "sequence": [],
+        "loops": 1,
         "results": [],
-        "loops": 1
+        "transitionalItem": {},
+        "sequence": []
     },
     "create:mechanical_crafting": {
         "type": "create:mechanical_crafting",

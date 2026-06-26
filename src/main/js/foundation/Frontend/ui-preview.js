@@ -1,122 +1,26 @@
-function updateJEIPreview(currentActiveEngine, compiledIngredients, compiledResultsArray, firstOutputItemName) {
-    const isBasinStyle = (currentActiveEngine === 'create:mixing' || currentActiveEngine === 'create:compacting');
-    const jeiInEl = document.getElementById('jeiIn');
-    const jeiGridEl = document.getElementById('jeiGrid');
-    if (jeiInEl) jeiInEl.classList.toggle('hidden', !isBasinStyle);
-    if (jeiGridEl) jeiGridEl.classList.toggle('hidden', !isBasinStyle);
-
-    let graphicContainer = document.getElementById('jeiMachineSymbol');
-    let outputClean = firstOutputItemName.includes(':') ? firstOutputItemName.split(':').pop() : firstOutputItemName;
-    const jeiOutEl = document.getElementById('jeiOut');
-    const jeiLabelEl = document.getElementById('jeiLabel');
-
-    if (isBasinStyle) {
-        if (jeiGridEl) {
-            const gridSlots = jeiGridEl.children;
-            for (let i = 0; i < gridSlots.length; i++) {
-                gridSlots[i].innerHTML = "";
-            }
-            let textSlotIndex = 0;
-            compiledIngredients.forEach(item => {
-                if (item.item && textSlotIndex < gridSlots.length) {
-                    let clean = item.item.includes(':') ? item.item.split(':').pop() : item.item;
-                    gridSlots[textSlotIndex].innerHTML = `<span title="${item.item}">${clean}</span>`;
-                    textSlotIndex++;
-                }
-            });
-        }
-        if (jeiInEl) {
-            jeiInEl.innerHTML = "";
-            compiledIngredients.forEach(item => {
-                if (item.fluid) {
-                    let cleanFluid = item.fluid.includes(':') ? item.fluid.split(':').pop() : item.fluid;
-                    jeiInEl.innerHTML += `<div class="fluid-preview-bar-node" title="${item.fluid}">${cleanFluid} <br> ${item.amount}mB</div>`;
-                }
-            });
-        }
-        if (graphicContainer) {
-            if (currentActiveEngine === 'create:mixing') {
-                graphicContainer.innerHTML = `<div class="machine-base-casing"><div class="machine-mixer-head"></div></div>`;
-            } else {
-                graphicContainer.innerHTML = `<div class="machine-base-casing"><div class="machine-press-piston"></div></div>`;
-            }
-        }
-        if (jeiOutEl) {
-            jeiOutEl.innerHTML = "";
-            compiledResultsArray.forEach(item => {
-                let cleanRes = item.item || item.fluid || 'unknown';
-                if (cleanRes.includes(':')) cleanRes = cleanRes.split(':').pop();
-                let countTxt = item.count ? `x${item.count}` : `${item.amount}mB`;
-                let chanceTxt = item.chance ? ` (${Math.round(item.chance * 100)}%)` : '';
-                jeiOutEl.innerHTML += `<div class="jei-item-badge">${cleanRes} ${countTxt}${chanceTxt}</div>`;
-            });
-        }
-        if (jeiLabelEl) {
-            jeiLabelEl.textContent = currentActiveEngine === 'create:mixing' ? "Mechanical Mixer Basin Processing" : "Mechanical Press Compacting Process";
-        }
-    } else if (currentActiveEngine === 'create:sequenced_assembly') {
-        if (graphicContainer) {
-            graphicContainer.innerHTML = `<div class="assembly-conveyor-belt"><div class="assembly-track-arrow"></div></div>`;
-        }
-        if (jeiOutEl) {
-            jeiOutEl.innerHTML = `<div class="jei-item-badge">${outputClean}</div>`;
-        }
-        if (jeiLabelEl) {
-            jeiLabelEl.textContent = "Sequenced Assembly Factory Line Loop";
-        }
-    } else {
-        if (graphicContainer) {
-            if (currentActiveEngine === 'create:pressing') {
-                graphicContainer.innerHTML = `<div class="kinetic-press-anim"></div>`;
-            } else if (currentActiveEngine === 'create:cutting') {
-                graphicContainer.innerHTML = `<div class="kinetic-saw-anim"></div>`;
-            } else if (currentActiveEngine === 'create:crushing') {
-                graphicContainer.innerHTML = `<div class="kinetic-wheels-anim"></div>`;
-            } else if (currentActiveEngine === 'create:splashing') {
-                graphicContainer.innerHTML = `<div class="kinetic-fan-water-anim"></div>`;
-            } else if (currentActiveEngine === 'create:haunting') {
-                graphicContainer.innerHTML = `<div class="kinetic-fan-soul-anim"></div>`;
-            } else {
-                graphicContainer.innerHTML = `<div class="kinetic-generic-gear"></div>`;
-            }
-        }
-        if (jeiOutEl) {
-            jeiOutEl.innerHTML = "";
-            compiledResultsArray.forEach(item => {
-                let cleanRes = item.item || 'unknown';
-                if (cleanRes.includes(':')) cleanRes = cleanRes.split(':').pop();
-                let chanceTxt = item.chance ? ` (${Math.round(item.chance * 100)}%)` : '';
-                jeiOutEl.innerHTML += `<div class="jei-item-badge">${cleanRes} x${item.count || 1}${chanceTxt}</div>`;
-            });
-        }
-        if (jeiLabelEl) {
-            let engineClean = currentActiveEngine.split(':').pop().replace('_', ' ');
-            jeiLabelEl.textContent = `Kinetic ${engineClean.toUpperCase()} Machine Process`;
-        }
-    }
-}
-
 function copyToClipboard() {
     const jsonText = document.getElementById('jsonOutput')?.textContent;
     if (!jsonText) return;
 
-    navigator.clipboard.writeText(jsonText).then(() => {
-        const copyBtn = document.querySelector('.code-card-header .add-slot-btn');
-        if (copyBtn) {
-            const originalText = copyBtn.textContent;
-            copyBtn.textContent = 'Copied! ✅';
-            copyBtn.style.background = '#4caf50';
-            copyBtn.style.color = '#fff';
-
-            setTimeout(() => {
-                copyBtn.textContent = originalText;
-                copyBtn.style.background = '';
-                copyBtn.style.color = '';
-            }, 1500);
-        }
-    }).catch(err => {
-        console.error('Failed to copy text: ', err);
-    });
+    navigator.clipboard
+        .writeText(jsonText)
+        .then(() => {
+            const copyBtn = document.getElementById('copyTextBtn');
+            if (copyBtn) {
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied! ✅';
+                copyBtn.style.background = '#20c997';
+                copyBtn.style.color = '#121212';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                    copyBtn.style.background = '';
+                    copyBtn.style.color = '';
+                }, 1500);
+            }
+        })
+        .catch((err) => {
+            console.error('Failed to copy text: ', err);
+        });
 }
 
 function downloadRecipeJson() {
@@ -130,7 +34,11 @@ function downloadRecipeJson() {
         let filename = 'recipe.json';
         const titleInput = document.getElementById('recipeTitle');
         if (titleInput && titleInput.value.trim()) {
-            filename = titleInput.value.trim().toLowerCase().replace(/[^a-z0-9]/g, '_') + '.json';
+            filename =
+                titleInput.value
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]/g, '_') + '.json';
         } else {
             filename = `${engineType}_recipe.json`;
         }
@@ -155,10 +63,9 @@ function downloadRecipeJson() {
 function updateCodePreviewPaneOnly() {
     if (typeof activeRecipeId === 'undefined' || !activeRecipeId || !recipesDatabase || !recipesDatabase[activeRecipeId]) return;
 
-    const recipeOutputElement = document.getElementById("codePreview");
+    const recipeOutputElement = document.getElementById('codePreview');
     if (!recipeOutputElement) return;
 
-    
     let ingredientsArray = [];
     let outputsArray = [];
 
@@ -198,10 +105,9 @@ function updateCodePreviewPaneOnly() {
         }
     }
 
-    
     let coreRecipe = {};
     const rawEngine = currentActiveEngine || 'create:mixing';
-    const currentEngineCode = rawEngine.includes('create:') ? rawEngine.split(":")[1] : rawEngine;
+    const currentEngineCode = rawEngine.includes('create:') ? rawEngine.split(':')[1] : rawEngine;
 
     if (['mixing', 'compacting'].includes(currentEngineCode)) {
         if (typeof compileBasinRecipe === 'function') coreRecipe = compileBasinRecipe(currentEngineCode, ingredientsArray, outputsArray);
@@ -214,4 +120,11 @@ function updateCodePreviewPaneOnly() {
     }
 
     recipeOutputElement.textContent = JSON.stringify(coreRecipe, null, 4);
+}
+
+function handleAutomatedWorkspacePurge(shouldReset) {
+    if (!shouldReset) return;
+    // Clear form when paste area is emptied
+    syncRecipeCodeLineNumbers();
+    autoGrowRecipeTextarea();
 }

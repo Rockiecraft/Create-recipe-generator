@@ -1,7 +1,7 @@
 .recipe-form {
-    flex: 0 0 540px !important; 
-    width: 540px !important;
-    max-width: auto !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
     min-width: 0 !important;
     margin: 0 !important;
     display: flex !important;
@@ -9,14 +9,14 @@
     gap: 10px !important;
 }
 
-.main-content { 
-    flex: 1; 
-    padding: 20px; 
+.main-content {
+    padding: 16px !important;
     overflow: visible !important;
     height: auto !important;
-    display: flex; 
-    flex-direction: column; 
-    gap: 20px; 
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    box-sizing: border-box !important;
 }
 
 
@@ -59,15 +59,16 @@
 
 .config-card,
 .ingredient-block,
-#ingredientsContainer > div { 
-    background-color: #1b1c24 !important; 
-    border: 1px solid #262836 !important; 
-    border-radius: 4px !important; 
-    padding: 6px 10px !important; 
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0px !important;
-    box-sizing: border-box !important;
+#ingredientsContainer > div {
+  background-color: #1b1c24 !important;
+  border: 1px solid #262836 !important;
+  border-radius: 4px !important;
+  padding: 6px 10px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;   /* ← add this */
 }
 
 .config-card h3 { 
@@ -195,34 +196,7 @@ input[type="checkbox"], input[type="radio"] {
 .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 
 
-#outputsContainer { 
-    display: flex !important; 
-    flex-direction: column !important; 
-    gap: 12px !important; 
-    width: 100% !important; 
-}
 
-#outputsContainer > .form-group,
-#outputsContainer > div {
-    max-width: 100% !important; 
-    width: 35% !important;
-    background-color: #1b1c24 !important;
-    border: 1px solid #262836 !important;
-    border-radius: 4px;
-    padding: 6px 10px !important;
-    box-sizing: border-box !important;
-}
-
-#outputsContainer input[type="text"]{
-    width: 70% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-}
-#outputsContainer input[type="number"] {
-    width: 25% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-}
 
 #addOutputBtn,
 .workspace button[id*="Output"] {
@@ -235,26 +209,16 @@ input[type="checkbox"], input[type="radio"] {
 
 
 .workspace, .workspace-wrapper, .app-layout {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important; 
-    align-items: flex-start !important;
-    gap: 12px !important;             
-    padding: 12px !important;          
-    width: auto !important;
-    height: auto !important;           
-    box-sizing: border-box !important;
-}
-
-.recipe-form, .main-content {
-    display: flex !important;
-    flex: 0 0 840px !important;         
-    width: 640px !important;
-    max-width: 840px !important;
-    min-width: 0 !important;
-    height: auto !important;
-    overflow-y: visible !important;    
-    box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;   /* ← was flex-start */
+  align-items: flex-start !important;
+  gap: 12px !important;
+  padding: 12px !important;
+  width: 100% !important;
+  min-height: calc(100vh - 57px) !important;
+  box-sizing: border-box !important;
 }
 
 .btn-util { background: var(--bg-input); border: 1px solid var(--border-color); color: #fff; padding: 1px 1px; border-radius: 4px; font-size: 11.5px; cursor: pointer; }
@@ -264,28 +228,7 @@ input[type="checkbox"], input[type="radio"] {
 
 
 
-#outputsContainer .grid-cell-stacked-box > div[style*="display:flex"] {
-    display: flex !important;
-    flex-direction: row !important;
-    gap: 12px !important;
-    width: 100% !important;
-    box-sizing: border-box;
-}
 
-
-#outputsContainer .out-count,
-#outputsContainer .out-chance {
-    width: 100% !important;
-    min-width: 60px !important;
-    height: 20px !important; 
-    padding: 6px 10px !important;
-    box-sizing: border-box !important;
-    background-color: var(--bg-input) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: var(--radius-sm) !important;
-    color: var(--text-color) !important;
-    font-size: 12px !important;
-}
 
 
 
@@ -293,11 +236,11 @@ input[type="checkbox"], input[type="radio"] {
 .config-card #conditionsContainer > div {
     display: flex !important;
     flex-direction: column !important;
-    gap: 12px !important;              
+    gap: 12px !important;
     width: 100% !important;
     padding: 14px !important;
-    background-color: #1b1c24 !important;
-    border: 1px solid #262836 !important;
+    background-color: #0f1018 !important;
+    border: 1px solid #2a2b3a !important;
     border-radius: 4px !important;
     box-sizing: border-box !important;
 }
@@ -454,89 +397,7 @@ details[open] summary span:first-child {
 
 
 
-#ingredientsContainer .grid-cell-stacked-box,
-#outputsContainer .grid-cell-stacked-box {
-    background-color: #16171e !important;   
-    border: 1px solid #232530 !important;    
-    border-radius: 8px !important;           
-    padding: 16px !important;                 
-    margin-bottom: 12px !important;
-    box-shadow: none !important;              
-    display: flex !important;
-    flex-direction: column !important;        
-    gap: 10px !important;                    
-}
 
-
-#ingredientsContainer .grid-cell-stacked-box span,
-#outputsContainer .grid-cell-stacked-box span {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 13px !important;
-    font-weight: 600 !important;
-}
-
-
-#ingredientsContainer .grid-cell-stacked-box span:not([style*="color:var(--danger)"]),
-#outputsContainer .grid-cell-stacked-box span:not([style*="color:var(--danger)"]) {
-    color: #a3a6b4 !important;            
-}
-
-
-#ingredientsContainer .grid-cell-stacked-box span[style*="color:var(--danger)"],
-#outputsContainer .grid-cell-stacked-box span[style*="color:var(--danger)"] {
-    color: #da584d !important;               
-    font-size: 13px !important;
-    cursor: pointer !important;
-    opacity: 0.85 !important;
-    transition: opacity 0.15s ease !important;
-}
-
-#ingredientsContainer .grid-cell-stacked-box span[style*="color:var(--danger)"]:hover,
-#outputsContainer .grid-cell-stacked-box span[style*="color:var(--danger)"]:hover {
-    opacity: 1 !important;
-}
-
-
-#ingredientsContainer .grid-cell-stacked-box label,
-#outputsContainer .grid-cell-stacked-box label,
-#outputsContainer .grid-cell-stacked-box .out-count-label {
-    color: #5d606f !important;                
-    font-size: 12px !important;
-    font-weight: 400 !important;
-    margin: 0 !important;
-    white-space: nowrap !important;           
-}
-
-
-#ingredientsContainer .grid-cell-stacked-box input[type="text"],
-#ingredientsContainer .grid-cell-stacked-box input[type="number"],
-#outputsContainer .grid-cell-stacked-box input[type="text"],
-#outputsContainer .grid-cell-stacked-box input[type="number"] {
-    background-color: #0f1014 !important;   
-    border: 1px solid #232530 !important;     
-    border-radius: 4px !important;            
-    color: #e2e4ec !important;                
-    padding: 6px 10px !important;
-    font-size: 12px !important;
-    box-sizing: border-box !important;        
-}
-
-
-#ingredientsContainer .grid-cell-stacked-box input[type="text"],
-#outputsContainer .grid-cell-stacked-box input[type="text"] {
-    width: 100% !important;
-    max-width: 80% !important;               
-    margin-bottom: 2px !important;
-}
-
-
-#ingredientsContainer .grid-cell-stacked-box input[type="number"],
-#outputsContainer .grid-cell-stacked-box input[type="number"] {
-    width: 60% !important;                  
-    min-width: 10% !important;
-    max-width: 200% !important;
-    display: inline-block !important;
-}
 
 
 #ingredientsContainer .grid-cell-stacked-box div[style*="display:flex; gap:10px; align-items:center;"],
@@ -556,4 +417,3 @@ details[open] summary span:first-child {
     gap: 8px !important;                      
     width: 100% !important;
 }
-

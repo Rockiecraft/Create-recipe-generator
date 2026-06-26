@@ -34,3 +34,8 @@ app/dist/
 # --- DISTROBOX & CONTAINER RUNTIME ARTIFACTS ---
 .distrobox/
 container-artifacts/
+
+
+# a script i use for something. ignore
+upload-to-something.js 
+
