@@ -16,6 +16,7 @@
     "src/index.html",
     "src/css/**/*",
     "src/main/**/*",
+    "src/preload.js",
     "app-entry.js"
     ],
     "win": {

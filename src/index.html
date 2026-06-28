@@ -377,7 +377,7 @@
                     </div>
                 </div>
 
-                
+
                 <div id="advancedProcessingDrawer" style="margin-top: 15px; width: 100%;">
 
                     <!-- Row 1: Heat Requirement Configuration (Only for Mixing & Compacting) -->
@@ -703,6 +703,7 @@
 
     <!-- Frontend: Recipe Compilers -->
     <script src="main/js/foundation/recipe-compilers/recipe-compiler.js"></script>
+    <script src="main/js/foundation/recipe-compilers/recipe-isolation.js"></script>
     <script src="main/js/foundation/recipe-compilers/recipe-templates.js"></script>
 
     <!-- Frontend: UI -->
@@ -726,6 +727,21 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        document.addEventListener('click', function (e) {
+            const link = e.target.closest('a[href]');
+            if (!link) return;
+            const href = link.getAttribute('href');
+            if (!href || href.startsWith('#')) return;
+            try {
+                const { shell } = require('electron');
+                e.preventDefault();
+                shell.openExternal(href);
+            } catch (err) {
+            }
+        });
+    </script>
 
 
     <div id="resetConfirmationModal" class="modal-backdrop-overlay"

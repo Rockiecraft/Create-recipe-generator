@@ -95,34 +95,48 @@ window.toggleSidebarCollapseState = function () {
 };
 
 function createNewRecipeLayout() {
-    // Save the outgoing recipe's live DOM state before tearing anything down.
     if (activeRecipeId && recipesDatabase[activeRecipeId]) {
-        if (typeof saveActiveRecipeState === 'function') saveActiveRecipeState();
+        if (typeof saveOutgoingRecipeState === 'function') {
+            saveOutgoingRecipeState(activeRecipeId);
+        } else if (typeof saveActiveRecipeState === 'function') {
+            saveActiveRecipeState();
+        }
     }
- 
+
     const id = `recipe_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
- 
+
     recipesDatabase[id] = {
         id: id,
         name: 'Untitled Template Module',
         engine: 'create:pressing',
         platform: 'universal',
         enginesData: {},
+        conditionsByEngine: {},
         conditions: [],
         pasteState: {},
+        platformByEngine: {},
     };
- 
-    
+
     window.currentActiveEngine = 'create:pressing';
     currentActiveEngine = 'create:pressing';
- 
-    
+
     if (window.workspaceIsolatorState) {
         window.workspaceIsolatorState.activePastedRawText = {};
         window.workspaceIsolatorState.cachedConditionTemplates = {};
         window.workspaceIsolatorState.isParsingLock = false;
     }
- 
+
+    const radioUniversal = document.querySelector('input[name="platform"][value="universal"]');
+    if (radioUniversal) radioUniversal.checked = true;
+
+    const wrapCheck = document.getElementById('useForgeConditionalWrapper');
+    if (wrapCheck) wrapCheck.checked = false;
+
+    const conditionsContainer = document.getElementById('conditionsContainer');
+    if (conditionsContainer) conditionsContainer.innerHTML = '';
+
+    const codeArea = document.getElementById('recipeCodeTextarea');
+    if (codeArea) codeArea.value = '';
 
     if (typeof loadRecipeFromState === 'function') loadRecipeFromState(id);
 }
@@ -160,42 +174,7 @@ function downloadSingleJsonFileDirectly(filename) {
     if (typeof downloadRecipeJson === 'function') downloadRecipeJson();
 }
 
-function deleteRecipeTarget(id) {
-    if (!recipesDatabase[id]) return;
-    const item = recipesDatabase[id];
-    const name = item.name || 'Untitled';
-    if (!confirm(`Are you absolutely sure you want to delete "${name}"?`)) return;
-    delete recipesDatabase[id];
-    if (activeRecipeId === id) {
-        const remainingKeys = Object.keys(recipesDatabase);
-        if (remainingKeys.length > 0) {
-            activeRecipeId = remainingKeys[0];
-            if (typeof loadRecipeFromState === 'function') loadRecipeFromState(activeRecipeId);
-        } else {
-            activeRecipeId = '';
-            currentActiveEngine = 'create:mixing';
-            const titleInput = document.getElementById('recipeTitle');
-            if (titleInput) titleInput.value = '';
-            const containerIng = document.getElementById('ingredientsContainer');
-            const containerOut = document.getElementById('outputsContainer');
-            const containerSteps = document.getElementById('assemblyStepsContainer');
-            const containerCond = document.getElementById('conditionsContainer');
-            if (containerIng) containerIng.innerHTML = '';
-            if (containerOut) containerOut.innerHTML = '';
-            if (containerSteps) containerSteps.innerHTML = '';
-            if (containerCond) containerCond.innerHTML = '';
-            const tabElement = document.querySelector('.engine-tab[data-engine="create:mixing"]');
-            if (tabElement) {
-                document.querySelectorAll('.engine-tab').forEach((b) => b.classList.remove('active'));
-                tabElement.classList.add('active');
-            }
-            if (typeof toggleEngineFields === 'function') toggleEngineFields();
-        }
-    }
-    if (typeof saveActiveRecipeState === 'function') saveActiveRecipeState();
-    renderSidebarList();
-    if (typeof compileRecipe === 'function') compileRecipe();
-}
+
 
 function duplicateRecipeTarget(id) {
     cloneRecipeLayoutProfile(id);

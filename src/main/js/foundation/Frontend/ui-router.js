@@ -16,8 +16,11 @@ function switchEngine(buttonEl) {
 
     if (typeof saveActiveRecipeState === 'function') saveActiveRecipeState();
 
-    getEngineModule(previousEngineKey).save(recipe, previousEngineKey);
-
+    if (typeof captureLayoutSnapshot === 'function') {
+        captureLayoutSnapshot(activeRecipeId, previousEngineKey);
+    } else {
+        getEngineModule(previousEngineKey).save(recipe, previousEngineKey);
+    }
     const outgoingPlatformRad = document.querySelector('input[name="platform"]:checked');
     if (outgoingPlatformRad) {
         if (!recipe.platformByEngine) recipe.platformByEngine = {};
@@ -42,18 +45,19 @@ function switchEngine(buttonEl) {
         if (el) el.innerHTML = '';
     });
 
-   
     const condContainer = document.getElementById('conditionsContainer');
     if (condContainer) condContainer.innerHTML = '';
     if (typeof _restoreConditionsForEngine === 'function') {
         _restoreConditionsForEngine(recipe, newEngineKey);
     }
 
-    getEngineModule(newEngineKey).restore(recipe, newEngineKey);
+    const snapApplied = typeof applyLayoutSnapshot === 'function' ? applyLayoutSnapshot(activeRecipeId, newEngineKey) : false;
+
+    if (!snapApplied) {
+        getEngineModule(newEngineKey).restore(recipe, newEngineKey);
+    }
 
     const savedPlatform = (recipe.platformByEngine && recipe.platformByEngine[newEngineKey]) || 'universal';
-    const incomingPlatformRad = document.querySelector(`input[name="platform"][value="${savedPlatform}"]`);
-    if (incomingPlatformRad) incomingPlatformRad.checked = true;
 
     window.isSwitchingLayouts = false;
 

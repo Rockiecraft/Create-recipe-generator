@@ -8,7 +8,7 @@ function copyToClipboard() {
             const copyBtn = document.getElementById('copyTextBtn');
             if (copyBtn) {
                 const originalText = copyBtn.textContent;
-                copyBtn.textContent = 'Copied! ✅';
+                copyBtn.textContent = 'Copied!';
                 copyBtn.style.background = '#20c997';
                 copyBtn.style.color = '#121212';
                 setTimeout(() => {

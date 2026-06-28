@@ -26,7 +26,6 @@ function saveActiveRecipeState() {
     // Keep top-level in sync as a fallback for old saves
     recipe.platform = platformValue;
 
-
     if (!recipe.conditionsByEngine) recipe.conditionsByEngine = {};
     const { forgeConditions, fabricConditions, neoConditions } = serializeAllConditions();
     recipe.conditionsByEngine[engineKey] = { forgeConditions, fabricConditions, neoConditions };
@@ -45,6 +44,13 @@ function saveActiveRecipeState() {
 }
 
 function loadRecipeFromState(filename) {
+    if (activeRecipeId && recipesDatabase[activeRecipeId]) {
+        if (typeof captureLayoutSnapshot === 'function') {
+            const outgoing = recipesDatabase[activeRecipeId];
+            captureLayoutSnapshot(activeRecipeId, outgoing.engine || 'create:pressing');
+        }
+    }
+
     const outgoingCodeArea = document.getElementById('recipeCodeTextarea');
     if (activeRecipeId && recipesDatabase[activeRecipeId] && outgoingCodeArea) {
         const outgoingRecipe = recipesDatabase[activeRecipeId];
@@ -100,10 +106,7 @@ function loadRecipeFromState(filename) {
     window._userClearedOutputs = true;
     if (typeof toggleEngineFields === 'function') toggleEngineFields();
     window._userClearedOutputs = false;
-
-    getEngineModule(engineKey).restore(recipe, engineKey);
-
-    _restoreConditionsForEngine(recipe, engineKey);
+      
 
     if (typeof renderSidebarList === 'function') renderSidebarList(filename);
 
@@ -127,7 +130,6 @@ function loadRecipeFromState(filename) {
     if (typeof compileRecipe === 'function') compileRecipe();
 }
 
-
 function _restoreConditionsForEngine(recipe, engineKey) {
     const container = document.getElementById('conditionsContainer');
     if (!container) return;
@@ -136,7 +138,6 @@ function _restoreConditionsForEngine(recipe, engineKey) {
     const saved = recipe.conditionsByEngine?.[engineKey];
     if (!saved) return;
 
-    
     if (saved.forgeConditions || saved.fabricConditions || saved.neoConditions) {
         const syntheticNode = { recipes: [{}] };
         const inner = syntheticNode.recipes[0];
