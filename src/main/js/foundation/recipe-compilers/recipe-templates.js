@@ -21,7 +21,6 @@ const RECIPE_TEMPLATES = {
         "ingredients": [],
         "results": []
     },
-
     "create:cutting": {
         "type": "create:cutting",
         "ingredients": [],
@@ -37,13 +36,11 @@ const RECIPE_TEMPLATES = {
         "ingredients": [],
         "results": []
     },
-
     "create:filling": {
         "type": "create:filling",
         "ingredients": [],
         "results": []
     },
-
     "create:splashing": {
         "type": "create:splashing",
         "ingredients": [],
@@ -64,19 +61,16 @@ const RECIPE_TEMPLATES = {
         "ingredients": [],
         "results": []
     },
-
     "create:deploying": {
         "type": "create:deploying",
         "ingredients": [],
         "results": []
     },
-
     "create:item_application": {
-    "type": "create:item_application",
-    "ingredients": [],
-    "results": []
+        "type": "create:item_application",
+        "ingredients": [],
+        "results": []
     },
-    
     "create:sequenced_assembly": {
         "type": "create:sequenced_assembly",
         "ingredient": {},
@@ -92,7 +86,6 @@ const RECIPE_TEMPLATES = {
         "pattern": [],
         "result": {}
     },
-
     "wrappers": {
         "forge:conditional": {
             "type": "forge:conditional",
@@ -104,3 +97,22 @@ const RECIPE_TEMPLATES = {
         }
     }
 };
+
+/**
+ * Get the base template for an engine key.
+ * Checks core templates first, then plugin templates registered via plugin-api.js.
+ * Falls back to a minimal generic template if neither has it.
+ */
+function getRecipeTemplate(engineKey) {
+    if (RECIPE_TEMPLATES[engineKey]) {
+        return JSON.parse(JSON.stringify(RECIPE_TEMPLATES[engineKey]));
+    }
+    if (window.PLUGIN_TEMPLATES && window.PLUGIN_TEMPLATES[engineKey]) {
+        return JSON.parse(JSON.stringify(window.PLUGIN_TEMPLATES[engineKey]));
+    }
+    // Generic fallback for unknown engines
+    return { type: engineKey, ingredients: [], results: [] };
+}
+
+window.RECIPE_TEMPLATES = RECIPE_TEMPLATES;
+window.getRecipeTemplate = getRecipeTemplate;

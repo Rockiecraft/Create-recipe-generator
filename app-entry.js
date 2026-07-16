@@ -9,6 +9,7 @@ function createStudioDesktopWindow() {
         minHeight: 650,
         backgroundColor: '#141416',
         title: 'Create Recipe Generator',
+        icon: process.platform === 'win32' ? path.join(__dirname, 'src', 'main', 'assets', 'icon.ico') : path.join(__dirname, 'src', 'main', 'assets', 'icon.png'),
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,

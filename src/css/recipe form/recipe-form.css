@@ -1,59 +1,22 @@
 .recipe-form {
-    flex: 1 1 auto !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    margin: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 10px !important;
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
 }
 
 .main-content {
-    padding: 16px !important;
-    overflow: visible !important;
-    height: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 16px !important;
-    box-sizing: border-box !important;
-}
-
-
-.engine-tabs-bar {
-    display: flex; 
-    gap: 6px; 
-    background: var(--bg-card); 
-    padding: 6px; 
-    border-radius: 6px; 
-    border: 1px solid var(--border-color);
-    flex-wrap: wrap; 
-    min-height: min-content; 
-    box-sizing: border-box;
-    flex-shrink: 0;
-}
-
-.engine-tab {
-    padding: 8px 14px; 
-    font-size: 13px; 
-    font-weight: 500; 
-    color: var(--text-muted);
-    cursor: pointer; 
-    border-radius: 4px; 
-    background: transparent; 
-    border: none; 
-    white-space: nowrap;
-}
-
-.engine-tab:hover { 
-    background: rgba(255,255,255,0.03); 
-    color: #fff; 
-}
-
-.engine-tab.active { 
-    background: var(--bg-input); 
-    color: #fff; 
-    font-weight: 600; 
+  padding: 16px !important;
+  overflow: visible !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  box-sizing: border-box !important;
 }
 
 
@@ -68,95 +31,95 @@
   flex-direction: column !important;
   gap: 0px !important;
   box-sizing: border-box !important;
-  width: 100% !important;   /* ← add this */
+  width: 100% !important; /* ← add this */
 }
 
-.config-card h3 { 
-    margin: 0 0 12px 0; 
-    font-size: 13px; 
-    color: var(--accent); 
-    text-transform: uppercase; 
-    letter-spacing: 0.5px; 
+.config-card h3 {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 
 .form-group {
-    display: grid !important;
-    grid-template-columns: 110px 1fr !important;
-    align-items: center !important;
-    gap: 8px !important;
-    margin-top: 3px !important;
-    width: 100% !important;
+  display: grid !important;
+  grid-template-columns: 110px 1fr !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-top: 3px !important;
+  width: 100% !important;
 }
 
 label,
 .form-group label,
 .config-card label,
 .ingredient-block label,
-.out-count-label { 
-    font-size: 10px !important; 
-    font-weight: 500 !important; 
-    color: #7d8296 !important; 
-    text-transform: none !important; 
-    margin: 0 !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+.out-count-label {
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  color: #7d8296 !important;
+  text-transform: none !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 
 input{
-    background-color: #14151c !important; 
-    border: 1px solid #232530 !important; 
-    color: #fff !important; 
-    border-radius: 4px !important; 
-    padding: 1px 6px !important;
-    height: 20px !important; 
-    font-size: 11px !important;
-    outline: none !important;
-    width: 60% !important;
-    box-sizing: border-box !important;
+  background-color: #14151c !important;
+  border: 1px solid #232530 !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+  padding: 1px 6px !important;
+  height: 20px !important;
+  font-size: 11px !important;
+  outline: none !important;
+  width: 60% !important;
+  box-sizing: border-box !important;
 }
 
- select {
-    background-color: #14151c !important;
-    border: 1px solid #232530 !important; 
-    color: #fff !important; 
-    border-radius: 4px !important; 
-    padding: 1px 6px !important;
-    height: 20px !important;
-    font-size: 11px !important;
-    outline: none !important;
-    width: 70% !important;
-    box-sizing: border-box !important;
+select {
+  background-color: #14151c !important;
+  border: 1px solid #232530 !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+  padding: 1px 6px !important;
+  height: 20px !important;
+  font-size: 11px !important;
+  outline: none !important;
+  width: 60% !important;
+  box-sizing: border-box !important;
 }
 
 input:focus, select:focus {
-    border-color: var(--accent) !important;
+  border-color: var(--accent) !important;
 }
 
-input[type="checkbox"], input[type="radio"] { 
-    width: 11px !important; 
-    height: 11px !important; 
-    accent-color: var(--accent) !important;
-    cursor: pointer !important;
-    margin: 0 !important;
+input[type="checkbox"], input[type="radio"] {
+  width: 11px !important;
+  height: 11px !important;
+  accent-color: var(--accent) !important;
+  cursor: pointer !important;
+  margin: 0 !important;
 }
 
-.radio-group { 
-    display: flex; 
-    gap: 15px; 
-    background: #1a1a1c; 
-    padding: 10px; 
-    border-radius: 4px; 
-    border: 1px solid var(--border-color); 
-    margin-top: 6px; 
+.radio-group {
+  display: flex;
+  gap: 15px;
+  background: #1a1a1c;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  margin-top: 6px;
 }
 
-.radio-group label { 
-    margin-top: 0; 
-    color: #fff; 
-    cursor: pointer; 
+.radio-group label {
+  margin-top: 0;
+  color: #fff;
+  cursor: pointer;
 }
 
 
@@ -164,28 +127,28 @@ input[type="checkbox"], input[type="radio"] {
 .grid-full-width-line { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; }
 .grid-cell-stacked-box { display: flex; flex-direction: column; }
 
-.grid-cell-context-hint { 
-    grid-column: 2 !important; 
-    display: flex; 
-    align-items: center; 
-    font-size: 10px !important; 
-    color: #53586d !important; 
-    line-height: 1.2 !important; 
-    padding-top: 0px !important; 
-    margin-top: 0px !important;
+.grid-cell-context-hint {
+  grid-column: 2 !important;
+  display: flex;
+  align-items: center;
+  font-size: 10px !important;
+  color: #53586d !important;
+  line-height: 1.2 !important;
+  padding-top: 0px !important;
+  margin-top: 0px !important;
 }
 
 .cond-block {
-    background: var(--bg-input);
-    border: 1px solid var(--border-color);
-    padding: 15px;
-    border-radius: 4px;
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    box-sizing: border-box;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  padding: 15px;
+  border-radius: 4px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .cond-full-row, .cond-header-line { display: flex; justify-content: space-between; align-items: center; width: 100%; }
@@ -196,23 +159,20 @@ input[type="checkbox"], input[type="radio"] {
 .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 
 
-
-
 #addOutputBtn,
 .workspace button[id*="Output"] {
-    width: 200px !important;
-    max-width: 240px !important;
-    display: block !important;
-    margin-top: 10px !important;
+  width: 200px !important;
+  max-width: 240px !important;
+  display: block !important;
+  margin-top: 10px !important;
 }
-
 
 
 .workspace, .workspace-wrapper, .app-layout {
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: wrap !important;
-  justify-content: center !important;   /* ← was flex-start */
+  justify-content: center !important; /* ← was flex-start */
   align-items: flex-start !important;
   gap: 12px !important;
   padding: 12px !important;
@@ -225,49 +185,42 @@ input[type="checkbox"], input[type="radio"] {
 .btn-util:hover { background: var(--border-color); }
 
 
-
-
-
-
-
-
-
 #conditionsContainer > div,
 .config-card #conditionsContainer > div {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 12px !important;
-    width: 100% !important;
-    padding: 14px !important;
-    background-color: #0f1018 !important;
-    border: 1px solid #2a2b3a !important;
-    border-radius: 4px !important;
-    box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  width: 100% !important;
+  padding: 14px !important;
+  background-color: #0f1018 !important;
+  border: 1px solid #2a2b3a !important;
+  border-radius: 4px !important;
+  box-sizing: border-box !important;
 }
 
 
 #conditionsContainer > div > div[style*="display: flex"],
 #conditionsContainer > div > div[style*="display:flex"] {
-    display: flex !important;
-    flex-direction: row !important;      
-    justify-content: flex-start !important; 
-    align-items: center !important;    
-    width: 100% !important;
-    gap: 16px !important;                
-    box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  width: 100% !important;
+  gap: 16px !important;
+  box-sizing: border-box !important;
 }
 
 
 #conditionsContainer div[style*="flex-direction: column"],
 #conditionsContainer div[style*="flex-direction:column"],
 #conditionsContainer .form-group {
-    flex: 0 1 auto !important;          
-    width: auto !important;
-    max-width: none !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 4px !important;
-    box-sizing: border-box !important;
+  flex: 0 1 auto !important;
+  width: auto !important;
+  max-width: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  box-sizing: border-box !important;
 }
 
 
@@ -275,145 +228,202 @@ input[type="checkbox"], input[type="radio"] {
 #conditionsContainer input.cond-key,
 #conditionsContainer input.cond-val,
 #conditionsContainer select.cond-route-select {
-    width: auto !important;            
-    height: 22px !important;
-    background-color: #14151c !important; 
-    border: 1px solid #232530 !important;
-    color: #ffffff !important;
-    border-radius: 4px !important;
-    padding: 1px 6px !important;
-    font-size: 11px !important;
-    outline: none !important;
-    box-sizing: border-box !important;
+  width: auto !important;
+  height: 22px !important;
+  background-color: #14151c !important;
+  border: 1px solid #232530 !important;
+  color: #ffffff !important;
+  border-radius: 4px !important;
+  padding: 1px 6px !important;
+  font-size: 11px !important;
+  outline: none !important;
+  box-sizing: border-box !important;
 }
 
 
 #conditionsContainer div[style*="line-height: 1.4"],
 #conditionsContainer .cond-context-clue,
 #conditionsContainer .grid-cell-context-hint {
-    flex: 1 1 auto !important;          
-    display: block !important;
-    width: auto !important;
-    max-width: none !important;
-    white-space: normal !important;      
-    word-break: break-word !important;   
-    
-    padding: 0 !important;               
-    margin: 0 !important;
-    
-    font-size: 11px !important;
-    color: #7d8296 !important;          
-    line-height: 1.4 !important;
-    text-align: left !important;
+  flex: 1 1 auto !important;
+  display: block !important;
+  width: auto !important;
+  max-width: none !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  font-size: 11px !important;
+  color: #7d8296 !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
 }
 
 
 #conditionsContainer .left-aligned-layout-grid,
 #conditionsContainer .grid-cell-stacked-box {
-    display: contents !important;        
+  display: contents !important;
 }
 
 .advanced-options-disclosure summary::-webkit-details-marker {
-    display: none !important;
+  display: none !important;
 }
 
 
 .advanced-options-disclosure[open] .disclosure-arrow-marker,
 details[open] .disclosure-arrow-marker,
 details[open] summary span:first-child {
-    transform: rotate(90deg) !important;
-    color: var(--accent) !important;
-    display: inline-block !important; 
+  transform: rotate(90deg) !important;
+  color: var(--accent) !important;
+  display: inline-block !important;
 }
 
-.hidden, 
+.hidden,
 .fluid-output-toggle-row.hidden {
-    display: none !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    height: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
 }
 
 #assemblyStepsContainer select.step-type,
 #assemblyStepsContainer input.ing-id,
 #assemblyStepsContainer input.step-fluid-id {
-    width: 100% !important;
-    max-width: 100% !important;
-    display: block !important;
-    box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+  box-sizing: border-box !important;
 }
 
 
 #assemblyStepsContainer input.step-fluid-amount {
-    width: 10px !important;
-    min-width: 0px !important;
-    max-width: 75px !important;
-    flex-shrink: 0 !important;
-    box-sizing: border-box !important;
+  width: 10px !important;
+  min-width: 0px !important;
+  max-width: 75px !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
 }
 
 
 #assemblyStepsContainer select.step-type,
 #assemblyStepsContainer input.ing-id,
 #assemblyStepsContainer input.step-fluid-id {
-    width: auto !important;      
-    max-width: auto !important;  
-    flex: none !important;         
+  width: auto !important;
+  max-width: auto !important;
+  flex: none !important;
 }
 
 
 #assemblyStepsContainer div[style*="display:flex"] {
-    justify-content: flex-start !important;
+  justify-content: flex-start !important;
 }
 
 #assemblyStepsContainer .grid-cell-stacked-box {
-    background-color: #14151c !important; 
-    border: 1px solid #3c3f54 !important; 
-    border-radius: var(--radius-lg) !important;
-    padding: 16px !important;
-    margin-bottom: 12px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 8px !important;
-    box-sizing: border-box !important;
-    width: 53% !important;
+  background-color: #14151c !important;
+  border: 1px solid #3c3f54 !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 16px !important;
+  margin-bottom: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  box-sizing: border-box !important;
+  width: 53% !important;
 }
 
 
 #assemblyStepsContainer .grid-cell-stacked-box > div:first-child {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    width: 100% !important;
-    margin-bottom: 4px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-bottom: 4px !important;
 }
-
-
-
-
-
-
-
 
 
 #ingredientsContainer .grid-cell-stacked-box div[style*="display:flex; gap:10px; align-items:center;"],
 #ingredientsContainer .grid-cell-stacked-box div[style*="display: flex; gap: 10px; align-items: center;"] {
-    display: flex !important;
-    flex-direction: column !important;        
-    align-items: flex-start !important;       
-    gap: 8px !important;                      
-    width: 100% !important;
-    margin-top: 4px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin-top: 4px !important;
 }
 
 #ingredientsContainer .grid-cell-stacked-box div[style*="display:flex; gap:10px; align-items:center;"] > label,
 #ingredientsContainer .grid-cell-stacked-box div[style*="display: flex; gap: 10px; align-items: center;"] > label {
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;                      
-    width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+/* ─── Recipe field sizing (~10–15% larger for readability) ──────────
+   Scoped to the recipe ingredient/output fields only. Every rule below
+   uses :not(#conditionsContainer *), which means it simply doesn't match
+   anything inside the Conditional & Framework Rules drawer at all — not
+   a specificity fight, an outright exclusion — so the drawer stays at
+   its original compact size with zero risk of these leaking into it. */
+
+.config-card label:not(#conditionsContainer *),
+.ingredient-block label:not(#conditionsContainer *),
+.grid-cell-stacked-box label:not(#conditionsContainer *) {
+  font-size: 11.5px !important; /* was 10px, +15% */
+}
+
+.config-card input:not(#conditionsContainer *):not([type="checkbox"]):not([type="radio"]),
+.ingredient-block input:not(#conditionsContainer *):not([type="checkbox"]):not([type="radio"]) {
+  font-size: 12.5px !important; /* was 11px, ~+14% */
+  height: 23px !important;      /* was 20px, +15% */
+  padding: 2px 7px !important;  /* was 1px 6px */
+  /* Text inputs center their content reliably on their own — no
+     line-height/height gymnastics needed here, that problem was
+     specific to <select>'s native rendering below. */
+}
+
+.config-card select:not(#conditionsContainer *),
+.ingredient-block select:not(#conditionsContainer *) {
+  font-size: 12.5px !important;
+  height: 24px !important;
+  /* appearance:none takes full manual control of rendering instead of
+     fighting Chromium's native <select> box model, which was the real
+     source of the centering problem — no amount of height/padding
+     tuning fully fixes it because the native renderer doesn't strictly
+     follow the CSS box model for where it draws the selected value.
+     Removing native appearance also removes the native dropdown arrow,
+     replaced below with a small inline SVG chevron. */
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  padding: 0 26px 0 8px !important; /* 0 vertical — line-height below
+    handles centering directly instead; right side reserves room for
+    the custom arrow */
+  line-height: 24px !important; /* set to the exact same value as height
+    (not a multiplier like 1.2) — this is what actually guarantees
+    single-line text centers exactly in the box, rather than
+    approximately */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%237d8296'/></svg>") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 10px center !important;
+}
+
+.config-card input[type="checkbox"]:not(#conditionsContainer *),
+.config-card input[type="radio"]:not(#conditionsContainer *) {
+  width: 12.5px !important;  /* was 11px, ~+14% */
+  height: 12.5px !important;
+}
+
+.grid-cell-context-hint:not(#conditionsContainer *) {
+  font-size: 11.5px !important; /* was 10px, +15% */
+}
+
+/* A little extra room in the label/input column now that the text
+   itself is bigger, so longer labels/hints don't start wrapping. */
+.config-card .left-aligned-layout-grid:not(#conditionsContainer *) {
+  grid-template-columns: 400px 1fr !important; /* was 380px */
 }

@@ -107,7 +107,6 @@ function reverseCompilePastedRecipe() {
             const _oldEngineKey = (_recipe.engine || window.currentActiveEngine || 'create:pressing').replace('create:', '');
             const _newEngineKey = trueMachineCode;
 
-            
             if (_oldEngineKey !== _newEngineKey) {
                 if (_recipe.pasteState) {
                     _recipe.pasteState[_oldEngineKey] = '';
@@ -135,7 +134,6 @@ function reverseCompilePastedRecipe() {
         }
         window.isFabricConversionActive = requiresFabricConversion;
 
-        
         if (!activeRecipeId || !recipesDatabase[activeRecipeId]) {
             const newId = `recipe_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
             recipesDatabase[newId] = {
@@ -159,7 +157,6 @@ function reverseCompilePastedRecipe() {
             recipe.enginesData[engineKey] = module.fromJson(recipeData, engineKey);
         }
 
-        
         recipe.engine = engineKey;
         window.currentActiveEngine = engineKey;
         currentActiveEngine = engineKey;
@@ -168,6 +165,13 @@ function reverseCompilePastedRecipe() {
         document.querySelectorAll('.engine-tab, .tab-button').forEach((b) => b.classList.remove('active'));
         const tabEl = document.querySelector(`.engine-tab[data-engine="${engineKey}"]`) || document.querySelector(`.engine-tab[data-engine="${engineKey.replace('create:', '')}"]`);
         if (tabEl) tabEl.classList.add('active');
+
+        if (tabEl && typeof syncModTabDisplayForEngine === 'function') syncModTabDisplayForEngine(tabEl);
+
+        if (tabEl && typeof _modGroupForTabButton === 'function') {
+            if (!recipe.lastEngineByModGroup) recipe.lastEngineByModGroup = {};
+            recipe.lastEngineByModGroup[_modGroupForTabButton(tabEl)] = engineKey;
+        }
 
         // Clear containers and restore engine layout
         window.isSwitchingLayouts = true;
@@ -187,15 +191,32 @@ function reverseCompilePastedRecipe() {
             } catch (innerFault) {
                 console.error('hydrateCustomConditionBlockRows failed:', innerFault);
             }
+
+            try {
+                if (typeof serializeAllConditions === 'function') {
+                    const { forgeConditions, fabricConditions, neoConditions } = serializeAllConditions();
+                    if (!recipe.conditionsByEngine) recipe.conditionsByEngine = {};
+                    recipe.conditionsByEngine[engineKey] = { forgeConditions, fabricConditions, neoConditions };
+                    recipe.conditions = forgeConditions;
+                }
+            } catch (condSyncFault) {
+                console.error('Failed to sync pasted conditions into recipe.conditionsByEngine:', condSyncFault);
+            }
+
             setTimeout(() => {
                 if (errorBox) errorBox.style.display = 'none';
                 if (typeof clearRecipeCodeErrorHighlight === 'function') clearRecipeCodeErrorHighlight();
-                
+
                 window.workspaceIsolatorState.isParsingLock = false;
                 try {
                     if (typeof compileRecipe === 'function') compileRecipe();
                 } catch (compileFault) {
                     console.error('compileRecipe failed after paste-import:', compileFault);
+                }
+
+               
+                if (typeof _persistRecipesDatabase === 'function') {
+                    _persistRecipesDatabase();
                 }
 
                 if (typeof renderSidebarList === 'function') renderSidebarList(activeRecipeId);
@@ -270,208 +291,6 @@ function selectActiveMachineryTabElement(recipeTypeId) {
     } else if (matchButton && typeof matchButton.click === 'function') {
         matchButton.click();
     }
-}
-
-/**
- * Component 3 Rehydrator: Clears rows, appends cards, and populates fluid/item slots.
- */
-function hydrateInputIngredientCards(recipeData) {
-    const container = document.getElementById('ingredientsContainer');
-    if (!container) return;
-
-    if (singleInputField && singleInputField.offsetParent !== null) {
-        const singleNode = Array.isArray(recipeData.ingredients) ? recipeData.ingredients[0] : recipeData.ingredients;
-        if (singleNode) {
-            singleInputField.value = singleNode.item || singleNode.tag || singleNode.fluid || '';
-            singleInputField.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-        
-        const singleInputField2 = document.getElementById('inputItem2');
-        if (singleInputField2 && singleInputField2.offsetParent !== null) {
-            const singleNode2 = Array.isArray(recipeData.ingredients) ? recipeData.ingredients[1] : null;
-            if (singleNode2) {
-                singleInputField2.value = singleNode2.item || singleNode2.tag || '';
-                singleInputField2.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-        }
-        return;
-    }
-
-    let realRecipe = recipeData;
-    if (recipeData && (recipeData.ingredients || recipeData.results || recipeData.sequence || recipeData.key)) {
-        realRecipe = recipeData;
-    } else if (recipeData && recipeData.recipe && typeof recipeData.recipe === 'object') {
-        realRecipe = recipeData.recipe;
-    }
-
-    let nodesList = [];
-
-    if (realRecipe && realRecipe.key && typeof realRecipe.key === 'object') {
-        for (let characterSymbol in realRecipe.key) {
-            if (realRecipe.key.hasOwnProperty(characterSymbol)) {
-                nodesList.push(realRecipe.key[characterSymbol]);
-            }
-        }
-    } else if (realRecipe && Array.isArray(realRecipe.ingredients) && realRecipe.sequence) {
-        nodesList = realRecipe.ingredients;
-    } else if (realRecipe && Array.isArray(realRecipe.ingredients)) {
-        nodesList = realRecipe.ingredients;
-    } else if (realRecipe && realRecipe.ingredients && typeof realRecipe.ingredients === 'object') {
-        nodesList = [realRecipe.ingredients];
-    }
-
-    if (!nodesList || nodesList.length === 0) return;
-
-    container.innerHTML = '';
-
-    nodesList.forEach((node, index) => {
-        let targetIdentifierValue = node.item || node.fluid || node.tag || node.fluidTag || '';
-        let isFluid = !!node.fluid || !!node.fluidTag;
-        let finalAmountValue = isFluid ? parseInt(node.amount || 1000, 10) : parseInt(node.count || 1, 10);
-
-        if (isFluid && window.isFabricConversionActive) {
-            finalAmountValue = Math.round(finalAmountValue / 81);
-        }
-
-        if (typeof addIngredientBlock === 'function') {
-            addIngredientBlock();
-        } else {
-            const addBtn = document.getElementById('addIngBtn');
-            if (addBtn) addBtn.click();
-        }
-
-        setTimeout(() => {
-            const latestRow = container.children[index] || container.lastElementChild;
-            if (!latestRow) return;
-
-            const idBox = latestRow.querySelector('.ing-id') || latestRow.querySelector('input[type="text"]');
-            const countBox = latestRow.querySelector('.ing-count') || latestRow.querySelector('input[type="number"]');
-            const checkFluid = latestRow.querySelector('.ing-is-fluid') || latestRow.querySelector('input[type="checkbox"]');
-            const checkTag = latestRow.querySelector('.ing-is-tag');
-
-            if (idBox) idBox.value = targetIdentifierValue;
-            if (checkTag) checkTag.checked = !!node.tag || !!node.fluidTag;
-
-            if (isFluid) {
-                if (countBox) countBox.value = finalAmountValue;
-                if (checkFluid) {
-                    checkFluid.checked = true;
-                    checkFluid.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-            } else {
-                if (countBox) countBox.value = finalAmountValue;
-                if (checkFluid) {
-                    checkFluid.checked = false;
-                    checkFluid.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-            }
-        }, 15);
-    });
-}
-
-/**
- * Component 4 Rehydrator: Maps results into outcome cards.
- */
-function hydrateOutputOutcomeCards(recipeData) {
-    const simpleEngines = ['crushing', 'milling', 'cutting', 'splashing', 'sequenced_assembly'];
-    const currentEngine = (currentActiveEngine || '').replace('create:', '');
-    const useSimple = simpleEngines.includes(currentEngine);
-
-    const container = useSimple ? document.getElementById('outputsContainerSimple') || document.getElementById('outputsContainer') : document.getElementById('outputsContainerFluid') || document.getElementById('outputsContainer');
-
-    if (!container) return;
-
-    const singleOutputField = document.getElementById('singleOutputProductId');
-    if (singleOutputField && singleOutputField.offsetParent !== null) {
-        const singleResult = Array.isArray(recipeData.results) ? recipeData.results[0] : recipeData.result ? (Array.isArray(recipeData.result) ? recipeData.result[0] : recipeData.result) : null;
-        if (singleResult) {
-            const val = singleResult.item || singleResult.id || '';
-            singleOutputField.value = val;
-            singleOutputField.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-        return;
-    }
-
-    let realRecipe = recipeData;
-    if (recipeData && (recipeData.ingredients || recipeData.results || recipeData.sequence || recipeData.result)) {
-        realRecipe = recipeData;
-    } else if (recipeData && recipeData.recipe && typeof recipeData.recipe === 'object') {
-        realRecipe = recipeData.recipe;
-    }
-
-    let nodesList = [];
-
-    if (realRecipe && realRecipe.result && typeof realRecipe.result === 'object' && !Array.isArray(realRecipe.result)) {
-        nodesList = [realRecipe.result];
-    } else if (realRecipe && Array.isArray(realRecipe.result)) {
-        nodesList = realRecipe.result;
-    } else if (realRecipe && Array.isArray(realRecipe.results)) {
-        nodesList = realRecipe.results;
-    } else if (realRecipe && realRecipe.results && typeof realRecipe.results === 'object') {
-        nodesList = [realRecipe.results];
-    }
-
-    if (!nodesList || nodesList.length === 0) return;
-
-    container.innerHTML = '';
-
-    nodesList.forEach((node, index) => {
-        let targetIdentifierValue = node.item || node.fluid || node.tag || node.fluidTag || '';
-        let isFluid = !!node.fluid || !!node.fluidTag;
-        let finalAmountValue;
-        let dropChanceWeight = node.chance !== undefined ? parseFloat(node.chance) : 1.0;
-
-        if (isFluid) {
-            const rawAmount = parseInt(node.amount || 1000, 10);
-            finalAmountValue = window.isFabricConversionActive ? Math.round(rawAmount / 81) : rawAmount;
-        }
-
-        const simpleEngines = ['crushing', 'milling', 'cutting', 'polishing', 'splashing'];
-        const currentEngine = (currentActiveEngine || '').replace('create:', '');
-        if (simpleEngines.includes(currentEngine)) {
-            if (typeof addSimpleOutputBlock === 'function') addSimpleOutputBlock();
-        } else {
-            if (typeof addOutputBlock === 'function') addOutputBlock(targetIdentifierValue);
-        }
-
-        setTimeout(() => {
-            const latestRow = container.children[index] || container.lastElementChild;
-            if (!latestRow) return;
-
-            const idBox = latestRow.querySelector('.out-id') || latestRow.querySelector('input[type="text"]');
-            const checkFluid = latestRow.querySelector('.out-is-fluid') || latestRow.querySelector('input[type="checkbox"]');
-            const checkTag = latestRow.querySelector('.out-is-tag');
-            const numberInputs = latestRow.querySelectorAll('input[type="number"]');
-
-            if (idBox) idBox.value = targetIdentifierValue;
-            if (checkTag) checkTag.checked = !!node.tag || !!node.fluidTag;
-
-            if (isFluid) {
-                if (checkFluid) {
-                    window._hydratingFluid = true;
-                    checkFluid.checked = true;
-                    checkFluid.dispatchEvent(new Event('change', { bubbles: true }));
-                    window._hydratingFluid = false;
-                    const freshNumberInputs = latestRow.querySelectorAll('input[type="number"]');
-                    freshNumberInputs.forEach((inputField) => {
-                        inputField.value = finalAmountValue;
-                        inputField.dispatchEvent(new Event('input', { bubbles: true }));
-                    });
-                }
-            } else {
-                finalAmountValue = parseInt(node.count || node.amount || 1, 10);
-                if (numberInputs[0]) numberInputs[0].value = finalAmountValue;
-                if (checkFluid) {
-                    checkFluid.checked = false;
-                    checkFluid.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-                if (numberInputs.length >= 2) {
-                    const displayChance = dropChanceWeight <= 1.0 ? Math.round(dropChanceWeight * 100) : dropChanceWeight;
-                    numberInputs[1].value = displayChance;
-                }
-            }
-        }, 80);
-    });
 }
 
 /**
@@ -579,7 +398,6 @@ function hydrateCustomConditionBlockRows(rawJsonInput) {
         if (node.recipe && typeof node.recipe === 'object') scanNode(node.recipe);
     };
 
-   
     scanNode(rawJsonInput);
 
     // Deduplicate by JSON string
@@ -699,11 +517,9 @@ function hydrateCustomConditionBlockRows(rawJsonInput) {
     });
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
     const codeArea = document.getElementById('recipeCodeTextarea');
     if (!codeArea) return;
-
 
     let _parseDebounceTimer = null;
     codeArea.addEventListener('input', () => {
@@ -871,8 +687,6 @@ function hydrateSequencedAssemblyRecipe(recipeData) {
 window.reverseCompilePastedRecipe = reverseCompilePastedRecipe;
 window.extractInnerCreateRecipePayload = extractInnerCreateRecipePayload;
 window.selectActiveMachineryTabElement = selectActiveMachineryTabElement;
-window.hydrateInputIngredientCards = hydrateInputIngredientCards;
-window.hydrateOutputOutcomeCards = hydrateOutputOutcomeCards;
 window.synchronizePlatformFrameworkRadios = synchronizePlatformFrameworkRadios;
 window.hydrateCustomConditionBlockRows = hydrateCustomConditionBlockRows;
 window.hydrateMechanicalCraftingRecipe = hydrateMechanicalCraftingRecipe;

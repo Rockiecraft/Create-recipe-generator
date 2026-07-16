@@ -10,23 +10,26 @@
     "dist": "electron-builder --win portable --linux AppImage --linux flatpak"
   },
   "build": {
+    "directories": {
+    "buildResources": "src/main/assets"
+  },
     "appId": "com.rockiecraft.create-recipe-generator",
     "productName": "CreateRecipeGenerator",
     "files": [
-    "src/index.html",
-    "src/css/**/*",
-    "src/main/**/*",
-    "src/preload.js",
-    "app-entry.js"
+      "app-entry.js",
+      "src/**/*",
+      "!src/**/*.map"
     ],
     "win": {
-      "target": "portable"
+      "target": "portable",
+      "icon": "src/main/assets/icon.png"
     },
     "linux": {
       "target": [
         "AppImage",
         "flatpak"
       ],
+      "icon": "src/main/assets/icon.png",
       "category": "Development"
     },
     "flatpak": {

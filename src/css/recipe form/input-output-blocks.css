@@ -1,13 +1,13 @@
-#outputsContainerFluid { 
-    display: flex !important; 
-    flex-direction: column !important; 
-    gap: 12px !important; 
-    width: 100% !important; 
+#outputsContainerFluid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
 }
 
 #outputsContainerFluid > .form-group,
 #outputsContainerFluid > div {
-    max-width: 100% !important; 
+    max-width: 100% !important;
     width: 35% !important;
     background-color: #1b1c24 !important;
     border: 1px solid #262836 !important;
@@ -40,7 +40,7 @@
 #outputsContainerFluid .out-chance {
     width: 100% !important;
     min-width: 60px !important;
-    height: 20px !important; 
+    height: 20px !important;
     padding: 6px 10px !important;
     box-sizing: border-box !important;
     background-color: var(--bg-input) !important;
@@ -52,15 +52,15 @@
 
 #ingredientsContainer .grid-cell-stacked-box,
 #outputsContainerFluid .grid-cell-stacked-box {
-    background-color: #16171e !important;   
-    border: 1px solid #232530 !important;    
-    border-radius: 8px !important;           
-    padding: 16px !important;                 
+    background-color: #16171e !important;
+    border: 1px solid #232530 !important;
+    border-radius: 8px !important;
+    padding: 16px !important;
     margin-bottom: 12px !important;
-    box-shadow: none !important;              
+    box-shadow: none !important;
     display: flex !important;
-    flex-direction: column !important;        
-    gap: 10px !important;                    
+    flex-direction: column !important;
+    gap: 10px !important;
 }
 
 
@@ -74,13 +74,13 @@
 
 #ingredientsContainer .grid-cell-stacked-box span:not([style*="color:var(--danger)"]),
 #outputsContainerFluid .grid-cell-stacked-box span:not([style*="color:var(--danger)"]) {
-    color: #a3a6b4 !important;            
+    color: #a3a6b4 !important;
 }
 
 
 #ingredientsContainer .grid-cell-stacked-box span[style*="color:var(--danger)"],
 #outputsContainerFluid .grid-cell-stacked-box span[style*="color:var(--danger)"] {
-    color: #da584d !important;               
+    color: #da584d !important;
     font-size: 13px !important;
     cursor: pointer !important;
     opacity: 0.85 !important;
@@ -96,11 +96,11 @@
 #ingredientsContainer .grid-cell-stacked-box label,
 #outputsContainerFluid .grid-cell-stacked-box label,
 #outputsContainerFluid .grid-cell-stacked-box .out-count-label {
-    color: #5d606f !important;                
+    color: #5d606f !important;
     font-size: 12px !important;
     font-weight: 400 !important;
     margin: 0 !important;
-    white-space: nowrap !important;           
+    white-space: nowrap !important;
 }
 
 
@@ -108,27 +108,27 @@
 #ingredientsContainer .grid-cell-stacked-box input[type="number"],
 #outputsContainerFluid .grid-cell-stacked-box input[type="text"],
 #outputsContainerFluid .grid-cell-stacked-box input[type="number"] {
-    background-color: #0f1014 !important;   
-    border: 1px solid #232530 !important;     
-    border-radius: 4px !important;            
-    color: #e2e4ec !important;                
+    background-color: #0f1014 !important;
+    border: 1px solid #232530 !important;
+    border-radius: 4px !important;
+    color: #e2e4ec !important;
     padding: 6px 10px !important;
     font-size: 12px !important;
-    box-sizing: border-box !important;        
+    box-sizing: border-box !important;
 }
 
 
 #ingredientsContainer .grid-cell-stacked-box input[type="text"],
 #outputsContainerFluid .grid-cell-stacked-box input[type="text"] {
     width: 100% !important;
-    max-width: 80% !important;               
+    max-width: 80% !important;
     margin-bottom: 2px !important;
 }
 
 
 #ingredientsContainer .grid-cell-stacked-box input[type="number"],
 #outputsContainerFluid .grid-cell-stacked-box input[type="number"] {
-    width: 60% !important;                  
+    width: 60% !important;
     min-width: 10% !important;
     max-width: 200% !important;
     display: inline-block !important;
@@ -146,11 +146,11 @@
 /* Cards should be full-width, not 35% */
 #outputsContainerSimple > div {
     width: 100% !important;
-    max-width: 30% !important;        /* reasonable cap, not 35% */
+    max-width: 30% !important; /* reasonable cap, not 35% */
     background-color: #1b1c24 !important;
     border: 1px solid #262836 !important;
     border-radius: 4px;
-    padding: 0 !important;              /* padding handled by .grid-cell-stacked-box */
+    padding: 0 !important; /* padding handled by .grid-cell-stacked-box */
     box-sizing: border-box !important;
 }
 
