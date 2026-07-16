@@ -100,13 +100,6 @@ window.toggleSidebarCollapseState = function () {
 };
 
 function createNewRecipeLayout() {
-  if (activeRecipeId && recipesDatabase[activeRecipeId]) {
-    if (typeof saveOutgoingRecipeState === 'function') {
-      saveOutgoingRecipeState(activeRecipeId);
-    } else if (typeof saveActiveRecipeState === 'function') {
-      saveActiveRecipeState();
-    }
-  }
 
   const id = `recipe_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
 
@@ -122,26 +115,9 @@ function createNewRecipeLayout() {
     platformByEngine: {},
   };
 
-  window.currentActiveEngine = 'create:pressing';
-  currentActiveEngine = 'create:pressing';
-
   if (window.workspaceIsolatorState) {
-    window.workspaceIsolatorState.activePastedRawText = {};
-    window.workspaceIsolatorState.cachedConditionTemplates = {};
     window.workspaceIsolatorState.isParsingLock = false;
   }
-
-  const radioUniversal = document.querySelector('input[name="platform"][value="universal"]');
-  if (radioUniversal) radioUniversal.checked = true;
-
-  const wrapCheck = document.getElementById('useForgeConditionalWrapper');
-  if (wrapCheck) wrapCheck.checked = false;
-
-  const conditionsContainer = document.getElementById('conditionsContainer');
-  if (conditionsContainer) conditionsContainer.innerHTML = '';
-
-  const codeArea = document.getElementById('recipeCodeTextarea');
-  if (codeArea) codeArea.value = '';
 
   if (typeof loadRecipeFromState === 'function') loadRecipeFromState(id);
 }
@@ -166,9 +142,7 @@ function cloneRecipeLayoutProfile(filename) {
   recipesDatabase[cloneId] = JSON.parse(JSON.stringify(source));
   recipesDatabase[cloneId].id = cloneId;
   recipesDatabase[cloneId].name = `${source.name || 'Untitled'} (Copy)`;
-  activeRecipeId = cloneId;
   if (typeof loadRecipeFromState === 'function') loadRecipeFromState(cloneId);
-  if (typeof saveActiveRecipeState === 'function') saveActiveRecipeState();
   renderSidebarList();
   if (typeof compileRecipe === 'function') compileRecipe();
 }

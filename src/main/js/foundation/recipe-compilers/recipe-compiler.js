@@ -129,6 +129,9 @@ function loadRecipeFromState(filename) {
     const savedPlatform = (recipe.platformByEngine && recipe.platformByEngine[engineKey]) || recipe.platform || 'universal';
     const platformRad = document.querySelector(`input[name="platform"][value="${savedPlatform}"]`);
     if (platformRad) platformRad.checked = true;
+    
+    const wrapCheck = document.getElementById('useForgeConditionalWrapper');
+    if (wrapCheck) wrapCheck.checked = false;
   }
 
   if (typeof renderSidebarList === 'function') renderSidebarList(filename);
