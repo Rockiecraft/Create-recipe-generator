@@ -19,8 +19,20 @@ window.toggleBasinFluidOutputVisibility = function (checkbox, blockId) {
   if (!block) return;
   const chanceContainer = block.querySelector('.chance-container');
   const countLabel = block.querySelector('.out-count-label');
+  const countInput = block.querySelector('.out-count');
   if (chanceContainer) chanceContainer.classList.toggle('hidden', checkbox.checked);
   if (countLabel) countLabel.textContent = checkbox.checked ? 'mB' : 'Amount';
+  if (countInput) {
+    if (checkbox.checked) {
+      countInput.step = '100';
+      countInput.max = '1000';
+      if (!countInput.value || parseInt(countInput.value, 10) <= 1) countInput.value = '1000';
+    } else {
+      countInput.step = '1';
+      countInput.max = '64';
+      if (parseInt(countInput.value, 10) > 64) countInput.value = '1';
+    }
+  }
   if (typeof compileRecipe === 'function') compileRecipe();
 };
 
@@ -108,7 +120,7 @@ function addBasinOutputBlock(defaultValue = '', engineKeyHint = null) {
     <div style="display:flex; gap:10px; margin-top:6px;">
       <div style="flex:1;">
         <label class="out-count-label" style="margin-top:0;">Amount</label>
-        <input type="number" class="out-count" value="1" min="0" max="1000" style="padding:4px; font-size:11px;"
+        <input type="number" class="out-count" value="1" min="0" max="1000" step="1" style="padding:4px; font-size:11px;"
           oninput="let p=parseInt(this.value); const isFluid=this.closest('.grid-cell-stacked-box').querySelector('.out-is-fluid')?.checked;
             if(isFluid){if(p>1000)this.value=1000;} else {if(p>64)this.value=64;} if(typeof compileRecipe==='function')compileRecipe();" />
       </div>
@@ -127,26 +139,27 @@ function compileBasinRecipe(recipe, engineKey, isFabric) {
 
   const versionDropdown = document.getElementById('minecraftVersion');
   const selectedVersion = versionDropdown ? versionDropdown.value : '1.20.1';
-  const itemKeyType = selectedVersion === '1.21.1' ? 'id' : 'item';
-  const fluidKeyType = selectedVersion === '1.21.1' ? 'id' : 'fluid';
+  // Only the OUTPUT side changes key name on 1.21.1 — ingredients always stay item/fluid.
+  const outputItemKeyType = selectedVersion === '1.21.1' ? 'id' : 'item';
+  const outputFluidKeyType = selectedVersion === '1.21.1' ? 'id' : 'fluid';
 
   const ingredients = (data.ingredients || []).map((ing) => {
     if (ing.isFluid) {
       let amount = parseInt(ing.amount, 10) || 1000;
       if (isFabric) amount *= 81;
-      return ing.isTag ? { fluidTag: ing.id, amount } : { [fluidKeyType]: ing.id, amount };
+      return ing.isTag ? { fluidTag: ing.id, amount } : { fluid: ing.id, amount };
     }
-    return ing.isTag ? { tag: ing.id } : { [itemKeyType]: ing.id };
+    return ing.isTag ? { tag: ing.id } : { item: ing.id };
   });
 
   const results = (data.outputs || []).map((out) => {
     if (out.isFluid) {
       let amount = parseInt(out.count, 10) || 1000;
       if (isFabric) amount *= 81;
-      return out.isTag ? { fluidTag: out.id, amount } : { [fluidKeyType]: out.id, amount };
+      return out.isTag ? { fluidTag: out.id, amount } : { [outputFluidKeyType]: out.id, amount };
     }
     const count = parseInt(out.count, 10) || 1;
-    return out.isTag ? { tag: out.id, count } : { [itemKeyType]: out.id, count };
+    return out.isTag ? { tag: out.id, count } : { [outputItemKeyType]: out.id, count };
   });
 
   const recipeOut = { type: engineKey };

@@ -9,7 +9,7 @@ const TIMED_SINGLE_OUTPUT_ENGINES = [
 ];
 
 const TIMED_CHANCE_OUTPUT_ENGINES = [
-  'create:crushing', 'create:splashing', 'create:milling'
+  'create:crushing', 'create:splashing', 'create:milling', 'create:cutting'
 ];
 
 const TimedRecipeData = {

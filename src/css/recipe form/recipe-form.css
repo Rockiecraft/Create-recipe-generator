@@ -291,16 +291,6 @@ details[open] summary span:first-child {
   pointer-events: none !important;
 }
 
-#assemblyStepsContainer select.step-type,
-#assemblyStepsContainer input.ing-id,
-#assemblyStepsContainer input.step-fluid-id {
-  width: 100% !important;
-  max-width: 100% !important;
-  display: block !important;
-  box-sizing: border-box !important;
-}
-
-
 #assemblyStepsContainer input.step-fluid-amount {
   width: 10px !important;
   min-width: 0px !important;
@@ -313,9 +303,11 @@ details[open] summary span:first-child {
 #assemblyStepsContainer select.step-type,
 #assemblyStepsContainer input.ing-id,
 #assemblyStepsContainer input.step-fluid-id {
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
   width: auto !important;
-  max-width: auto !important;
-  flex: none !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 
@@ -333,7 +325,9 @@ details[open] summary span:first-child {
   flex-direction: column !important;
   gap: 8px !important;
   box-sizing: border-box !important;
-  width: 53% !important;
+  width: fit-content !important;
+  min-width: 340px !important;
+  max-width: 100% !important;
 }
 
 
@@ -341,8 +335,16 @@ details[open] summary span:first-child {
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
-  width: 100% !important;
+  min-width: 100% !important;
   margin-bottom: 4px !important;
+}
+
+#assemblyStepsContainer .grid-cell-stacked-box label {
+  width: auto !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  flex-shrink: 0 !important;
 }
 
 

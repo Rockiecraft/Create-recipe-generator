@@ -41,7 +41,8 @@ function compileSpoutRecipe(recipe) {
   out.ingredients.push(fluidObject);
 
   if (data.outputItem) {
-    out.results.push({ item: data.outputItem });
+    const itemKey = typeof getItemKey === 'function' ? getItemKey() : 'item';
+    out.results.push({ [itemKey]: data.outputItem });
   }
 
   return out;
