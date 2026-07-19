@@ -103,7 +103,7 @@ function compileMechanicalCraftingRecipe(recipe) {
     for (let r = 0; r < (data.height || 3); r++) {
         let rowString = '';
         for (let c = 0; c < (data.width || 3); c++) {
-            rowString += data.gridMatrix[`${r},${c}`] || '';
+            rowString += data.gridMatrix[`${r},${c}`] || ' ';
         }
         patternArray.push(rowString);
     }
@@ -115,11 +115,12 @@ function compileMechanicalCraftingRecipe(recipe) {
     });
     out.key = keyMap;
 
-    out.result = data.outputItem 
-    ? (data.outputIsTag 
-      ? { tag: data.outputItem, count: data.outputCount || 1 } 
-      : { [itemKey]: data.outputItem, count: data.outputCount || 1 }) 
-      : { [itemKey]: '', count: 1 };
+    out.result = (() => {
+        const count = data.outputCount || 1;
+        const base = data.outputIsTag ? { tag: data.outputItem || '' } : { [itemKey]: data.outputItem || '' };
+        if (count !== 1) base.count = count;
+        return base;
+    })();
 
     return out;
 }

@@ -5,7 +5,7 @@ function renderModals() {
            right:0 !important; bottom:0 !important; width:100vw !important; height:100vh !important;
            background:rgba(0,0,0,0.75) !important; z-index:99999 !important;
            justify-content:center !important; align-items:center !important;
-           transform:scale(calc(1 / 0.85)) !important; transform-origin:top left !important;
+           transform:scale(calc(1 / 0.9)) !important; transform-origin:top left !important;
            box-sizing:border-box !important;">
     <div class="modal-content-card"
         style="background:#1a1c24; border:2px solid #282b3a; border-radius:8px; width:420px;
@@ -39,7 +39,7 @@ function renderModals() {
            right:0 !important; bottom:0 !important; width:100vw !important; height:100vh !important;
            background:rgba(0,0,0,0.75) !important; z-index:99999 !important;
            justify-content:center !important; align-items:center !important;
-           transform:scale(calc(1 / 0.85)) !important; transform-origin:top left !important;
+           transform:scale(calc(1 / 0.9)) !important; transform-origin:top left !important;
            box-sizing:border-box !important;">
     <div class="modal-content-card"
         style="background:#1a1c24; border:2px solid #282b3a; border-radius:8px; width:460px;

@@ -309,8 +309,10 @@ function applyLayoutSnapshot(recipeId, engineKey) {
     const outContainer = document.getElementById('outputsContainerSimple');
     if (outContainer) outContainer.innerHTML = '';
     (snap.outputs || []).forEach(out => {
-      const addFn = typeof addStandardOutputBlock === 'function' ? addStandardOutputBlock
-        : typeof addTimedOutputBlock === 'function' ? addTimedOutputBlock : null;
+      const usesTimedEngine = ['milling', 'crushing', 'cutting'].includes(eng);
+      const addFn = usesTimedEngine
+        ? (typeof addTimedOutputBlock === 'function' ? addTimedOutputBlock : null)
+        : (typeof addStandardOutputBlock === 'function' ? addStandardOutputBlock : null);
       if (!addFn) return;
       window._seedingOutputBlock = true;
       addFn();

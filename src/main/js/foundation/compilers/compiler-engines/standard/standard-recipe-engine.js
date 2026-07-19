@@ -93,7 +93,14 @@ function compileStandardKineticRecipe(recipe, engineKey) {
             return result;
         });
     } else {
-        out.results = data.outputItem ? [data.outputIsTag ? { tag: data.outputItem, count: data.outputCount || 1 } : { [itemKey]: data.outputItem, count: data.outputCount || 1 }] : [];
+        out.results = data.outputItem
+            ? [(() => {
+                const count = data.outputCount || 1;
+                const base = data.outputIsTag ? { tag: data.outputItem } : { [itemKey]: data.outputItem };
+                if (count !== 1) base.count = count;
+                return base;
+              })()]
+            : [];
     }
 
     return out;

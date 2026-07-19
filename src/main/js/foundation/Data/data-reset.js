@@ -27,7 +27,7 @@ function executeMasterApplicationDataReset() {
         eyeSaverCurtain.style.setProperty('zIndex', '999999', 'important');
 
         
-        eyeSaverCurtain.style.setProperty('transform', 'scale(1.17647)', 'important');
+        eyeSaverCurtain.style.setProperty('transform', 'scale(calc(1 / 0.9))', 'important');
         eyeSaverCurtain.style.setProperty('transform-origin', 'top left', 'important');
 
         document.body.appendChild(eyeSaverCurtain);

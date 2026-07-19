@@ -1,6 +1,7 @@
 /**
  * compiler-engines/timed/timed-recipe-engine.js
  */
+const TIMED_NO_AMOUNT_ENGINES = ['create:crushing'];
 
 function addTimedOutputBlock(defaultValue = '') {
   window._userClearedOutputs = false;
@@ -16,6 +17,14 @@ function addTimedOutputBlock(defaultValue = '') {
   outDiv.style.position = 'relative';
 
   const valueAttr = defaultValue ? `value="${defaultValue}"` : '';
+  const showAmount = !TIMED_NO_AMOUNT_ENGINES.includes(window.currentActiveEngine);
+
+  const amountHtml = showAmount ? `
+      <div style="flex:1;">
+        <label style="margin-top:0;">Amount</label>
+        <input type="number" class="out-count" value="1" min="1" max="64" style="padding:4px; font-size:11px;"
+          oninput="let p=parseInt(this.value)||1; if(p>64)p=64; if(p<1)p=1; this.value=p; if(typeof compileRecipe==='function')compileRecipe();" />
+      </div>` : '';
 
   outDiv.innerHTML = /* HTML */ `
     <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -34,12 +43,7 @@ function addTimedOutputBlock(defaultValue = '') {
       </label>
     </div>
 
-    <div style="display:flex; gap:10px; margin-top:6px;">
-      <div style="flex:1;">
-        <label style="margin-top:0;">Amount</label>
-        <input type="number" class="out-count" value="1" min="1" max="64" style="padding:4px; font-size:11px;"
-          oninput="let p=parseInt(this.value)||1; if(p>64)p=64; if(p<1)p=1; this.value=p; if(typeof compileRecipe==='function')compileRecipe();" />
-      </div>
+    <div style="display:flex; gap:10px; margin-top:6px;">${amountHtml}
       <div class="chance-container" style="flex:1;">
         <label style="margin-top:0;">Chance (%)</label>
         <input type="number" class="out-chance" value="100" min="0" max="100" style="padding:4px; font-size:11px;"
@@ -65,9 +69,12 @@ function compileTimedKineticRecipe(recipe, engineKey) {
   out.processingTime = data.processingTime || 200;
 
   if (TimedRecipeData.usesChanceOutputs(engineKey)) {
+    const includeCount = !TIMED_NO_AMOUNT_ENGINES.includes(engineKey);
     out.results = (data.outputs || []).map((o) => {
-      const count = parseInt(o.count, 10) || 1;
-      const result = o.isTag ? { tag: o.id, count } : { [itemKey]: o.id, count };
+      const result = o.isTag ? { tag: o.id } : { [itemKey]: o.id };
+      if (includeCount) {
+        result.count = parseInt(o.count, 10) || 1;
+      }
       const chancePct = parseFloat(o.chance);
       if (!isNaN(chancePct) && chancePct < 100) {
         result.chance = parseFloat((chancePct / 100).toFixed(2));
@@ -76,9 +83,12 @@ function compileTimedKineticRecipe(recipe, engineKey) {
     });
   } else {
     out.results = data.outputItem
-      ? [data.outputIsTag
-          ? { tag: data.outputItem, count: data.outputCount || 1 }
-          : { [itemKey]: data.outputItem, count: data.outputCount || 1 }]
+      ? [(() => {
+          const count = data.outputCount || 1;
+          const base = data.outputIsTag ? { tag: data.outputItem } : { [itemKey]: data.outputItem };
+          if (count !== 1) base.count = count;
+          return base;
+        })()]
       : [];
   }
 
