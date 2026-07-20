@@ -28,6 +28,14 @@ function getItemKey() {
 }
 window.getItemKey = getItemKey;
 
+function formatChanceAsFloat(jsonString) {
+    return jsonString.replace(/"chance"\s*:\s*(-?\d+(?:\.\d+)?)/g, (match, numStr) => {
+        if (numStr.includes('.')) return match;
+        return match.replace(numStr, `${numStr}.0`);
+    });
+}
+window.formatChanceAsFloat = formatChanceAsFloat;
+
 function compileRecipe() {
     if (window.isSwitchingLayouts || window.isWorkspaceSwappingLayout) return;
     if (window.isParsingRecipe) return;
@@ -66,10 +74,10 @@ function compileRecipe() {
     const isNeoForge = version === '1.21.1';
 
     const outputField = document.getElementById('recipeOutput') || document.querySelector('.recipeOutput');
-    if (outputField) outputField.value = JSON.stringify(outputJson, null, 4);
+    if (outputField) outputField.value = formatChanceAsFloat(JSON.stringify(outputJson, null, 4));
 
     const previewEl = document.getElementById('jsonOutput');
-    if (previewEl) previewEl.textContent = JSON.stringify(outputJson, null, 2);
+    if (previewEl) previewEl.textContent = formatChanceAsFloat(JSON.stringify(outputJson, null, 2));
 
     if (typeof saveActiveRecipeState === 'function') saveActiveRecipeState();
 }
